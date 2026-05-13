@@ -325,6 +325,17 @@
             color: var(--accent-blue);
         }
 
+        .market-header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .market-update-time {
+            font-size: 0.625rem;
+            color: var(--text-muted);
+        }
+
         .market-value {
             font-size: 1.75rem;
             font-weight: 700;
@@ -2448,7 +2459,10 @@
                                 <span class="market-index-name">${market.name}</span>
                                 <span class="market-index-code">${market.code}</span>
                             </div>
-                            <span class="market-tag">实时</span>
+                            <div class="market-header-right">
+                                <span class="market-tag">实时</span>
+                                <span class="market-update-time">${market.update_time || ''}</span>
+                            </div>
                         </div>
                         <div class="market-value">${market.value.toFixed(2)}</div>
                         <div class="market-change">
