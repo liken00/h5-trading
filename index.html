@@ -1117,6 +1117,173 @@
             color: var(--text-secondary);
         }
 
+        /* 登录弹窗 */
+        .login-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 15000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .login-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-modal {
+            background: linear-gradient(135deg, #1a1f35, #0f1525);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 360px;
+            padding: 1.75rem;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .login-modal-overlay.active .login-modal {
+            transform: translateY(0);
+        }
+
+        .login-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        .login-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: #94a3b8;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-section { margin-bottom: 1rem; }
+        .login-subtitle { font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem; }
+
+        .login-input-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-input-row input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .login-input-row input:focus {
+            border-color: #ffd700;
+        }
+
+        .send-code-btn {
+            padding: 0.75rem 1rem;
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 10px;
+            color: #ffd700;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .send-code-btn:hover { background: rgba(255,215,0,0.2); }
+        .send-code-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .login-error {
+            color: #ff4757;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+            min-height: 1rem;
+        }
+
+        .login-submit-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: linear-gradient(135deg, #ffd700, #f59e0b);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .login-submit-btn:hover { opacity: 0.9; }
+        .login-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .login-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.25rem 0;
+            color: #4a5568;
+            font-size: 0.75rem;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .wechat-login-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: #07C160;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .wechat-login-btn:hover { background: #06a050; }
+        .wechat-hint { font-size: 0.7rem; color: #64748b; text-align: center; margin-top: 0.5rem; }
+
+        .login-footer {
+            font-size: 0.7rem;
+            color: #4a5568;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
         /* 邀请海报弹窗 */
         .invite-modal-overlay {
             position: fixed;
@@ -2117,6 +2284,47 @@
         <div class="achievement-desc" id="achievementDesc"></div>
     </div>
 
+    <!-- 登录弹窗 -->
+    <div class="login-modal-overlay" id="loginModal">
+        <div class="login-modal">
+            <div class="login-header">
+                <div class="login-title">登录 / 注册</div>
+                <button class="login-close" id="closeLoginModal">×</button>
+            </div>
+
+            <!-- 手机号登录 -->
+            <div class="login-section">
+                <div class="login-subtitle">手机号登录</div>
+                <div class="login-input-row">
+                    <input type="tel" id="loginPhone" placeholder="请输入手机号" maxlength="11" />
+                </div>
+                <div class="login-input-row">
+                    <input type="text" id="loginCode" placeholder="请输入验证码" maxlength="6" style="flex:1" />
+                    <button class="send-code-btn" id="sendCodeBtn">发送验证码</button>
+                </div>
+                <div class="login-error" id="loginError"></div>
+                <button class="login-submit-btn" id="loginSubmitBtn">登录 / 注册</button>
+            </div>
+
+            <div class="login-divider"><span>或</span></div>
+
+            <!-- 微信登录 -->
+            <div class="login-section">
+                <button class="wechat-login-btn" id="wechatLoginBtn">
+                    <svg class="wechat-icon" viewBox="0 0 24 24" width="20" height="20" fill="#07C160">
+                        <path d="M8.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm5 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm5.5 4.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zM12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.436 20.07A1.5 1.5 0 0 0 3.93 21.564l2.902-2.902A9.94 9.94 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
+                    </svg>
+                    微信一键登录
+                </button>
+                <div class="wechat-hint" id="wechatHint"></div>
+            </div>
+
+            <div class="login-footer">
+                登录即表示同意<a href="#" style="color:#ffd700">《用户协议》</a>
+            </div>
+        </div>
+    </div>
+
     <!-- 分享成功提示 -->
     <div class="share-success-toast" id="shareSuccessToast">
         <div class="share-success-icon">✓</div>
@@ -2399,6 +2607,31 @@
         });
 
         // ==================== 裂变系统 JavaScript ====================
+
+        // 用户登录状态
+        window.currentUser = null;
+
+        function updateLoginState() {
+            const btn = document.getElementById('openInviteModalBtn');
+            if (!btn) return;
+            btn.textContent = window.currentUser ? '我的邀请' : '立即邀请';
+        }
+
+        function checkLoginStatus() {
+            const token = localStorage.getItem('auth_token');
+            if (!token) return;
+            fetch(`${API_BASE}/auth/status`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }).then(r => r.json()).then(data => {
+                if (data.code === 0 && data.data?.logged_in) {
+                    window.currentUser = data.data.user;
+                    updateLoginState();
+                } else {
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('user_id');
+                }
+            }).catch(() => {});
+        }
 
         // 裂变状态管理
         const spreadState = {
@@ -2689,13 +2922,140 @@
 
         // 绑定裂变事件
         function bindSpreadEvents() {
-            // 打开邀请弹窗
+            // 打开登录弹窗
             document.getElementById('openInviteModalBtn').addEventListener('click', () => {
-                document.getElementById('inviteModal').classList.add('active');
-                document.body.style.overflow = 'hidden';
-                // 刷新我的数据和排行榜
-                refreshMyStats();
-                refreshLeaderboard();
+                if (window.currentUser) {
+                    // 已登录，打开邀请弹窗
+                    document.getElementById('inviteModal').classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                    refreshMyStats();
+                    refreshLeaderboard();
+                } else {
+                    // 未登录，打开登录弹窗
+                    document.getElementById('loginModal').classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+
+            // 关闭登录弹窗
+            document.getElementById('closeLoginModal').addEventListener('click', () => {
+                document.getElementById('loginModal').classList.remove('active');
+                document.body.style.overflow = '';
+            });
+
+            // 点击遮罩关闭
+            document.getElementById('loginModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('loginModal')) {
+                    document.getElementById('loginModal').classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // 发送验证码
+            document.getElementById('sendCodeBtn').addEventListener('click', async () => {
+                const phone = document.getElementById('loginPhone').value.trim();
+                const btn = document.getElementById('sendCodeBtn');
+                if (phone.length !== 11) {
+                    document.getElementById('loginError').textContent = '请输入11位手机号';
+                    return;
+                }
+                document.getElementById('loginError').textContent = '';
+                btn.disabled = true;
+                btn.textContent = '发送中...';
+                try {
+                    const res = await fetch(`${API_BASE}/auth/send_code`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone })
+                    });
+                    const data = await res.json();
+                    if (data.code === 0) {
+                        btn.textContent = '已发送';
+                        let countdown = 60;
+                        const timer = setInterval(() => {
+                            countdown--;
+                            if (countdown <= 0) {
+                                btn.disabled = false;
+                                btn.textContent = '重新发送';
+                                clearInterval(timer);
+                            } else {
+                                btn.textContent = `${countdown}秒`;
+                            }
+                        }, 1000);
+                        // ⚠️ 演示环境显示验证码
+                        if (data.debug_code) {
+                            document.getElementById('loginCode').value = data.debug_code;
+                        }
+                    } else {
+                        document.getElementById('loginError').textContent = data.msg;
+                        btn.disabled = false;
+                        btn.textContent = '发送验证码';
+                    }
+                } catch(e) {
+                    document.getElementById('loginError').textContent = '网络错误';
+                    btn.disabled = false;
+                    btn.textContent = '发送验证码';
+                }
+            });
+
+            // 登录提交
+            document.getElementById('loginSubmitBtn').addEventListener('click', async () => {
+                const phone = document.getElementById('loginPhone').value.trim();
+                const code = document.getElementById('loginCode').value.trim();
+                const btn = document.getElementById('loginSubmitBtn');
+                const errorEl = document.getElementById('loginError');
+                if (!phone || !code) {
+                    errorEl.textContent = '请填写手机号和验证码';
+                    return;
+                }
+                errorEl.textContent = '';
+                btn.disabled = true;
+                btn.textContent = '登录中...';
+                try {
+                    const res = await fetch(`${API_BASE}/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ phone, code })
+                    });
+                    const data = await res.json();
+                    if (data.code === 0) {
+                        // 登录成功
+                        localStorage.setItem('auth_token', data.data.token);
+                        localStorage.setItem('user_id', data.data.user.id);
+                        window.currentUser = data.data.user;
+                        updateLoginState();
+                        document.getElementById('loginModal').classList.remove('active');
+                        document.body.style.overflow = '';
+                        // 打开邀请弹窗
+                        document.getElementById('inviteModal').classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                        refreshMyStats();
+                        refreshLeaderboard();
+                    } else {
+                        errorEl.textContent = data.msg;
+                    }
+                } catch(e) {
+                    errorEl.textContent = '网络错误，请重试';
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = '登录 / 注册';
+                }
+            });
+
+            // 微信登录
+            document.getElementById('wechatLoginBtn').addEventListener('click', async () => {
+                const hintEl = document.getElementById('wechatHint');
+                try {
+                    const res = await fetch(`${API_BASE}/auth/wechat/qr`);
+                    const data = await res.json();
+                    if (data.data && data.data.qr_url) {
+                        window.location.href = data.data.qr_url;
+                    } else {
+                        hintEl.textContent = data.data?.msg || '微信登录暂不可用，请使用手机号登录';
+                    }
+                } catch(e) {
+                    hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
+                }
             });
 
             // 关闭邀请弹窗
@@ -2856,6 +3216,7 @@
 
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
+            checkLoginStatus();
             initSpreadSystem();
             initScrollBehavior();
         });
