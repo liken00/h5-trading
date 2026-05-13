@@ -2359,6 +2359,7 @@
                     微信一键登录
                 </button>
                 <div class="wechat-hint" id="wechatHint"></div>
+                <div id="wechatQrBox" style="display:flex;justify-content:center;align-items:center;min-height:200px;"></div>
             </div>
 
             <div class="login-footer">
@@ -3108,13 +3109,16 @@
                 }
             });
 
-            // 微信登录：弹窗扫码授权
+            // 微信登录：显示二维码 → 用户用微信扫码授权
             let wechatPollTimer = null;
-            let wechatAuthWin = null;
+            let wechatQrEl = null;
 
             document.getElementById('wechatLoginBtn').addEventListener('click', async () => {
                 const hintEl = document.getElementById('wechatHint');
-                hintEl.textContent = '正在加载微信授权...';
+                const qrBox = document.getElementById('wechatQrBox');
+                if (wechatQrEl) qrBox.innerHTML = '';
+                hintEl.innerHTML = '正在加载授权二维码...';
+
                 try {
                     const res = await fetch(`${API_BASE}/auth/wechat/qr`);
                     const data = await res.json();
@@ -3123,28 +3127,30 @@
                         return;
                     }
 
-                    // 打开微信授权弹窗（新窗口）
-                    wechatAuthWin = window.open(
-                        data.data.auth_url,
-                        'wechat_auth',
-                        'width=400,height=600,scrollbars=no,location=no'
-                    );
+                    hintEl.innerHTML = '<small style="color:#94a3b8">用微信扫码下方二维码授权登录</small>';
 
-                    if (!wechatAuthWin) {
-                        hintEl.textContent = '请允许弹出窗口';
-                        return;
-                    }
+                    // 生成二维码
+                    wechatQrEl = document.createElement('div');
+                    wechatQrEl.id = 'wechatQrEl';
+                    qrBox.innerHTML = '';
+                    qrBox.appendChild(wechatQrEl);
+                    new QRCode(wechatQrEl, {
+                        text: data.data.auth_url,
+                        width: 180,
+                        height: 180,
+                        colorDark: '#000000',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
 
-                    hintEl.innerHTML = '<span style="color:#52c41a">✅ 已打开微信授权页</span><br><small>请在微信中点击"确认授权"</small>';
-
-                    // 轮询登录状态（兼容非postMessage情况）
-                    const state = data.data.state;
+                    // 轮询登录状态
                     const pollUrl = data.data.poll_url;
-
+                    let pollCount = 0;
                     wechatPollTimer = setInterval(async () => {
-                        if (wechatAuthWin && wechatAuthWin.closed) {
+                        pollCount++;
+                        if (pollCount > 150) { // 5分钟超时
                             clearInterval(wechatPollTimer);
-                            hintEl.textContent = '登录未完成，请重试';
+                            hintEl.textContent = '授权超时，请重试';
                             return;
                         }
                         try {
@@ -3158,37 +3164,12 @@
                                 localStorage.setItem('user_id', user.id);
                                 window.currentUser = user;
                                 updateLoginState();
-                                if (wechatAuthWin) wechatAuthWin.close();
                                 document.getElementById('loginModal').classList.remove('active');
                                 document.body.style.overflow = '';
-                                hintEl.textContent = '';
+                                qrBox.innerHTML = '<div style="color:#52c41a;font-size:2rem;">✅</div><div style="color:#52c41a">授权成功</div>';
                             }
                         } catch(e) {}
                     }, 2000);
-
-                    // 监听postMessage（更快的回调方式）
-                    const msgHandler = async (event) => {
-                        if (!event.data?.token) return;
-                        window.removeEventListener('message', msgHandler);
-                        clearInterval(wechatPollTimer);
-                        localStorage.setItem('auth_token', event.data.token);
-                        localStorage.setItem('user_id', event.data.user_id);
-                        // 获取用户信息
-                        try {
-                            const statusRes = await fetch(`${API_BASE}/auth/status`, {
-                                headers: { 'Authorization': `Bearer ${event.data.token}` }
-                            });
-                            const statusData = await statusRes.json();
-                            if (statusData.code === 0 && statusData.data?.logged_in) {
-                                window.currentUser = statusData.data.user;
-                                updateLoginState();
-                            }
-                        } catch(e) {}
-                        if (wechatAuthWin) wechatAuthWin.close();
-                        document.getElementById('loginModal').classList.remove('active');
-                        document.body.style.overflow = '';
-                    };
-                    window.addEventListener('message', msgHandler);
 
                 } catch(e) {
                     hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
