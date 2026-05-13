@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>涨停复盘宝 - 专业量化交易社群</title>
+    <title>复盘宝 - 专业量化交易社群</title>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
@@ -2354,7 +2354,7 @@
                 <div class="poster-card">
                     <div class="poster-preview" id="posterPreview" style="background:#0a0e17; border-radius:12px; padding:20px; text-align:center;">
                         <div class="poster-logo">Q</div>
-                        <div class="poster-title">涨停复盘宝</div>
+                        <div class="poster-title">复盘宝</div>
                         <div class="poster-subtitle">专业量化交易社群 · 每日免费策略</div>
                         <div class="poster-qr" id="posterQrCode">
                             <span style="font-size: 0.625rem; color: #666;">二维码区域</span>
@@ -3134,7 +3134,7 @@
         // 初始化分享链接
         function initShareLinks() {
             const shareUrl = window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode;
-            const shareTitle = '涨停复盘宝 - 专业量化交易社群';
+            const shareTitle = '复盘宝 - 专业量化交易社群';
             const shareDesc = '免费获取每日策略、实时行情、VIP专属服务';
 
             // 微信分享（需要引导用户在浏览器中打开）
@@ -3575,7 +3575,7 @@
                     });
 
                     const link = document.createElement('a');
-                    link.download = `涨停复盘宝_${spreadState.inviteCode}.png`;
+                    link.download = `复盘宝_${spreadState.inviteCode}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
 
@@ -3593,7 +3593,7 @@
                 if (navigator.share) {
                     // 原生分享API（移动端）
                     navigator.share({
-                        title: '📈 涨停复盘宝 - 每日公开涨停龙头名单',
+                        title: '📈 复盘宝 - 每日公开涨停龙头名单',
                         text: '免费获取今日涨停板复盘、龙头战法、明日潜力标的，限量VIP名额正在发放中',
                         url: window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode
                     }).then(() => {
