@@ -115,6 +115,43 @@
             color: var(--accent-green);
         }
 
+        .header-auth-links {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-left: 1rem;
+        }
+
+        .auth-link {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .auth-link:hover {
+            color: #ffd700;
+            background: rgba(255,215,0,0.08);
+        }
+
+        .auth-divider {
+            color: #4a5568;
+            font-size: 0.8rem;
+        }
+
+        /* 已登录状态 */
+        .header-auth-links.logged-in .auth-link { display: none; }
+        .header-auth-links.logged-in .auth-divider { display: none; }
+        .header-auth-links.logged-in::after {
+            content: attr(data-nickname);
+            color: #ffd700;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
         .header-cta {
             background: var(--gradient-green);
             color: #000;
@@ -1948,6 +1985,11 @@
                 <a href="#">社群</a>
                 <a href="#">关于</a>
             </nav>
+            <div class="header-auth-links" id="headerAuthLinks">
+                <a href="#" class="auth-link" id="btnLogin">登录</a>
+                <span class="auth-divider">|</span>
+                <a href="#" class="auth-link" id="btnRegister">注册</a>
+            </div>
             <a href="#" class="header-cta">加入社群</a>
         </div>
     </header>
@@ -2613,8 +2655,19 @@
 
         function updateLoginState() {
             const btn = document.getElementById('openInviteModalBtn');
+            const authLinks = document.getElementById('headerAuthLinks');
             if (!btn) return;
             btn.textContent = window.currentUser ? '我的邀请' : '立即邀请';
+
+            // 更新顶部登录/注册区域
+            if (authLinks) {
+                if (window.currentUser) {
+                    authLinks.classList.add('logged-in');
+                    authLinks.setAttribute('data-nickname', window.currentUser.nickname || '用户');
+                } else {
+                    authLinks.classList.remove('logged-in');
+                }
+            }
         }
 
         function checkLoginStatus() {
@@ -2922,6 +2975,19 @@
 
         // 绑定裂变事件
         function bindSpreadEvents() {
+            // 绑定登录/注册头部链接
+            document.getElementById('btnLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            document.getElementById('btnRegister').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+
             // 打开登录弹窗
             document.getElementById('openInviteModalBtn').addEventListener('click', () => {
                 if (window.currentUser) {
