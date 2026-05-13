@@ -3108,17 +3108,88 @@
                 }
             });
 
-            // 微信登录
+            // 微信登录：弹窗扫码授权
+            let wechatPollTimer = null;
+            let wechatAuthWin = null;
+
             document.getElementById('wechatLoginBtn').addEventListener('click', async () => {
                 const hintEl = document.getElementById('wechatHint');
+                hintEl.textContent = '正在加载微信授权...';
                 try {
                     const res = await fetch(`${API_BASE}/auth/wechat/qr`);
                     const data = await res.json();
-                    if (data.data && data.data.qr_url) {
-                        window.location.href = data.data.qr_url;
-                    } else {
-                        hintEl.textContent = data.data?.msg || '微信登录暂不可用，请使用手机号登录';
+                    if (data.code !== 0 || !data.data?.auth_url) {
+                        hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
+                        return;
                     }
+
+                    // 打开微信授权弹窗（新窗口）
+                    wechatAuthWin = window.open(
+                        data.data.auth_url,
+                        'wechat_auth',
+                        'width=400,height=600,scrollbars=no,location=no'
+                    );
+
+                    if (!wechatAuthWin) {
+                        hintEl.textContent = '请允许弹出窗口';
+                        return;
+                    }
+
+                    hintEl.innerHTML = '<span style="color:#52c41a">✅ 已打开微信授权页</span><br><small>请在微信中点击"确认授权"</small>';
+
+                    // 轮询登录状态（兼容非postMessage情况）
+                    const state = data.data.state;
+                    const pollUrl = data.data.poll_url;
+
+                    wechatPollTimer = setInterval(async () => {
+                        if (wechatAuthWin && wechatAuthWin.closed) {
+                            clearInterval(wechatPollTimer);
+                            hintEl.textContent = '登录未完成，请重试';
+                            return;
+                        }
+                        try {
+                            const pollRes = await fetch(pollUrl);
+                            const pollData = await pollRes.json();
+                            if (pollData.code === 0 && pollData.data?.ready) {
+                                clearInterval(wechatPollTimer);
+                                const token = pollData.data.token;
+                                const user = pollData.data.user;
+                                localStorage.setItem('auth_token', token);
+                                localStorage.setItem('user_id', user.id);
+                                window.currentUser = user;
+                                updateLoginState();
+                                if (wechatAuthWin) wechatAuthWin.close();
+                                document.getElementById('loginModal').classList.remove('active');
+                                document.body.style.overflow = '';
+                                hintEl.textContent = '';
+                            }
+                        } catch(e) {}
+                    }, 2000);
+
+                    // 监听postMessage（更快的回调方式）
+                    const msgHandler = async (event) => {
+                        if (!event.data?.token) return;
+                        window.removeEventListener('message', msgHandler);
+                        clearInterval(wechatPollTimer);
+                        localStorage.setItem('auth_token', event.data.token);
+                        localStorage.setItem('user_id', event.data.user_id);
+                        // 获取用户信息
+                        try {
+                            const statusRes = await fetch(`${API_BASE}/auth/status`, {
+                                headers: { 'Authorization': `Bearer ${event.data.token}` }
+                            });
+                            const statusData = await statusRes.json();
+                            if (statusData.code === 0 && statusData.data?.logged_in) {
+                                window.currentUser = statusData.data.user;
+                                updateLoginState();
+                            }
+                        } catch(e) {}
+                        if (wechatAuthWin) wechatAuthWin.close();
+                        document.getElementById('loginModal').classList.remove('active');
+                        document.body.style.overflow = '';
+                    };
+                    window.addEventListener('message', msgHandler);
+
                 } catch(e) {
                     hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
                 }
