@@ -94,7 +94,7 @@
         }
 
         .logo-text {
-            font-size: 1.125rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--text-primary);
         }
@@ -1061,6 +1061,134 @@
         }
 
         /* ==================== 裂变系统 CSS ==================== */
+
+        /* ==================== VIP紧急闪烁 ==================== */
+        .vip-urgent {
+            animation: vipUrgentPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes vipUrgentPulse {
+            0%, 100% { background: rgba(10, 14, 23, 0.95); }
+            50% { background: rgba(255, 71, 87, 0.2); }
+        }
+        @keyframes urgentTextPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .vip-urgent .vip-countdown { color: #ff4757 !important; animation: urgentTextPulse 1s infinite; }
+
+        /* ==================== 实时在线人数 ==================== */
+        .live-viewers {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: rgba(255,193,7,0.1);
+            border: 1px solid rgba(255,193,7,0.25);
+            border-radius: 20px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.65rem;
+            color: var(--accent-gold);
+        }
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            background: #ff4757;
+            border-radius: 50%;
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+        }
+
+        /* ==================== 离开意图拦截弹窗 ==================== */
+        .exit-intent-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.72);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .exit-intent-overlay.show { display: flex; }
+        .exit-intent-modal {
+            background: linear-gradient(145deg,#1a2035,#0a0e17);
+            border: 2px solid rgba(255,193,7,0.4);
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-width: 340px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 40px rgba(255,193,7,0.15);
+        }
+        .exit-intent-close {
+            position: absolute; top: 0.5rem; right: 0.75rem;
+            background: none; border: none;
+            color: var(--text-muted); font-size: 1.5rem; cursor: pointer;
+        }
+        .exit-intent-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .exit-intent-title {
+            font-size: 1.05rem; font-weight: 700;
+            color: var(--accent-gold); margin-bottom: 0.5rem;
+        }
+        .exit-intent-desc {
+            font-size: 0.78rem; color: var(--text-secondary);
+            margin-bottom: 1rem; line-height: 1.5;
+        }
+        .exit-intent-gift {
+            background: rgba(255,193,7,0.08);
+            border: 1px dashed rgba(255,193,7,0.35);
+            border-radius: 10px;
+            padding: 0.75rem; margin-bottom: 1rem;
+        }
+        .exit-intent-gift-title { color: var(--accent-gold); font-size: 0.85rem; font-weight: 700; margin-bottom: 0.2rem; }
+        .exit-intent-gift-desc { color: var(--text-secondary); font-size: 0.7rem; }
+        .exit-intent-btn {
+            width: 100%; padding: 0.75rem;
+            background: var(--gradient-gold);
+            border: none; border-radius: 10px;
+            color: #000; font-weight: 700; font-size: 0.9rem;
+            cursor: pointer; margin-bottom: 0.5rem;
+        }
+        .exit-intent-skip {
+            background: none; border: none;
+            color: var(--text-muted); font-size: 0.7rem; cursor: pointer;
+        }
+
+        /* ==================== 限时冲刺弹窗 ==================== */
+        .rush-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.78);
+            z-index: 9998;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .rush-overlay.show { display: flex; }
+        .rush-modal {
+            background: linear-gradient(145deg,#1a0500,#0a0e17);
+            border: 2px solid #ff4757;
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-width: 320px; width: 100%;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255,71,87,0.25);
+        }
+        .rush-countdown {
+            font-size: 2.8rem; font-weight: 900;
+            color: #ff4757; font-family: monospace;
+            margin: 0.5rem 0; letter-spacing: 2px;
+        }
+        .rush-label {
+            background: #ff4757; color: white;
+            border-radius: 20px;
+            padding: 0.2rem 0.75rem;
+            font-size: 0.65rem; font-weight: 700;
+            display: inline-block; margin-bottom: 0.5rem;
+        }
+
 
         /* 浮动邀请栏 */
         .invite-float-bar {
@@ -2461,6 +2589,42 @@
         <button class="fomo-close" id="closeFomo">×</button>
     </div>
 
+
+    <!-- 离开意图拦截弹窗 -->
+    <div class="exit-intent-overlay" id="exitIntentOverlay">
+        <div class="exit-intent-modal">
+            <button class="exit-intent-close" id="closeExitIntent">×</button>
+            <div class="exit-intent-icon">🎁</div>
+            <div class="exit-intent-title">别急着走！送你限时好礼</div>
+            <div class="exit-intent-desc">
+                错过这份精选热点，你会后悔的<br>
+                <span style="color:#ff4757;font-weight:700">仅剩 <span id="exitIntentSlots">12</span> 个免费名额</span>
+            </div>
+            <div class="exit-intent-gift">
+                <div class="exit-intent-gift-title">🔥 立即领取</div>
+                <div class="exit-intent-gift-desc">分享到朋友圈/群聊，双方各得 <strong style="color:#ffc107">+3天VIP</strong></div>
+            </div>
+            <button class="exit-intent-btn" id="exitShareNow">立即分享领取VIP</button>
+            <button class="exit-intent-skip" id="skipExitIntent">残忍离开 ×</button>
+        </div>
+    </div>
+
+    <!-- 限时冲刺弹窗（双倍VIP奖励） -->
+    <div class="rush-overlay" id="rushOverlay">
+        <div class="rush-modal">
+            <div class="rush-label">⚡ 限时冲刺 · 双倍VIP</div>
+            <div style="font-size:1.4rem;font-weight:800;color:white;margin-bottom:0.25rem">分享即可双倍奖励</div>
+            <div class="rush-countdown" id="rushCountdown">30:00</div>
+            <div style="color:#94a3b8;font-size:0.7rem;margin-bottom:1rem">超时恢复单倍奖励，趁现在！</div>
+            <div style="background:rgba(255,71,87,0.12);border:1px solid rgba(255,71,87,0.3);border-radius:10px;padding:0.75rem;margin-bottom:1rem">
+                <div style="color:#ff4757;font-size:0.75rem;font-weight:700;margin-bottom:0.2rem">当前奖励</div>
+                <div style="color:white;font-size:1.1rem;font-weight:800">邀请1人 = <span style="color:#ffc107">+6天VIP</span></div>
+            </div>
+            <button class="exit-intent-btn" id="rushShareBtn" style="background:linear-gradient(135deg,#ff4757,#c0392b)">⚡ 立即冲刺分享</button>
+            <button class="exit-intent-skip" id="skipRush">稍后再说</button>
+        </div>
+    </div>
+
     <!-- 成就徽章弹窗 -->
     <div class="achievement-modal" id="achievementModal">
         <div class="achievement-badge" id="achievementBadge">🎉</div>
@@ -3738,6 +3902,180 @@
             initSpreadSystem();
             initScrollBehavior();
         });
+
+        // ==================== 增强裂变系统 ====================
+        // ---- 实时在线人数 ----
+        let liveViewerCount = 127 + Math.floor(Math.random() * 50);
+        function updateLiveCount() {
+            const el = document.getElementById('liveViewerCount');
+            if (el) {
+                liveViewerCount = Math.max(80, liveViewerCount + Math.floor(Math.random() * 11) - 5);
+                el.textContent = liveViewerCount;
+            }
+        }
+        setInterval(updateLiveCount, 8000 + Math.random() * 7000);
+
+        // ---- VIP紧急模式（剩余<24小时闪烁） ----
+        function checkVipUrgency() {
+            const expiry = parseInt(localStorage.getItem('spread_vip_expiry') || 0);
+            if (!expiry) return;
+            const hoursLeft = (expiry - Date.now()) / (1000 * 60 * 60);
+            const header = document.querySelector('.header');
+            const floatBar = document.getElementById('inviteFloatBar');
+            if (hoursLeft <= 24 && hoursLeft > 0) {
+                header?.classList.add('vip-urgent');
+                floatBar?.classList.add('vip-urgent');
+            } else {
+                header?.classList.remove('vip-urgent');
+                floatBar?.classList.remove('vip-urgent');
+            }
+        }
+        setInterval(checkVipUrgency, 60000);
+
+        // ---- 离开意图拦截 ----
+        let exitIntentShown = false;
+        function showExitIntent() {
+            if (exitIntentShown || parseInt(localStorage.getItem('spread_invite_count') || 0) >= 3) return;
+            const overlay = document.getElementById('exitIntentOverlay');
+            if (overlay) {
+                overlay.classList.add('show');
+                const slotsEl = document.getElementById('exitIntentSlots');
+                if (slotsEl) slotsEl.textContent = (12 - Math.floor(Math.random() * 5)).toString();
+            }
+            exitIntentShown = true;
+        }
+        // 桌面端
+        document.addEventListener('mouseout', (e) => {
+            if (!e.relatedTarget) showExitIntent();
+        });
+        // 移动端返回手势
+        window.addEventListener('popstate', () => {
+            history.pushState(null, '', location.href);
+            showExitIntent();
+        });
+        history.pushState(null, '', location.href);
+
+        document.getElementById('closeExitIntent')?.addEventListener('click', () => {
+            document.getElementById('exitIntentOverlay')?.classList.remove('show');
+        });
+        document.getElementById('skipExitIntent')?.addEventListener('click', () => {
+            document.getElementById('exitIntentOverlay')?.classList.remove('show');
+        });
+        document.getElementById('exitShareNow')?.addEventListener('click', () => {
+            document.getElementById('exitIntentOverlay')?.classList.remove('show');
+            document.getElementById('inviteModal')?.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            refreshMyStats?.();
+            refreshLeaderboard?.();
+        });
+
+        // ---- 连续打卡系统 ----
+        function checkDailyStreak() {
+            const today = new Date().toDateString();
+            const lastVisit = localStorage.getItem('spread_last_visit');
+            let streak = parseInt(localStorage.getItem('spread_streak_days') || '0');
+            if (lastVisit === today) return;
+            if (lastVisit) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                if (new Date(lastVisit).toDateString() === yesterday.toDateString()) {
+                    streak++;
+                } else {
+                    streak = 1;
+                }
+            } else {
+                streak = 1;
+            }
+            localStorage.setItem('spread_streak_days', streak.toString());
+            localStorage.setItem('spread_last_visit', today);
+            if (streak >= 3) {
+                const bonusDays = Math.min(streak - 2, 7);
+                const currentExpiry = parseInt(localStorage.getItem('spread_vip_expiry') || Date.now());
+                localStorage.setItem('spread_vip_expiry', currentExpiry + bonusDays * 24 * 60 * 60 * 1000);
+                setTimeout(() => showAchievement('🔥', `连续${streak}天打卡！`, `获得 ${bonusDays} 天VIP连续奖励`), 500);
+            }
+        }
+        checkDailyStreak();
+
+        // ---- 限时冲刺系统 ----
+        let rushActive = false;
+        let rushSeconds = 0;
+        let rushTimer = null;
+        function triggerRushEvent() {
+            if (rushActive) return;
+            const todayRushes = parseInt(sessionStorage.getItem('rush_today') || '0');
+            if (todayRushes >= 2 || Math.random() > 0.30) return;
+            rushActive = true;
+            rushSeconds = 30 * 60;
+            sessionStorage.setItem('rush_today', (todayRushes + 1).toString());
+            document.getElementById('rushOverlay')?.classList.add('show');
+            rushTimer = setInterval(() => {
+                rushSeconds--;
+                const el = document.getElementById('rushCountdown');
+                if (el) {
+                    const m = Math.floor(rushSeconds / 60);
+                    const s = rushSeconds % 60;
+                    el.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                }
+                if (rushSeconds <= 0) {
+                    rushActive = false;
+                    clearInterval(rushTimer);
+                    document.getElementById('rushOverlay')?.classList.remove('show');
+                }
+            }, 1000);
+        }
+        document.getElementById('skipRush')?.addEventListener('click', () => {
+            document.getElementById('rushOverlay')?.classList.remove('show');
+            rushActive = false;
+            clearInterval(rushTimer);
+        });
+        document.getElementById('rushShareBtn')?.addEventListener('click', () => {
+            document.getElementById('rushOverlay')?.classList.remove('show');
+            rushActive = false;
+            clearInterval(rushTimer);
+            document.getElementById('inviteModal')?.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            refreshMyStats?.();
+            refreshLeaderboard?.();
+        });
+        // 5-15分钟后随机触发
+        setTimeout(triggerRushEvent, 5 * 60 * 1000 + Math.random() * 10 * 60 * 1000);
+
+        // ---- 双倍VIP版本的recordShare ----
+        const _origRecordShare = recordShare;
+        window.recordShare = function() {
+            const bonus = rushActive ? 6 : 3;
+            spreadState.inviteCount++;
+            spreadState.points += 10 * (rushActive ? 2 : 1);
+            spreadState.vipDays += bonus;
+            const currentExpiry = parseInt(localStorage.getItem('spread_vip_expiry') || Date.now());
+            localStorage.setItem('spread_vip_expiry', currentExpiry + bonus * 24 * 60 * 60 * 1000);
+            if (spreadState.inviteCount >= 10 && spreadState.level !== 'diamond') {
+                spreadState.level = 'diamond';
+                localStorage.setItem('spread_level', 'diamond');
+            } else if (spreadState.inviteCount >= 3 && spreadState.level === 'bronze') {
+                spreadState.level = 'gold';
+                localStorage.setItem('spread_level', 'gold');
+            }
+            localStorage.setItem('spread_invite_count', spreadState.inviteCount);
+            localStorage.setItem('spread_points', spreadState.points);
+            localStorage.setItem('spread_vip_days', spreadState.vipDays);
+            const btn = document.getElementById('sharePosterBtn');
+            if (btn) {
+                btn.classList.add('share-exploding');
+                setTimeout(() => btn.classList.remove('share-exploding'), 500);
+            }
+            updateSpreadUI?.();
+            updateTierUI?.();
+            checkVipUrgency();
+            if (rushActive) {
+                setTimeout(() => showAchievement('⚡', '双倍VIP冲刺！', `获得 +${bonus}天VIP！`), 500);
+                rushActive = false;
+                clearInterval(rushTimer);
+                document.getElementById('rushOverlay')?.classList.remove('show');
+            }
+        };
+
 
         // 暴露API给外部调用（用于追踪实际邀请）
         window.updateInviteCount = function(count) {
