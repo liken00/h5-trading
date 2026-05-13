@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>复盘宝 - 专业量化交易社群</title>
+    <title>热点通 - 实时热点资讯平台</title>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
@@ -2115,13 +2115,13 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">Q</div>
-                <span class="logo-text">QuantMaster</span>
+                <div class="logo-text">热点通</div>
             </div>
             <nav class="header-nav">
-                <a href="#" class="active">行情</a>
-                <a href="#">策略</a>
-                <a href="#">社群</a>
-                <a href="#">关于</a>
+                <a href="#" class="active">热点</a>
+                <a href="#">精选</a>
+                <a href="#">圈子</a>
+                <a href="#">我的</a>
             </nav>
             <div class="header-auth-links" id="headerAuthLinks">
                 <a href="#" class="auth-link" id="btnLogin">登录</a>
@@ -2136,20 +2136,20 @@
     <section class="hero">
         <div class="hero-badge">
             <span class="live-indicator"><span class="live-dot"></span> Live</span>
-            <span id="marketStatusText">实时行情数据</span>
+            <span id="marketStatusText">实时热点资讯</span>
             <button class="refresh-btn" id="refreshMarketBtn" onclick="refreshAllData()" title="刷新数据">🔄</button>
         </div>
-        <h1>专业<span>量化交易</span>社群</h1>
+        <h1>实时<span>热点资讯</span>平台</h1>
         <p class="hero-desc">
-            汇聚顶级交易员，分享独家策略，实时解读市场动态，
-            让每一次决策都有数据支撑
+            每日更新热门话题，精选优质资讯，实时追踪社会热点，
+            让每一次阅读都有价值
         </p>
         <div class="hero-buttons">
             <a href="#community" class="btn btn-primary">
-                <span>👑</span> 加入付费社群
+                <span>👑</span> 免费加入
             </a>
             <a href="#strategies" class="btn btn-secondary">
-                <span>📊</span> 查看策略
+                <span>📊</span> 了解更多
             </a>
         </div>
     </section>
@@ -2164,22 +2164,22 @@
     <!-- Stock List Section -->
     <section class="stock-section" id="stocks">
         <div class="section-header">
-            <h2 class="section-title">🔥 热门股票</h2>
+            <h2 class="section-title">🔥 热门话题</h2>
             <div class="section-tabs">
                 <button class="section-tab active" data-tab="hot">热门</button>
-                <button class="section-tab" data-tab="wave2">二波</button>
-                <button class="section-tab" data-tab="zt">涨停</button>
+                <button class="section-tab" data-tab="wave2">精选</button>
+                <button class="section-tab" data-tab="zt">最新</button>
                 <button class="section-tab" data-tab="focus">关注</button>
             </div>
         </div>
         <div class="stock-list">
             <div class="stock-table">
                 <div class="stock-table-header">
-                    <span>股票名称</span>
-                    <span>最新价</span>
-                    <span>涨跌幅</span>
-                    <span>连板</span>
-                    <span>换手率</span>
+                    <span>话题</span>
+                    <span>热度</span>
+                    <span>评论</span>
+                    <span>时间</span>
+                    <span>来源</span>
                 </div>
                 <div id="stockTableBody">
                     <!-- Stock data will be injected here -->
@@ -2191,7 +2191,7 @@
     <!-- Strategy Cards -->
     <section class="strategy-section" id="strategies">
         <div class="section-header">
-            <h2 class="section-title">📈 精选策略</h2>
+            <h2 class="section-title">📈 精选内容</h2>
         </div>
         <div class="strategy-grid" id="strategyGrid">
             <!-- Strategy cards will be injected here -->
@@ -2202,26 +2202,26 @@
     <section class="community-section" id="community">
         <div class="community-card">
             <div class="community-icon">👑</div>
-            <h2 class="community-title">加入专业交易社群</h2>
+            <h2 class="community-title">加入热点资讯社群</h2>
             <p class="community-desc">
-                获得独家策略、实时买卖信号、每日复盘分析
+                获得独家内容、实时热点资讯、每日精选推荐
             </p>
             <div class="community-features">
                 <div class="community-feature">
                     <div class="community-feature-icon">📊</div>
-                    <span class="community-feature-text">每日策略信号</span>
+                    <span class="community-feature-text">每日热点精选</span>
                 </div>
                 <div class="community-feature">
                     <div class="community-feature-icon">🎯</div>
-                    <span class="community-feature-text">精准买卖点</span>
+                    <span class="community-feature-text">精准内容推荐</span>
                 </div>
                 <div class="community-feature">
                     <div class="community-feature-icon">📚</div>
-                    <span class="community-feature-text">系统化教学</span>
+                    <span class="community-feature-text">系统化内容库</span>
                 </div>
                 <div class="community-feature">
                     <div class="community-feature-icon">💬</div>
-                    <span class="community-feature-text">实时交流</span>
+                    <span class="community-feature-text">实时交流互动</span>
                 </div>
             </div>
             <div class="community-price">
@@ -2243,7 +2243,7 @@
                 <a href="#">联系我们</a>
                 <a href="#">使用条款</a>
             </div>
-            <p class="footer-copy">© 2024 QuantMaster. All rights reserved. 投资有风险，入市需谨慎。</p>
+            <p class="footer-copy">© 2024 热点通. All rights reserved.</p>
         </div>
     </footer>
 
@@ -2253,7 +2253,7 @@
             <div class="invite-float-left">
                 <div class="invite-float-icon">🎁</div>
                 <div class="invite-float-text">
-                    <span class="invite-float-title">🔥 邀请码标记功能已上线</span>
+                    <span class="invite-float-title">🔥 邀请码功能已上线</span>
                     <span class="invite-float-desc">每邀1人各得3天VIP · 邀满3人得7天 · 邀满10人得30天VIP</span>
                 </div>
             </div>
@@ -2284,7 +2284,7 @@
                             <span class="user-level-badge" id="userLevelBadge">LV1</span>
                         </div>
                         <div class="user-info">
-                            <div class="user-name" id="userName">量化爱好者</div>
+                            <div class="user-name" id="userName">资讯达人</div>
                             <div class="user-level">
                                 <span>🌟</span>
                                 <span id="userLevelName">青铜会员</span>
@@ -2354,8 +2354,8 @@
                 <div class="poster-card">
                     <div class="poster-preview" id="posterPreview" style="background:#0a0e17; border-radius:12px; padding:20px; text-align:center;">
                         <div class="poster-logo">Q</div>
-                        <div class="poster-title">复盘宝</div>
-                        <div class="poster-subtitle">专业量化交易社群 · 每日免费策略</div>
+                        <div class="poster-title">热点通</div>
+                        <div class="poster-subtitle">实时热点资讯平台 · 每日精选内容</div>
                         <div class="poster-qr" id="posterQrCode">
                             <span style="font-size: 0.625rem; color: #666;">二维码区域</span>
                         </div>
@@ -2404,7 +2404,7 @@
                             <div class="rank-medal">🥈</div>
                             <div class="rank-avatar">量</div>
                             <div class="rank-info">
-                                <div class="rank-name">量化小陈</div>
+                                <div class="rank-name">内容达人</div>
                                 <div class="rank-time">累计邀请 56 人</div>
                             </div>
                             <div class="rank-count">
@@ -2440,7 +2440,7 @@
                     </div>
                     <div class="reward-rule-item">
                         <span class="reward-rule-icon">✓</span>
-                        <span>邀请满10人升级钻石会员，优先获取买卖信号</span>
+                        <span>邀请满10人升级钻石会员，优先获取精选内容</span>
                     </div>
                     <div class="reward-rule-item">
                         <span class="reward-rule-icon">✓</span>
@@ -2531,27 +2531,27 @@
 
         const strategyData = [
             {
-                title: '二波战法pro',
-                desc: '精准捕捉二波行情，过滤虚假信号',
-                stats: { winRate: '78%', profit: '156%', trades: 324 },
+                title: '热点追踪',
+                desc: '实时追踪热门话题，第一时间获取热点资讯',
+                stats: { winRate: '85%', profit: '10w+', trades: '8k+' },
                 price: '¥1999',
                 period: '/季度',
                 badge: 'hot',
                 tag: '热卖'
             },
             {
-                title: '涨停板战法',
-                desc: '短线涨停板套利策略',
-                stats: { winRate: '85%', profit: '234%', trades: 512 },
+                title: '精选内容包',
+                desc: '每日更新热门话题，精选优质资讯',
+                stats: { winRate: '85%', profit: '5w+', trades: '3k+' },
                 price: '¥2999',
                 period: '/季度',
                 badge: 'new',
                 tag: '新品'
             },
             {
-                title: 'VIP专属策略',
-                desc: '一对一策略定制，实时跟单',
-                stats: { winRate: '92%', profit: '380%', trades: 128 },
+                title: '精选内容',
+                desc: '精选资讯推送，实时内容更新',
+                stats: { winRate: '92%', profit: '20w+', trades: '15k+' },
                 price: '¥9999',
                 period: '/年',
                 badge: 'vip',
@@ -2667,8 +2667,8 @@
                 // 二波：只取status为'二波'的
                 filtered = stockData.filter(s => s.status === '二波');
             } else if (tab === 'zt') {
-                // 涨停：只取涨停的
-                filtered = stockData.filter(s => s.status === '涨停');
+                // 最新：不做过滤，显示所有
+                filtered = stockData;
             } else if (tab === 'focus') {
                 // 关注：取本地存储的自选股
                 const focusCodes = JSON.parse(localStorage.getItem('focus_stocks') || '[]');
@@ -2861,7 +2861,7 @@
                     filterStockData(currentTab);  // 使用当前tab渲染
                 }
             } catch (e) {
-                console.warn('涨停数据加载失败:', e.message);
+                console.warn('热门话题数据加载失败:', e.message);
             }
         }
 
@@ -2891,7 +2891,7 @@
                     <div class="sector-name">${sector.name}</div>
                     <div class="sector-pct ${sector.status}">${sector.pct >= 0 ? '+' : ''}${sector.pct.toFixed(2)}%</div>
                     <div class="sector-count">${sector.stock_count}只</div>
-                    <div class="sector-lead">龙头: ${sector.lead_stock}</div>
+                    <div class="sector-lead">热帖: ${sector.lead_stock}</div>
                 </div>
             `).join('');
         }
@@ -3134,8 +3134,8 @@
         // 初始化分享链接
         function initShareLinks() {
             const shareUrl = window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode;
-            const shareTitle = '复盘宝 - 专业量化交易社群';
-            const shareDesc = '免费获取每日策略、实时行情、VIP专属服务';
+            const shareTitle = '热点通 - 实时热点资讯平台';
+            const shareDesc = '免费获取精选内容、实时热点、专属服务';
 
             // 微信分享（需要引导用户在浏览器中打开）
             window.shareData = {
@@ -3575,7 +3575,7 @@
                     });
 
                     const link = document.createElement('a');
-                    link.download = `复盘宝_${spreadState.inviteCode}.png`;
+                    link.download = `热点通_${spreadState.inviteCode}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
 
@@ -3593,8 +3593,8 @@
                 if (navigator.share) {
                     // 原生分享API（移动端）
                     navigator.share({
-                        title: '📈 复盘宝 - 每日公开涨停龙头名单',
-                        text: '免费获取今日涨停板复盘、龙头战法、明日潜力标的，限量VIP名额正在发放中',
+                        title: '📢 热点通 - 实时热点资讯平台',
+                         text: '免费获取精选内容、实时热点资讯，限量名额正在发放中',
                         url: window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode
                     }).then(() => {
                         recordShare();
@@ -3660,18 +3660,14 @@
             }, 2000);
         }
 
-        // FOMO通知系统 - 股票语境 + 紧迫感
+        // FOMO通知系统 - 热点资讯语境 + 紧迫感
         const fomoMessages = [
-            { city: '深圳', name: '股友8***2', action: '获取了涨停复盘', reward: '获得3天VIP · 限时0元领' },
-            { city: '上海', name: '投机者', action: '分享了龙头标的', reward: '+3天VIP体验' },
-            { city: '北京', name: '作手老王', action: '领到了VIP', reward: '查看最新涨停板' },
-            { city: '广州', name: '短线客', action: '获取了早盘策略', reward: '+3天VIP' },
-            { city: '杭州', name: '游资群友', action: '下载了龙头名单', reward: '+7天VIP' },
-            { city: '成都', name: '打板族', action: '加入了复盘群', reward: '获得VIP权限' },
-            { city: '武汉', name: '职业作手', action: '领到了VIP', reward: '查看明日涨停预测' },
-            { city: '南京', name: '价投者', action: '获取了脱水研报', reward: '+3天VIP' },
-            { city: '西安', name: '小散甲', action: '加入了复盘宝', reward: 'VIP免费领取中' },
-            { city: '长沙', name: '作手老李', action: '获取了VIP', reward: '查看龙回头标的' }
+            { city: '深圳', name: '资讯达人', action: '加入了热点通', reward: '获得3天会员 · 限时0元领' },
+            { city: '上海', name: '资讯达人', action: '领取了精选内容', reward: '+3天会员体验' },
+            { city: '北京', name: '内容达人', action: '领到了会员', reward: '查看最新热门话题' },
+            { city: '杭州', name: '资深用户', action: '下载了精选内容', reward: '+7天会员' },
+            { city: '武汉', name: '内容达人', action: '领到了会员', reward: '查看今日热点资讯' },
+            { city: '长沙', name: '内容达人', action: '获取了会员', reward: '查看精选话题内容' }
         ];
 
         let fomoIndex = 0;
