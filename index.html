@@ -336,6 +336,30 @@
             color: var(--text-muted);
         }
 
+        .refresh-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            transition: transform 0.2s;
+        }
+        .refresh-btn:hover {
+            background: var(--bg-card-hover);
+        }
+        .refresh-btn:active {
+            transform: rotate(180deg);
+        }
+        .refresh-btn.loading {
+            animation: spin 1s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         .market-value {
             font-size: 1.75rem;
             font-weight: 700;
@@ -2112,7 +2136,8 @@
     <section class="hero">
         <div class="hero-badge">
             <span class="live-indicator"><span class="live-dot"></span> Live</span>
-            实时行情数据
+            <span id="marketStatusText">实时行情数据</span>
+            <button class="refresh-btn" id="refreshMarketBtn" onclick="refreshAllData()" title="刷新数据">🔄</button>
         </div>
         <h1>专业<span>量化交易</span>社群</h1>
         <p class="hero-desc">
@@ -2810,7 +2835,7 @@
         async function fetchMarketData() {
             try {
                 showSkeleton('indices');
-                const res = await fetch(`${API_BASE}/indices`);
+                const res = await fetch(`${API_BASE}/indices?refresh=true`);
                 const json = await res.json();
                 if (json.code === 0 && json.data) {
                     marketData = json.data;
@@ -2829,7 +2854,7 @@
                         `<div class="skeleton-card"><div class="skeleton skeleton-line medium"></div><div class="skeleton skeleton-line short"></div></div>`
                     ).join('');
                 }
-                const res = await fetch(`${API_BASE}/ztlist`);
+                const res = await fetch(`${API_BASE}/ztlist?refresh=true`);
                 const json = await res.json();
                 if (json.code === 0 && json.data) {
                     stockData = json.data;
@@ -2842,7 +2867,7 @@
 
         async function fetchHotSectors() {
             try {
-                const res = await fetch(`${API_BASE}/hot-sectors`);
+                const res = await fetch(`${API_BASE}/hot-sectors?refresh=true`);
                 const json = await res.json();
                 if (json.code === 0 && json.data) {
                     hotSectors = json.data;
@@ -2872,6 +2897,20 @@
         }
 
         // ==================== Real-time Updates ====================
+        // 手动刷新所有数据
+        async function refreshAllData() {
+            const btn = document.getElementById('refreshMarketBtn');
+            if (btn) btn.classList.add('loading');
+            await Promise.all([
+                fetchMarketData(),
+                fetchStockData(),
+                fetchHotSectors(),
+            ]);
+            if (btn) {
+                setTimeout(() => btn.classList.remove('loading'), 500);
+            }
+        }
+
         function startLiveUpdates() {
             // 每2分钟刷新大盘数据
             fetchMarketData();
@@ -2885,7 +2924,7 @@
         // ==================== Initialize ====================
         document.addEventListener('DOMContentLoaded', () => {
             renderMarketData();
-            renderStockData();
+            renderFilteredStockData(stockData, 'hot');
             renderStrategyData();
             initTabs();
             startLiveUpdates();
