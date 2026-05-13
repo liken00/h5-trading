@@ -839,6 +839,36 @@
             animation: fadeInUp 0.6s ease forwards;
         }
 
+        /* ==================== Skeleton Loading ==================== */
+        .skeleton {
+            background: linear-gradient(90deg, #1a1f35 25%, #252b45 50%, #1a1f35 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 6px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .skeleton-line {
+            height: 12px;
+            margin-bottom: 0.5rem;
+        }
+
+        .skeleton-line.short { width: 60%; }
+        .skeleton-line.medium { width: 80%; }
+        .skeleton-line.full { width: 100%; }
+
         /* ==================== Live Indicator ==================== */
         .live-indicator {
             display: flex;
@@ -2241,8 +2271,41 @@
         }
 
         // ==================== API Fetch Functions ====================
+
+        // 显示骨架屏
+        function showSkeleton(type) {
+            const el = document.getElementById('indicesContainer');
+            if (!el) return;
+            if (type === 'indices') {
+                el.innerHTML = `
+                    <div class="skeleton-card" style="display:flex;gap:1rem;align-items:center">
+                        <div><div class="skeleton" style="width:80px;height:14px;margin-bottom:6px"></div><div class="skeleton" style="width:50px;height:10px"></div></div>
+                        <div><div class="skeleton" style="width:80px;height:14px;margin-bottom:6px"></div><div class="skeleton" style="width:50px;height:10px"></div></div>
+                        <div><div class="skeleton" style="width:80px;height:14px;margin-bottom:6px"></div><div class="skeleton" style="width:50px;height:10px"></div></div>
+                        <div><div class="skeleton" style="width:80px;height:14px;margin-bottom:6px"></div><div class="skeleton" style="width:50px;height:10px"></div></div>
+                    </div>`;
+            }
+        }
+
+        // 数字滚动动画
+        function animateNumber(el, target, suffix='', decimals=2) {
+            const start = 0;
+            const duration = 800;
+            const startTime = performance.now();
+            function update(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
+                const current = start + (target - start) * eased;
+                el.textContent = current.toFixed(decimals) + suffix;
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
         async function fetchMarketData() {
             try {
+                showSkeleton('indices');
                 const res = await fetch(`${API_BASE}/indices`);
                 const json = await res.json();
                 if (json.code === 0 && json.data) {
@@ -2256,6 +2319,12 @@
 
         async function fetchStockData() {
             try {
+                const listEl = document.getElementById('ztListContainer');
+                if (listEl) {
+                    listEl.innerHTML = Array(5).fill().map(() =>
+                        `<div class="skeleton-card"><div class="skeleton skeleton-line medium"></div><div class="skeleton skeleton-line short"></div></div>`
+                    ).join('');
+                }
                 const res = await fetch(`${API_BASE}/ztlist`);
                 const json = await res.json();
                 if (json.code === 0 && json.data) {
