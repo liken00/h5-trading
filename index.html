@@ -2386,6 +2386,9 @@
             // 更新阶梯奖励UI
             updateTierUI();
 
+            // 自动上报邀请关系（如果有ref参数）
+            autoRecordInvite();
+
             // 更新UI显示
             updateSpreadUI();
 
@@ -2439,6 +2442,84 @@
                 title: shareTitle,
                 desc: shareDesc
             };
+        }
+
+        // 自动上报邀请关系
+        function autoRecordInvite() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            if (!refCode) return;
+
+            const visitorId = spreadState.userId;
+
+            // 上报到后端
+            fetch(`${API_BASE}/invite/record`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    visitor_id: visitorId,
+                    invite_code: refCode
+                })
+            }).then(res => res.json()).then(data => {
+                console.log('邀请记录已上报:', data);
+            }).catch(e => {
+                console.log('上报失败（可能后端未启动）:', e.message);
+            });
+
+            // 保存到本地
+            localStorage.setItem('spread_ref_code', refCode);
+        }
+
+        // 获取并显示我的邀请统计
+        function refreshMyStats() {
+            const code = spreadState.inviteCode;
+            fetch(`${API_BASE}/invite/stats?code=${code}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 0 && data.data) {
+                        const d = data.data;
+                        spreadState.inviteCount = d.total_invites || spreadState.inviteCount;
+                        spreadState.vipDays = d.total_vip_days || spreadState.vipDays;
+                        if (d.level) {
+                            spreadState.level = d.level;
+                            localStorage.setItem('spread_level', d.level);
+                        }
+                        localStorage.setItem('spread_invite_count', spreadState.inviteCount);
+                        localStorage.setItem('spread_vip_days', spreadState.vipDays);
+                        updateSpreadUI();
+                        updateTierUI();
+                    }
+                }).catch(() => {});
+        }
+
+        // 刷新排行榜
+        function refreshLeaderboard() {
+            fetch(`${API_BASE}/invite/leaderboard`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 0 && data.data) {
+                        renderLeaderboard(data.data);
+                    }
+                }).catch(() => {});
+        }
+
+        function renderLeaderboard(leaders) {
+            const list = document.getElementById('rankList');
+            if (!list) return;
+            list.innerHTML = leaders.map((item, i) => `
+                <div class="rank-item ${i === 0 ? 'top1' : i === 1 ? 'top2' : ''}">
+                    <div class="rank-medal">${item.medal || '#' + item.rank}</div>
+                    <div class="rank-avatar">${(item.owner_name || '某').charAt(0)}</div>
+                    <div class="rank-info">
+                        <div class="rank-name">${item.owner_name}</div>
+                        <div class="rank-time">累计邀请 ${item.total_invites} 人</div>
+                    </div>
+                    <div class="rank-count">
+                        <div class="rank-count-value">${item.total_vip_days}天</div>
+                        <div class="rank-count-label">VIP时长</div>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // 生成真实二维码
@@ -2543,6 +2624,9 @@
             document.getElementById('openInviteModalBtn').addEventListener('click', () => {
                 document.getElementById('inviteModal').classList.add('active');
                 document.body.style.overflow = 'hidden';
+                // 刷新我的数据和排行榜
+                refreshMyStats();
+                refreshLeaderboard();
             });
 
             // 关闭邀请弹窗
