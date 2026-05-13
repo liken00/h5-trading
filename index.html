@@ -468,6 +468,97 @@
             background: var(--bg-card-hover);
         }
 
+        .stock-row-focus-hint {
+            opacity: 0.6;
+        }
+
+        .focus-hint-tag {
+            font-size: 0.6rem;
+            color: var(--accent-gold);
+            background: rgba(255, 193, 7, 0.15);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            margin-top: 2px;
+            display: inline-block;
+        }
+
+        /* Stock Detail Modal */
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .detail-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        .detail-code {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+        .detail-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .detail-price {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .detail-change {
+            font-size: 0.875rem;
+        }
+        .detail-change.up { color: var(--accent-green); }
+        .detail-change.down { color: var(--accent-red); }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .detail-item {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .detail-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        .detail-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .detail-value.up { color: var(--accent-green); }
+        .detail-value.down { color: var(--accent-red); }
+        .detail-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        .detail-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--gradient-green);
+            color: #fff;
+        }
+        .detail-btn-close {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
         .stock-info {
             display: flex;
             flex-direction: column;
@@ -2062,7 +2153,7 @@
                     <span>股票名称</span>
                     <span>最新价</span>
                     <span>涨跌幅</span>
-                    <span>成交量</span>
+                    <span>连板</span>
                     <span>换手率</span>
                 </div>
                 <div id="stockTableBody">
@@ -2496,7 +2587,7 @@
                         </div>
                         <span class="stock-price">¥${stock.price.toFixed(2)}</span>
                         <span class="stock-percent ${changeClass}">
-                            ${arrow} ${changeSign}${stock.percent.toFixed(2)}%
+                            ${arrow} ${changeSign}${(stock.pct || stock.percent || 0).toFixed(2)}%
                         </span>
                         <span class="stock-volume">${stock.volume}</span>
                         <span class="stock-volume">${stock.turnover}%</span>
@@ -2539,15 +2630,148 @@
         }
 
         // ==================== Tab Switching ====================
+        let currentTab = 'hot';
+
+        function filterStockData(tab) {
+            currentTab = tab;
+            let filtered = [];
+            if (tab === 'hot') {
+                // 热门：按涨幅排序，取前20
+                filtered = [...stockData].sort((a, b) => (b.pct || 0) - (a.pct || 0)).slice(0, 20);
+            } else if (tab === 'wave2') {
+                // 二波：只取status为'二波'的
+                filtered = stockData.filter(s => s.status === '二波');
+            } else if (tab === 'zt') {
+                // 涨停：只取涨停的
+                filtered = stockData.filter(s => s.status === '涨停');
+            } else if (tab === 'focus') {
+                // 关注：取本地存储的自选股
+                const focusCodes = JSON.parse(localStorage.getItem('focus_stocks') || '[]');
+                filtered = stockData.filter(s => focusCodes.includes(s.code));
+                if (filtered.length === 0) {
+                    // 没有自选时显示空状态提示
+                    filtered = stockData.slice(0, 5).map(s => ({...s, _isFocusHint: true}));
+                }
+            }
+            renderFilteredStockData(filtered, tab);
+        }
+
+        function renderFilteredStockData(data, tab) {
+            const tbody = document.getElementById('stockTableBody');
+            if (!data || data.length === 0) {
+                tbody.innerHTML = `<div class="empty-state" style="padding:2rem;text-align:center;color:var(--text-muted)">暂无数据${tab === 'focus' ? '，去热门列表添加关注' : ''}</div>`;
+                return;
+            }
+            tbody.innerHTML = data.map(stock => {
+                const changeSign = (stock.pct || 0) >= 0 ? '+' : '';
+                const changeClass = (stock.pct || 0) >= 0 ? 'up' : 'down';
+                const arrow = (stock.pct || 0) >= 0 ? '▲' : '▼';
+                const isFocusHint = stock._isFocusHint;
+                return `
+                    <div class="stock-row ${isFocusHint ? 'stock-row-focus-hint' : ''}" ${!isFocusHint ? `onclick="showStockDetail('${stock.code}')"` : ''} style="${!isFocusHint ? 'cursor:pointer' : ''}">
+                        <div class="stock-info">
+                            <span class="stock-name">${stock.name}</span>
+                            <span class="stock-code">${stock.code}</span>
+                            ${isFocusHint ? '<span class="focus-hint-tag">关注后可查看</span>' : ''}
+                        </div>
+                        <span class="stock-price">¥${(stock.price || 0).toFixed(2)}</span>
+                        <span class="stock-percent ${changeClass}">
+                            ${arrow} ${changeSign}${(stock.pct || 0).toFixed(2)}%
+                        </span>
+                        <span class="stock-volume">${stock.boards ? stock.boards+'板' : '-'}</span>
+                        <span class="stock-volume">${stock.turnover ? stock.turnover+'%' : '-'}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function initTabs() {
             const tabs = document.querySelectorAll('.section-tab');
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     tabs.forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
-                    // In real app, would filter stock data based on tab
+                    filterStockData(tab.dataset.tab);
                 });
             });
+        }
+
+        // ==================== Stock Detail Modal ====================
+        async function showStockDetail(code) {
+            const modal = document.getElementById('stockDetailModal') || createStockDetailModal();
+            modal.classList.add('active');
+            document.getElementById('stockDetailContent').innerHTML = `
+                <div style="display:flex;justify-content:center;align-items:center;padding:3rem">
+                    <div class="skeleton" style="width:200px;height:20px"></div>
+                </div>`;
+            try {
+                const res = await fetch(`${API_BASE}/stock/${code}`);
+                const json = await res.json();
+                if (json.code === 0 && json.data) {
+                    const d = json.data;
+                    const pct = d.pct || 0;
+                    const type = pct >= 0 ? 'up' : 'down';
+                    const sign = pct >= 0 ? '+' : '';
+                    document.getElementById('stockDetailContent').innerHTML = `
+                        <div class="detail-header">
+                            <div class="detail-name">${d.name || code}</div>
+                            <div class="detail-code">${code}</div>
+                        </div>
+                        <div class="detail-price-row">
+                            <span class="detail-price">${(d.price || 0).toFixed(2)}</span>
+                            <span class="detail-change ${type}">${sign}${d.change || 0} (${sign}${pct}%)</span>
+                        </div>
+                        <div class="detail-grid">
+                            <div class="detail-item"><span class="detail-label">今开</span><span class="detail-value">${(d.open || 0).toFixed(2)}</span></div>
+                            <div class="detail-item"><span class="detail-label">最高</span><span class="detail-value up">${(d.high || 0).toFixed(2)}</span></div>
+                            <div class="detail-item"><span class="detail-label">最低</span><span class="detail-value down">${(d.low || 0).toFixed(2)}</span></div>
+                            <div class="detail-item"><span class="detail-label">成交量</span><span class="detail-value">${d.volume || 0} 万手</span></div>
+                            <div class="detail-item"><span class="detail-label">成交额</span><span class="detail-value">${d.turnover || 0} 亿</span></div>
+                            <div class="detail-item"><span class="detail-label">振幅</span><span class="detail-value">${d.amplitude || 0}%</span></div>
+                        </div>
+                        <div class="detail-actions">
+                            <button class="detail-btn" onclick="toggleFocus('${code}')">⭐ ${isFocused(code) ? '取消关注' : '加关注'}</button>
+                            <button class="detail-btn detail-btn-close" onclick="closeStockDetail()">关闭</button>
+                        </div>`;
+                } else {
+                    document.getElementById('stockDetailContent').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted)加载失败</div>';
+                }
+            } catch (e) {
+                document.getElementById('stockDetailContent').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted)网络错误</div>';
+            }
+        }
+
+        function createStockDetailModal() {
+            const modal = document.createElement('div');
+            modal.id = 'stockDetailModal';
+            modal.className = 'modal';
+            modal.innerHTML = `<div class="modal-content" style="background:var(--bg-card);border-radius:var(--radius-lg);max-width:360px;width:90%;margin:2rem auto;padding:1.5rem">
+                    <div id="stockDetailContent"></div>
+                </div>`;
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeStockDetail(); });
+            document.body.appendChild(modal);
+            return modal;
+        }
+
+        function closeStockDetail() {
+            const m = document.getElementById('stockDetailModal');
+            if (m) m.classList.remove('active');
+        }
+
+        function toggleFocus(code) {
+            let focuses = JSON.parse(localStorage.getItem('focus_stocks') || '[]');
+            if (focuses.includes(code)) {
+                focuses = focuses.filter(c => c !== code);
+            } else {
+                focuses.push(code);
+            }
+            localStorage.setItem('focus_stocks', JSON.stringify(focuses));
+            showStockDetail(code);  // 刷新
+        }
+
+        function isFocused(code) {
+            const focuses = JSON.parse(localStorage.getItem('focus_stocks') || '[]');
+            return focuses.includes(code);
         }
 
         // ==================== API Fetch Functions ====================
@@ -2609,7 +2833,7 @@
                 const json = await res.json();
                 if (json.code === 0 && json.data) {
                     stockData = json.data;
-                    renderStockData();
+                    filterStockData(currentTab);  // 使用当前tab渲染
                 }
             } catch (e) {
                 console.warn('涨停数据加载失败:', e.message);
