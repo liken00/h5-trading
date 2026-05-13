@@ -3116,6 +3116,29 @@
             document.getElementById('wechatLoginBtn').addEventListener('click', async () => {
                 const hintEl = document.getElementById('wechatHint');
                 const qrBox = document.getElementById('wechatQrBox');
+
+                // 检测是否手机端
+                const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                if (isMobile) {
+                    // 手机端：直接跳转微信授权
+                    hintEl.innerHTML = '<small style="color:#94a3b8">正在拉起微信授权...</small>';
+                    try {
+                        const res = await fetch(`${API_BASE}/auth/wechat/qr`);
+                        const data = await res.json();
+                        if (data.code !== 0 || !data.data?.auth_url) {
+                            hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
+                            return;
+                        }
+                        // 微信手机端：直接跳转
+                        window.location.href = data.data.auth_url;
+                    } catch(e) {
+                        hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
+                    }
+                    return;
+                }
+
+                // 电脑端：显示二维码
                 if (wechatQrEl) qrBox.innerHTML = '';
                 hintEl.innerHTML = '正在加载授权二维码...';
 
@@ -3127,7 +3150,7 @@
                         return;
                     }
 
-                    hintEl.innerHTML = '<small style="color:#94a3b8">用微信扫码下方二维码授权登录</small>';
+                    hintEl.innerHTML = '<small style="color:#94a3b8">用微信扫下方二维码授权登录</small>';
 
                     // 生成二维码
                     wechatQrEl = document.createElement('div');
