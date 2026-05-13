@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>涨停复盘宝 - 专业量化交易社群</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         /* ==================== CSS Variables ==================== */
         :root {
@@ -964,6 +965,128 @@
             box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
         }
 
+        /* VIP倒计时横幅 */
+        .vip-countdown-banner {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: countdownPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes countdownPulse {
+            0%, 100% { border-color: rgba(255, 193, 7, 0.3); }
+            50% { border-color: rgba(255, 193, 7, 0.7); }
+        }
+
+        .countdown-icon { font-size: 1.2rem; }
+        .countdown-text { font-size: 0.8rem; color: #ffd700; }
+        .countdown-text b { color: #ff6b6b; font-size: 0.9rem; }
+
+        /* 三阶梯奖励 */
+        .tier-rewards {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .tier-reward-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .tier-reward-item.active {
+            background: rgba(0, 208, 132, 0.08);
+            border-color: rgba(0, 208, 132, 0.3);
+        }
+
+        .tier-reward-item.locked {
+            opacity: 0.6;
+        }
+
+        .tier-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .tier-reward-item.active .tier-num { background: var(--accent-green); }
+        .tier-reward-item.locked .tier-num { background: #555; }
+
+        .tier-info { flex: 1; }
+        .tier-name { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); }
+        .tier-desc { font-size: 0.65rem; color: var(--text-secondary); }
+        .tier-status { font-size: 0.9rem; }
+        .tier-reward-item.active .tier-status { color: var(--accent-green); }
+        .tier-reward-item.locked .tier-status { color: #666; }
+
+        /* 分享按钮粒子爆炸动画 */
+        @keyframes shareExplode {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .share-exploding {
+            animation: shareExplode 0.4s ease-out;
+        }
+
+        /* 成就徽章弹窗 */
+        .achievement-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #1a1a2e, #0a0e17);
+            border: 2px solid var(--accent-gold);
+            border-radius: 20px;
+            padding: 2rem;
+            z-index: 20000;
+            text-align: center;
+            min-width: 280px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .achievement-modal.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .achievement-badge {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
         /* 邀请海报弹窗 */
         .invite-modal-overlay {
             position: fixed;
@@ -1445,6 +1568,7 @@
         /* FOMO 动态通知 */
         .fomo-notification {
             position: fixed;
+            position: fixed;
             top: 80px;
             right: 1rem;
             background: var(--bg-card);
@@ -1814,6 +1938,40 @@
                     </div>
                 </div>
 
+                <!-- VIP倒计时提醒 -->
+                <div class="vip-countdown-banner" id="vipCountdownBanner">
+                    <span class="countdown-icon">⏰</span>
+                    <span class="countdown-text">您的VIP体验还剩 <b id="vipCountdownTime">--:--:--</b> 到期</span>
+                </div>
+
+                <!-- 三阶梯奖励 -->
+                <div class="tier-rewards">
+                    <div class="tier-reward-item ${spreadState.inviteCount >= 0 ? 'active' : ''}" id="tier1">
+                        <div class="tier-num">1</div>
+                        <div class="tier-info">
+                            <div class="tier-name">青铜奖励</div>
+                            <div class="tier-desc">邀请1人 → 双方各得3天VIP</div>
+                        </div>
+                        <div class="tier-status">✓</div>
+                    </div>
+                    <div class="tier-reward-item ${spreadState.inviteCount >= 3 ? 'active' : 'locked'}" id="tier2">
+                        <div class="tier-num">2</div>
+                        <div class="tier-info">
+                            <div class="tier-name">黄金奖励</div>
+                            <div class="tier-desc">累计邀请3人 → 额外奖励15天VIP</div>
+                        </div>
+                        <div class="tier-status">🔒</div>
+                    </div>
+                    <div class="tier-reward-item ${spreadState.inviteCount >= 10 ? 'active' : 'locked'}" id="tier3">
+                        <div class="tier-num">3</div>
+                        <div class="tier-info">
+                            <div class="tier-name">钻石奖励</div>
+                            <div class="tier-desc">累计邀请10人 → 成为合伙人，享永久分成</div>
+                        </div>
+                        <div class="tier-status">🔒</div>
+                    </div>
+                </div>
+
                 <!-- 邀请海报 -->
                 <div class="poster-card">
                     <div class="poster-preview" id="posterPreview">
@@ -1920,6 +2078,13 @@
             <div class="fomo-desc" id="fomoDesc">获得了7天VIP体验</div>
         </div>
         <button class="fomo-close" id="closeFomo">×</button>
+    </div>
+
+    <!-- 成就徽章弹窗 -->
+    <div class="achievement-modal" id="achievementModal">
+        <div class="achievement-badge" id="achievementBadge">🎉</div>
+        <div class="achievement-title" id="achievementTitle">成就解锁！</div>
+        <div class="achievement-desc" id="achievementDesc"></div>
     </div>
 
     <!-- 分享成功提示 -->
@@ -2215,6 +2380,12 @@
             // 初始化邀请码到分享链接
             initShareLinks();
 
+            // 启动VIP倒计时
+            startVipCountdown();
+
+            // 更新阶梯奖励UI
+            updateTierUI();
+
             // 更新UI显示
             updateSpreadUI();
 
@@ -2270,13 +2441,100 @@
             };
         }
 
-        // 生成二维码（简化版，实际需要用qrcode.js库）
+        // 生成真实二维码
         function generateQrCode() {
             const qrContainer = document.getElementById('posterQrCode');
             const shareUrl = window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode;
-            // 实际应该使用qrcode库生成，这里显示占位
-            qrContainer.innerHTML = `<div style="font-size:10px;color:#666;">扫码加入</div>
-                <div style="font-size:8px;color:#999;margin-top:4px;">${shareUrl.substring(0, 20)}...</div>`;
+            qrContainer.innerHTML = '';
+            try {
+                new QRCode(qrContainer, {
+                    text: shareUrl,
+                    width: 100,
+                    height: 100,
+                    colorDark: '#ffffff',
+                    colorLight: '#0a0e17',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            } catch(e) {
+                qrContainer.innerHTML = '<div style="font-size:10px;color:#666;">二维码</div>';
+            }
+        }
+
+        // VIP倒计时计时器
+        function startVipCountdown() {
+            const vipExpiry = localStorage.getItem('spread_vip_expiry');
+            if (!vipExpiry) {
+                // 首次访问，给7天VIP体验
+                const expiry = Date.now() + 7 * 24 * 60 * 60 * 1000;
+                localStorage.setItem('spread_vip_expiry', expiry);
+            }
+
+            function updateCountdown() {
+                const expiry = parseInt(localStorage.getItem('spread_vip_expiry') || Date.now() + 7 * 24 * 60 * 60 * 1000);
+                const now = Date.now();
+                const diff = Math.max(0, expiry - now);
+
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const el = document.getElementById('vipCountdownTime');
+                if (el) {
+                    el.textContent = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+                }
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // 显示成就弹窗
+        function showAchievement(badge, title, desc) {
+            document.getElementById('achievementBadge').textContent = badge;
+            document.getElementById('achievementTitle').textContent = title;
+            document.getElementById('achievementDesc').textContent = desc;
+            const modal = document.getElementById('achievementModal');
+            modal.classList.add('show');
+            setTimeout(() => modal.classList.remove('show'), 3000);
+        }
+
+        // 更新阶梯奖励UI
+        function updateTierUI() {
+            const tier1 = document.getElementById('tier1');
+            const tier2 = document.getElementById('tier2');
+            const tier3 = document.getElementById('tier3');
+            if (!tier1) return;
+
+            const count = spreadState.inviteCount;
+
+            // Tier 1 - always active if invited at least once
+            if (count >= 1) {
+                tier1.classList.add('active');
+                tier1.querySelector('.tier-status').textContent = '✓';
+            }
+
+            // Tier 2 - Gold (3 invites)
+            if (count >= 3) {
+                tier2.classList.remove('locked');
+                tier2.classList.add('active');
+                tier2.querySelector('.tier-status').textContent = '✓';
+                // Show achievement for first time reaching Gold
+                if (localStorage.getItem('tier2_unlocked') !== '1') {
+                    localStorage.setItem('tier2_unlocked', '1');
+                    setTimeout(() => showAchievement('🥇', '黄金会员解锁！', '累计邀请3人，额外获得15天VIP'), 500);
+                }
+            }
+
+            // Tier 3 - Diamond (10 invites)
+            if (count >= 10) {
+                tier3.classList.remove('locked');
+                tier3.classList.add('active');
+                tier3.querySelector('.tier-status').textContent = '✓';
+                if (localStorage.getItem('tier3_unlocked') !== '1') {
+                    localStorage.setItem('tier3_unlocked', '1');
+                    setTimeout(() => showAchievement('💎', '钻石合伙人解锁！', '成为合伙人，享永久分成权益'), 500);
+                }
+            }
         }
 
         // 绑定裂变事件
@@ -2341,6 +2599,10 @@
             spreadState.points += 30;
             spreadState.vipDays += 3;
 
+            // 延长VIP到期时间
+            const currentExpiry = parseInt(localStorage.getItem('spread_vip_expiry') || Date.now());
+            localStorage.setItem('spread_vip_expiry', currentExpiry + 3 * 24 * 60 * 60 * 1000);
+
             // 检查升级
             if (spreadState.inviteCount >= 10 && spreadState.level !== 'diamond') {
                 spreadState.level = 'diamond';
@@ -2354,7 +2616,15 @@
             localStorage.setItem('spread_points', spreadState.points);
             localStorage.setItem('spread_vip_days', spreadState.vipDays);
 
+            // 分享后按钮爆炸动画
+            const btn = document.getElementById('sharePosterBtn');
+            if (btn) {
+                btn.classList.add('share-exploding');
+                setTimeout(() => btn.classList.remove('share-exploding'), 500);
+            }
+
             updateSpreadUI();
+            updateTierUI();
         }
 
         // 显示分享成功
