@@ -2664,7 +2664,25 @@
             if (authLinks) {
                 if (window.currentUser) {
                     authLinks.classList.add('logged-in');
-                    authLinks.setAttribute('data-nickname', window.currentUser.nickname || '用户');
+                    const nick = window.currentUser.nickname || '用户';
+                    authLinks.innerHTML = `<span style="color:#94a3b8;font-size:0.8rem;">${nick}</span><a href="#" id="btnLogout" style="color:#ff4757;font-size:0.8rem;margin-left:0.5rem;">退出</a>`;
+                    document.getElementById('btnLogout').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const autoToken = localStorage.getItem('auto_token');
+                        if (autoToken) {
+                            fetch(`${API_BASE}/auth/logout`, {
+                                method: 'POST',
+                                headers: { 'X-Auto-Token': autoToken }
+                            });
+                        }
+                        localStorage.removeItem('auth_token');
+                        localStorage.removeItem('auto_token');
+                        localStorage.removeItem('user_id');
+                        window.currentUser = null;
+                        updateLoginState();
+                        authLinks.innerHTML = '<a href="#" id="btnLogin">登录</a><span style="color:#64748b;margin:0 0.2rem">|</span><a href="#" id="btnRegister">注册</a>';
+                        bindAuthLinks();
+                    });
                 } else {
                     authLinks.classList.remove('logged-in');
                 }
@@ -2672,19 +2690,54 @@
         }
 
         function checkLoginStatus() {
+            const autoToken = localStorage.getItem('auto_token');
             const token = localStorage.getItem('auth_token');
-            if (!token) return;
+
+            // 优先用auto_token自动登录
+            if (autoToken) {
+                fetch(`${API_BASE}/auth/auto_login`, {
+                    method: 'POST',
+                    headers: { 'X-Auto-Token': autoToken }
+                }).then(r => r.json()).then(data => {
+                    if (data.code === 0 && data.data?.token) {
+                        localStorage.setItem('auth_token', data.data.token);
+                        window.currentUser = data.data.user;
+                        updateLoginState();
+                        return;
+                    }
+                    // auto_token失效，尝试auth_token
+                    tryAuthToken();
+                }).catch(() => tryAuthToken());
+                return;
+            }
+
+            tryAuthToken();
+        }
+
+        function tryAuthToken() {
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                window.currentUser = null;
+                updateLoginState();
+                return;
+            }
             fetch(`${API_BASE}/auth/status`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             }).then(r => r.json()).then(data => {
                 if (data.code === 0 && data.data?.logged_in) {
                     window.currentUser = data.data.user;
-                    updateLoginState();
                 } else {
                     localStorage.removeItem('auth_token');
                     localStorage.removeItem('user_id');
+                    window.currentUser = null;
                 }
-            }).catch(() => {});
+                updateLoginState();
+            }).catch(() => {
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('user_id');
+                window.currentUser = null;
+                updateLoginState();
+            });
         }
 
         // 裂变状态管理
@@ -2974,20 +3027,26 @@
             }
         }
 
+        // 绑定登录/注册按钮
+        function bindAuthLinks() {
+            const loginBtn = document.getElementById('btnLogin');
+            const registerBtn = document.getElementById('btnRegister');
+            if (loginBtn) loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+            if (registerBtn) registerBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
         // 绑定裂变事件
         function bindSpreadEvents() {
             // 绑定登录/注册头部链接
-            document.getElementById('btnLogin').addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('loginModal').classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-
-            document.getElementById('btnRegister').addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('loginModal').classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
+            bindAuthLinks();
 
             // 打开登录弹窗
             document.getElementById('openInviteModalBtn').addEventListener('click', () => {
@@ -3086,8 +3145,9 @@
                     });
                     const data = await res.json();
                     if (data.code === 0) {
-                        // 登录成功
+                        // 登录成功：保存auth_token和auto_token
                         localStorage.setItem('auth_token', data.data.token);
+                        localStorage.setItem('auto_token', data.data.auto_token || '');
                         localStorage.setItem('user_id', data.data.user.id);
                         window.currentUser = data.data.user;
                         updateLoginState();
