@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>涨停复盘宝 - 专业量化交易社群</title>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         /* ==================== CSS Variables ==================== */
         :root {
@@ -1637,6 +1638,17 @@
             transform: translateY(-2px);
         }
 
+        .wechat-share-tip {
+            margin-top: 0.75rem;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.4;
+            background: rgba(255,255,255,0.03);
+            padding: 0.5rem;
+            border-radius: 6px;
+        }
+
         /* 邀请排行榜 */
         .invite-rank-section {
             margin-bottom: 1.5rem;
@@ -2114,8 +2126,8 @@
             <div class="invite-float-left">
                 <div class="invite-float-icon">🎁</div>
                 <div class="invite-float-text">
-                    <span class="invite-float-title">邀请好友加入，VIP免费送</span>
-                    <span class="invite-float-desc">每成功邀请1人，双方各得3天VIP</span>
+                    <span class="invite-float-title">🔥 邀请码标记功能已上线</span>
+                    <span class="invite-float-desc">每邀1人各得3天VIP · 邀满3人得7天 · 邀满10人得30天VIP</span>
                 </div>
             </div>
             <div class="invite-float-right">
@@ -2133,8 +2145,8 @@
         <div class="invite-modal">
             <div class="invite-modal-header">
                 <button class="invite-modal-close" id="closeInviteModal">×</button>
-                <div class="invite-modal-title">邀请好友赚VIP</div>
-                <div class="invite-modal-subtitle">每成功邀请1人，双方各得3天VIP体验</div>
+                <div class="invite-modal-title">🔥 邀请好友赚VIP</div>
+                <div class="invite-modal-subtitle">每邀1人各得3天VIP · 邀满3人得7天 · 邀满10人得30天</div>
             </div>
             <div class="invite-modal-body">
                 <!-- 用户等级卡片 -->
@@ -2213,7 +2225,7 @@
 
                 <!-- 邀请海报 -->
                 <div class="poster-card">
-                    <div class="poster-preview" id="posterPreview">
+                    <div class="poster-preview" id="posterPreview" style="background:#0a0e17; border-radius:12px; padding:20px; text-align:center;">
                         <div class="poster-logo">Q</div>
                         <div class="poster-title">涨停复盘宝</div>
                         <div class="poster-subtitle">专业量化交易社群 · 每日免费策略</div>
@@ -2239,6 +2251,9 @@
                     <div class="poster-btn-row">
                         <button class="poster-btn poster-btn-save" id="savePosterBtn">📥 保存海报</button>
                         <button class="poster-btn poster-btn-share" id="sharePosterBtn">📤 分享海报</button>
+                    </div>
+                    <div class="wechat-share-tip">
+                        💡 <b>微信分享方法：</b>点击「保存海报」→ 打开微信 → 右上角「+」→「发表」→「相册」选海报图 → 发送即可
                     </div>
                 </div>
 
@@ -3048,19 +3063,13 @@
             // 绑定登录/注册头部链接
             bindAuthLinks();
 
-            // 打开登录弹窗
+            // 打开邀请弹窗（无需登录，未登录用户也能分享海报）
             document.getElementById('openInviteModalBtn').addEventListener('click', () => {
-                if (window.currentUser) {
-                    // 已登录，打开邀请弹窗
-                    document.getElementById('inviteModal').classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                    refreshMyStats();
-                    refreshLeaderboard();
-                } else {
-                    // 未登录，打开登录弹窗
-                    document.getElementById('loginModal').classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                }
+                document.getElementById('inviteModal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+                // 刷新自己的数据和排行榜
+                refreshMyStats();
+                refreshLeaderboard();
             });
 
             // 关闭登录弹窗
@@ -3273,10 +3282,33 @@
                 }
             });
 
-            // 保存海报
-            document.getElementById('savePosterBtn').addEventListener('click', () => {
-                // 实际应该使用html2canvas库将海报转为图片下载
-                showShareSuccess('海报已保存到相册');
+            // 保存海报（生成图片下载）
+            document.getElementById('savePosterBtn').addEventListener('click', async () => {
+                const btn = document.getElementById('savePosterBtn');
+                btn.textContent = '⏳ 生成中...';
+                btn.disabled = true;
+
+                try {
+                    const posterEl = document.getElementById('posterPreview');
+                    const canvas = await html2canvas(posterEl, {
+                        scale: 2,
+                        backgroundColor: '#0a0e17',
+                        useCORS: true,
+                        logging: false
+                    });
+
+                    const link = document.createElement('a');
+                    link.download = `涨停复盘宝_${spreadState.inviteCode}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+
+                    showShareSuccess('海报已保存到相册');
+                } catch(e) {
+                    showShareSuccess('保存失败，请截图分享');
+                } finally {
+                    btn.textContent = '📥 保存海报';
+                    btn.disabled = false;
+                }
             });
 
             // 分享海报
@@ -3284,8 +3316,8 @@
                 if (navigator.share) {
                     // 原生分享API（移动端）
                     navigator.share({
-                        title: '涨停复盘宝 - 量化交易社群',
-                        text: '免费获取每日策略、实时行情',
+                        title: '📈 涨停复盘宝 - 每日公开涨停龙头名单',
+                        text: '免费获取今日涨停板复盘、龙头战法、明日潜力标的，限量VIP名额正在发放中',
                         url: window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode
                     }).then(() => {
                         recordShare();
@@ -3351,29 +3383,41 @@
             }, 2000);
         }
 
-        // FOMO通知系统
+        // FOMO通知系统 - 股票语境 + 紧迫感
         const fomoMessages = [
-            { city: '深圳', name: '张先生', action: '加入社群', reward: '获得7天VIP体验' },
-            { city: '上海', name: '李女士', action: '下载策略', reward: '获得3天VIP体验' },
-            { city: '北京', name: '王先生', action: '订阅服务', reward: '续费1个月' },
-            { city: '广州', name: '陈先生', action: '加入社群', reward: '获得5天VIP体验' },
-            { city: '杭州', name: '刘女士', action: '邀请好友', reward: '获得15天VIP' },
-            { city: '成都', name: '赵先生', action: '下载资料', reward: '获得3天VIP体验' },
-            { city: '武汉', name: '孙女士', action: '加入社群', reward: '获得7天VIP体验' },
-            { city: '南京', name: '周先生', action: '订阅服务', reward: '续费3个月' }
+            { city: '深圳', name: '股友8***2', action: '获取了涨停复盘', reward: '获得3天VIP · 限时0元领' },
+            { city: '上海', name: '投机者', action: '分享了龙头标的', reward: '+3天VIP体验' },
+            { city: '北京', name: '作手老王', action: '领到了VIP', reward: '查看最新涨停板' },
+            { city: '广州', name: '短线客', action: '获取了早盘策略', reward: '+3天VIP' },
+            { city: '杭州', name: '游资群友', action: '下载了龙头名单', reward: '+7天VIP' },
+            { city: '成都', name: '打板族', action: '加入了复盘群', reward: '获得VIP权限' },
+            { city: '武汉', name: '职业作手', action: '领到了VIP', reward: '查看明日涨停预测' },
+            { city: '南京', name: '价投者', action: '获取了脱水研报', reward: '+3天VIP' },
+            { city: '西安', name: '小散甲', action: '加入了复盘宝', reward: 'VIP免费领取中' },
+            { city: '长沙', name: '作手老李', action: '获取了VIP', reward: '查看龙回头标的' }
         ];
 
         let fomoIndex = 0;
+        let vipSlotsLeft = 87; // 模拟剩余VIP名额
 
         function showFomoNotification() {
             const msg = fomoMessages[fomoIndex % fomoMessages.length];
             const notification = document.getElementById('fomoNotification');
 
-            document.getElementById('fomoAvatar').textContent = msg.name[0];
-            document.getElementById('fomoTitle').textContent = `${msg.city}${msg.name} 刚${msg.action}`;
-            document.getElementById('fomoDesc').textContent = msg.reward;
+            // 随机选择动作，保持新鲜感
+            const randomMsg = fomoMessages[Math.floor(Math.random() * fomoMessages.length)];
+            const timeAgo = ['刚刚', Math.floor(Math.random() * 30 + 5) + '秒前', Math.floor(Math.random() * 2 + 1) + '分钟前'][Math.floor(Math.random() * 3)];
+
+            document.getElementById('fomoAvatar').textContent = randomMsg.name[0];
+            document.getElementById('fomoTitle').textContent = `${timeAgo} · ${randomMsg.city} ${randomMsg.name.slice(0, 2)} 刚${randomMsg.action}`;
+            document.getElementById('fomoDesc').textContent = `🔥 ${randomMsg.reward} · 仅剩${vipSlotsLeft}个名额`;
 
             notification.classList.add('show');
+
+            // 名额随机减少，制造紧迫感
+            if (Math.random() > 0.5) {
+                vipSlotsLeft = Math.max(12, vipSlotsLeft - Math.floor(Math.random() * 3));
+            }
 
             setTimeout(() => {
                 notification.classList.remove('show');
@@ -3383,16 +3427,16 @@
         }
 
         function startFomoNotifications() {
-            // 首次延迟30秒显示
+            // 首次10秒就显示（新访客留不到30秒）
             setTimeout(() => {
                 showFomoNotification();
-                // 之后每45-60秒随机显示
+                // 之后每20-40秒显示
                 setInterval(() => {
-                    if (Math.random() > 0.3) { // 70%概率显示
+                    if (Math.random() > 0.25) { // 75%概率显示
                         showFomoNotification();
                     }
-                }, 45000 + Math.random() * 15000);
-            }, 30000);
+                }, 20000 + Math.random() * 20000);
+            }, 10000);
         }
 
         // 页面滚动时隐藏/显示浮动栏
