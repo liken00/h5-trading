@@ -2,42 +2,26 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>热点通 - 实时热点资讯平台</title>
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复盘宝 - AI智能股票复盘工具 | 龙韵智趋</title>
+    <meta name="description" content="复盘宝 - 基于「龙韵智趋」战法的AI股票复盘工具，免费体验3次AI问股，永久解锁仅需介绍3人。">
     <style>
-        /* ==================== CSS Variables ==================== */
         :root {
             --bg-primary: #0a0e17;
             --bg-secondary: #111827;
-            --bg-card: #1a2035;
-            --bg-card-hover: #232d47;
-            
+            --bg-card: #1a1f2e;
             --text-primary: #ffffff;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
-            
             --accent-green: #00d084;
-            --accent-red: #ff4757;
-            --accent-gold: #ffc107;
             --accent-blue: #3b82f6;
-            
+            --accent-gold: #fbbf24;
             --border-color: #2a3548;
-            --gradient-green: linear-gradient(135deg, #00d084, #00b36b);
-            --gradient-red: linear-gradient(135deg, #ff4757, #c0392b);
-            --gradient-gold: linear-gradient(135deg, #ffc107, #f59e0b);
-            
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
-            
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
         }
 
-        /* ==================== Base Styles ==================== */
         * {
             margin: 0;
             padding: 0;
@@ -45,699 +29,281 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            padding-bottom: 70px;
         }
 
-        /* ==================== Header ==================== */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Banner */
+        .banner {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .banner-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .banner-highlight {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        /* Navigation */
+        nav {
             background: rgba(10, 14, 23, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
-            padding: 0.75rem 1rem;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .logo {
+        .nav-brand {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
         }
 
-        .logo-icon {
+        .nav-brand-icon {
             width: 32px;
             height: 32px;
-            background: var(--gradient-green);
-            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
+            font-size: 1.2rem;
         }
 
-        .logo-text {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .header-nav {
+        .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
+            list-style: none;
         }
 
-        .header-nav a {
+        .nav-links a {
             color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.3s;
+            font-size: 0.9rem;
+            transition: color 0.2s;
         }
 
-        .header-nav a:hover,
-        .header-nav a.active {
+        .nav-links a:hover {
             color: var(--accent-green);
         }
 
-        .header-auth-links {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            margin-left: 1rem;
-        }
-
-        .auth-link {
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            padding: 0.25rem 0.5rem;
-            border-radius: 6px;
-            transition: color 0.2s, background 0.2s;
-        }
-
-        .auth-link:hover {
-            color: #ffd700;
-            background: rgba(255,215,0,0.08);
-        }
-
-        .auth-divider {
-            color: #4a5568;
-            font-size: 0.8rem;
-        }
-
-        /* 已登录状态 */
-        .header-auth-links.logged-in .auth-link { display: none; }
-        .header-auth-links.logged-in .auth-divider { display: none; }
-        .header-auth-links.logged-in::after {
-            content: attr(data-nickname);
-            color: #ffd700;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .header-cta {
-            background: var(--gradient-green);
+        .nav-cta {
+            background: var(--accent-green);
             color: #000;
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.25rem;
             border-radius: var(--radius-sm);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-weight: 700;
+            font-size: 0.9rem;
         }
 
-        .header-cta:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 208, 132, 0.4);
-        }
-
-        /* ==================== Hero Section ==================== */
+        /* Main Hero */
         .hero {
-            padding: 6rem 1rem 3rem;
-            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
             text-align: center;
         }
 
         .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            display: inline-block;
             background: rgba(0, 208, 132, 0.1);
             border: 1px solid rgba(0, 208, 132, 0.3);
-            padding: 0.375rem 1rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
             color: var(--accent-green);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
             margin-bottom: 1.5rem;
         }
 
-        .hero-badge::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 800;
             margin-bottom: 1rem;
             background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        .hero h1 span {
-            background: var(--gradient-green);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-desc {
+        .hero-subtitle {
+            font-size: 1.2rem;
             color: var(--text-secondary);
-            font-size: 1rem;
+            margin-bottom: 2.5rem;
             max-width: 600px;
-            margin: 0 auto 2rem;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .hero-buttons {
+        .hero-features {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
             flex-wrap: wrap;
         }
 
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-md);
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: var(--gradient-green);
-            color: #000;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0, 208, 132, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--accent-green);
-        }
-
-        /* ==================== Market Overview ==================== */
-        .market-overview {
-            padding: 2rem 1rem;
-            background: var(--bg-secondary);
-        }
-
-        .market-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1rem;
-        }
-
-        .market-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            padding: 1.25rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s;
-        }
-
-        .market-card:hover {
-            border-color: var(--accent-green);
-            transform: translateY(-2px);
-        }
-
-        .market-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .market-index {
+        .hero-feature {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-
-        .market-index-name {
-            font-size: 0.875rem;
             color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
-        .market-index-code {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .market-tag {
-            font-size: 0.625rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            background: rgba(59, 130, 246, 0.2);
-            color: var(--accent-blue);
-        }
-
-        .market-header-right {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .market-update-time {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-        }
-
-        .refresh-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 0.875rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            transition: transform 0.2s;
-        }
-        .refresh-btn:hover {
-            background: var(--bg-card-hover);
-        }
-        .refresh-btn:active {
-            transform: rotate(180deg);
-        }
-        .refresh-btn.loading {
-            animation: spin 1s linear infinite;
-            pointer-events: none;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .market-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .market-change {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .market-change-value {
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        .market-change-value.up {
+        .hero-feature-icon {
             color: var(--accent-green);
         }
 
-        .market-change-value.down {
-            color: var(--accent-red);
-        }
-
-        .market-bar {
-            height: 4px;
-            background: var(--bg-secondary);
-            border-radius: 2px;
-            margin-top: 0.75rem;
-            overflow: hidden;
-        }
-
-        .market-bar-fill {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 0.5s ease;
-        }
-
-        .market-bar-fill.up {
-            background: var(--gradient-green);
-        }
-
-        .market-bar-fill.down {
-            background: var(--gradient-red);
-        }
-
-        /* ==================== Stock List ==================== */
-        .stock-section {
-            padding: 2rem 1rem;
-            background: var(--bg-primary);
-        }
-
-        .section-header {
-            max-width: 1200px;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .section-tabs {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .section-tab {
-            padding: 0.375rem 0.75rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            background: transparent;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .section-tab.active {
-            background: var(--accent-green);
-            color: #000;
-            border-color: var(--accent-green);
-        }
-
-        .stock-list {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .stock-table {
-            width: 100%;
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .stock-table-header {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-            padding: 0.75rem 1rem;
-            background: var(--bg-secondary);
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-align: right;
-        }
-
-        .stock-table-header span:first-child {
-            text-align: left;
-        }
-
-        .stock-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            align-items: center;
-            transition: background 0.3s;
-        }
-
-        .stock-row:last-child {
-            border-bottom: none;
-        }
-
-        .stock-row:hover {
-            background: var(--bg-card-hover);
-        }
-
-        .stock-row-focus-hint {
-            opacity: 0.6;
-        }
-
-        .focus-hint-tag {
-            font-size: 0.6rem;
-            color: var(--accent-gold);
-            background: rgba(255, 193, 7, 0.15);
-            padding: 0.1rem 0.4rem;
-            border-radius: 4px;
-            margin-top: 2px;
-            display: inline-block;
-        }
-
-        /* Stock Detail Modal */
-        .detail-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        .detail-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-        .detail-code {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: var(--bg-secondary);
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-        }
-        .detail-price-row {
-            display: flex;
-            align-items: baseline;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-        }
-        .detail-price {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-        .detail-change {
-            font-size: 0.875rem;
-        }
-        .detail-change.up { color: var(--accent-green); }
-        .detail-change.down { color: var(--accent-red); }
-        .detail-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-        }
-        .detail-item {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            padding: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-        .detail-label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-        .detail-value {
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-        .detail-value.up { color: var(--accent-green); }
-        .detail-value.down { color: var(--accent-red); }
-        .detail-actions {
-            display: flex;
-            gap: 0.75rem;
-        }
-        .detail-btn {
-            flex: 1;
-            padding: 0.75rem;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            background: var(--gradient-green);
-            color: #fff;
-        }
-        .detail-btn-close {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-        }
-
-        .stock-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stock-name {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .stock-code {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .stock-price {
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-align: right;
-        }
-
-        .stock-change {
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-align: right;
-        }
-
-        .stock-change.up {
-            color: var(--accent-green);
-        }
-
-        .stock-change.down {
-            color: var(--accent-red);
-        }
-
-        .stock-percent {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-align: right;
-        }
-
-        .stock-percent.up {
-            background: rgba(0, 208, 132, 0.15);
-            color: var(--accent-green);
-        }
-
-        .stock-percent.down {
-            background: rgba(255, 71, 87, 0.15);
-            color: var(--accent-red);
-        }
-
-        .stock-volume {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-align: right;
-        }
-
-        /* ==================== AI问股 Section ==================== */
-        .ai-ask-section {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
+        /* AI Ask Container */
         .ai-ask-container {
+            max-width: 700px;
+            margin: 0 auto 4rem;
             background: var(--bg-card);
-            border-radius: var(--radius-lg);
             border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
             overflow: hidden;
         }
+
         .ai-ask-header {
-            background: linear-gradient(135deg, #00d084, #00b36b);
-            padding: 1rem;
+            background: linear-gradient(135deg, var(--accent-green), #00b36b);
+            padding: 1.5rem;
             text-align: center;
         }
-        .ai-ask-header h3 {
+
+        .ai-ask-header h2 {
             color: #000;
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 700;
+            margin-bottom: 0.25rem;
         }
+
         .ai-ask-header p {
             color: rgba(0,0,0,0.6);
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
+            font-size: 0.85rem;
         }
+
         .ai-ask-status {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 1.5rem;
             padding: 0.75rem 1rem;
             background: var(--bg-secondary);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
         }
+
         .ai-ask-status .trials {
             color: var(--accent-gold);
             font-weight: 700;
         }
+
         .ai-ask-status .lifetime {
             color: var(--accent-green);
             font-weight: 700;
         }
+
         .ai-ask-messages {
-            height: 350px;
+            height: 300px;
             overflow-y: auto;
-            padding: 1rem;
+            padding: 1.5rem;
         }
+
         .ai-msg {
             margin-bottom: 1rem;
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
+
         .ai-msg.user {
             flex-direction: row-reverse;
         }
+
         .ai-msg-avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: var(--accent-green);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 1rem;
             flex-shrink: 0;
         }
+
         .ai-msg.user .ai-msg-avatar {
             background: var(--accent-blue);
         }
+
         .ai-msg-content {
             max-width: 75%;
             padding: 0.75rem 1rem;
             border-radius: var(--radius-md);
             background: var(--bg-secondary);
             font-size: 0.9rem;
-            line-height: 1.5;
+            line-height: 1.6;
         }
+
         .ai-msg.user .ai-msg-content {
             background: rgba(0, 208, 132, 0.15);
         }
+
         .ai-msg-waiting .ai-msg-content {
             color: var(--text-muted);
             font-style: italic;
         }
+
+        .ai-ask-hint {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .ai-ask-hint-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .ai-ask-hint p {
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ai-ask-hint-example {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
         .ai-ask-input-row {
             display: flex;
-            gap: 0.5rem;
-            padding: 1rem;
+            gap: 0.75rem;
+            padding: 1.25rem 1.5rem;
             border-top: 1px solid var(--border-color);
         }
+
         .ai-ask-input {
             flex: 1;
             padding: 0.75rem 1rem;
@@ -745,12 +311,14 @@
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             color: var(--text-primary);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
+
         .ai-ask-input:focus {
             outline: none;
             border-color: var(--accent-green);
         }
+
         .ai-ask-send-btn {
             padding: 0.75rem 1.5rem;
             background: var(--accent-green);
@@ -759,1908 +327,406 @@
             border-radius: var(--radius-md);
             font-weight: 700;
             cursor: pointer;
+            transition: opacity 0.2s;
         }
+
         .ai-ask-send-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        .ai-ask-hint {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-muted);
+
+        /* Section */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
         }
-        .ai-ask-hint-icon {
-            font-size: 3rem;
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 208, 132, 0.1);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
             margin-bottom: 0.5rem;
         }
-        .ai-ask-hint p {
+
+        .feature-card p {
+            color: var(--text-secondary);
             font-size: 0.9rem;
         }
 
-        /* ==================== Strategy Cards ==================== */
-        .strategy-section {
-            padding: 2rem 1rem;
-            background: var(--bg-secondary);
-        }
-
-        .strategy-grid {
-            max-width: 1200px;
-            margin: 0 auto;
+        /* How It Works */
+        .steps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
         }
 
-        .strategy-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
+        .step {
+            text-align: center;
             padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s;
         }
 
-        .strategy-card:hover {
-            border-color: var(--accent-green);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .strategy-card.featured {
-            border-color: var(--accent-gold);
-            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(255, 193, 7, 0.05) 100%);
-        }
-
-        .strategy-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.625rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 1rem;
-        }
-
-        .strategy-badge.hot {
-            background: rgba(255, 71, 87, 0.15);
-            color: var(--accent-red);
-        }
-
-        .strategy-badge.new {
-            background: rgba(0, 208, 132, 0.15);
-            color: var(--accent-green);
-        }
-
-        .strategy-badge.vip {
-            background: var(--gradient-gold);
-            color: #000;
-        }
-
-        .strategy-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .strategy-desc {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        .strategy-stats {
-            display: flex;
-            gap: 1.5rem;
-            padding: 1rem 0;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1rem;
-        }
-
-        .strategy-stat {
-            text-align: center;
-        }
-
-        .strategy-stat-value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .strategy-stat-label {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .strategy-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .strategy-price {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .strategy-price span {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .strategy-btn {
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
-            background: var(--gradient-green);
-            color: #000;
-        }
-
-        .strategy-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 208, 132, 0.3);
-        }
-
-        .strategy-btn.vip-btn {
-            background: var(--gradient-gold);
-        }
-
-        /* ==================== Community Section ==================== */
-        .community-section {
-            padding: 3rem 1rem;
-            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
-        }
-
-        .community-card {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .community-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-gold);
-        }
-
-        .community-icon {
-            width: 64px;
-            height: 64px;
-            background: var(--gradient-gold);
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+            color: #000;
         }
 
-        .community-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .step h3 {
+            font-size: 1rem;
             margin-bottom: 0.5rem;
         }
 
-        .community-desc {
+        .step p {
             color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 2rem;
+            font-size: 0.85rem;
         }
 
-        .community-features {
+        /* Pricing */
+        .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .community-feature {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-align: left;
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
         }
 
-        .community-feature-icon {
-            width: 36px;
-            height: 36px;
-            background: rgba(0, 208, 132, 0.1);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .pricing-card.popular {
+            border-color: var(--accent-green);
+        }
+
+        .pricing-card.popular::before {
+            content: '最受欢迎';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-green);
+            color: #000;
+            padding: 0.25rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price span {
             font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
         }
 
-        .community-feature-text {
-            font-size: 0.875rem;
-            color: var(--text-primary);
-        }
-
-        .community-price {
+        .pricing-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
             margin-bottom: 1.5rem;
         }
 
-        .community-price-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--accent-gold);
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 1.5rem;
         }
 
-        .community-price-period {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-        }
-
-        .community-btn {
-            display: inline-flex;
+        .pricing-features li {
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: var(--gradient-gold);
-            color: #000;
-            border-radius: var(--radius-md);
-            font-size: 1rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--accent-green);
             font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s;
         }
 
-        .community-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(255, 193, 7, 0.4);
-        }
-
-        /* ==================== Footer ==================== */
-        .footer {
-            padding: 2rem 1rem;
-            background: var(--bg-primary);
-            border-top: 1px solid var(--border-color);
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
             text-align: center;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .pricing-btn.primary {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        .pricing-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .pricing-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
         }
 
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-brand-icon {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
         }
 
         .footer-links {
             display: flex;
-            justify-content: center;
-            gap: 2rem;
+            gap: 3rem;
+        }
+
+        .footer-links-group h4 {
+            font-size: 0.9rem;
             margin-bottom: 1rem;
+            color: var(--text-primary);
         }
 
-        .footer-links a {
+        .footer-links-group ul {
+            list-style: none;
+        }
+
+        .footer-links-group li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links-group a {
             color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.3s;
+            font-size: 0.85rem;
+            transition: color 0.2s;
         }
 
-        .footer-links a:hover {
+        .footer-links-group a:hover {
             color: var(--accent-green);
         }
 
-        .footer-copy {
-            font-size: 0.75rem;
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
             color: var(--text-muted);
+            font-size: 0.8rem;
         }
 
-        /* ==================== Mobile Responsive ==================== */
+        /* Responsive */
         @media (max-width: 768px) {
-            .header-nav {
-                display: none;
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
             }
 
             .hero h1 {
-                font-size: 1.75rem;
+                font-size: 2rem;
             }
 
-            .hero-desc {
-                font-size: 0.875rem;
-            }
-
-            .market-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .section-header {
+            .hero-features {
                 flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
+                align-items: center;
             }
 
-            .section-tabs {
-                width: 100%;
-                overflow-x: auto;
+            .ai-ask-messages {
+                height: 250px;
             }
 
-            .stock-table-header,
-            .stock-row {
-                grid-template-columns: 1.5fr 1fr 1fr 1fr;
-            }
-
-            .stock-row .stock-volume {
-                display: none;
-            }
-
-            .stock-table-header span:nth-child(5) {
-                display: none;
-            }
-
-            .strategy-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .community-features {
-                grid-template-columns: 1fr;
+            .footer-content {
+                flex-direction: column;
             }
 
             .footer-links {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: 1.5rem;
             }
         }
 
-        /* ==================== Animations ==================== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-in {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        /* ==================== Skeleton Loading ==================== */
-        .skeleton {
-            background: linear-gradient(90deg, #1a1f35 25%, #252b45 50%, #1a1f35 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 6px;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        .skeleton-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .skeleton-line {
-            height: 12px;
-            margin-bottom: 0.5rem;
-        }
-
-        .skeleton-line.short { width: 60%; }
-        .skeleton-line.medium { width: 80%; }
-        .skeleton-line.full { width: 100%; }
-
-        /* ==================== Live Indicator ==================== */
-        .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.375rem;
-        }
-
-        .live-dot {
+        /* Scrollbar */
+        ::-webkit-scrollbar {
             width: 6px;
-            height: 6px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            animation: blink 1.5s infinite;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .live-text {
-            font-size: 0.625rem;
-            color: var(--accent-green);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* ==================== 裂变系统 CSS ==================== */
-
-        /* ==================== VIP紧急闪烁 ==================== */
-        .vip-urgent {
-            animation: vipUrgentPulse 1.5s ease-in-out infinite;
-        }
-        @keyframes vipUrgentPulse {
-            0%, 100% { background: rgba(10, 14, 23, 0.95); }
-            50% { background: rgba(255, 71, 87, 0.2); }
-        }
-        @keyframes urgentTextPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-        .vip-urgent .vip-countdown { color: #ff4757 !important; animation: urgentTextPulse 1s infinite; }
-
-        /* ==================== 实时在线人数 ==================== */
-        .live-viewers {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            background: rgba(255,193,7,0.1);
-            border: 1px solid rgba(255,193,7,0.25);
-            border-radius: 20px;
-            padding: 0.2rem 0.6rem;
-            font-size: 0.65rem;
-            color: var(--accent-gold);
-        }
-        .live-dot {
-            width: 6px;
-            height: 6px;
-            background: #ff4757;
-            border-radius: 50%;
-            animation: livePulse 1.5s ease-in-out infinite;
-        }
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.3; transform: scale(0.7); }
-        }
-
-        /* ==================== 离开意图拦截弹窗 ==================== */
-        .exit-intent-overlay {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.72);
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .exit-intent-overlay.show { display: flex; }
-        .exit-intent-modal {
-            background: linear-gradient(145deg,#1a2035,#0a0e17);
-            border: 2px solid rgba(255,193,7,0.4);
-            border-radius: 16px;
-            padding: 1.5rem;
-            max-width: 340px;
-            width: 100%;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 0 40px rgba(255,193,7,0.15);
-        }
-        .exit-intent-close {
-            position: absolute; top: 0.5rem; right: 0.75rem;
-            background: none; border: none;
-            color: var(--text-muted); font-size: 1.5rem; cursor: pointer;
-        }
-        .exit-intent-icon { font-size: 3rem; margin-bottom: 0.5rem; }
-        .exit-intent-title {
-            font-size: 1.05rem; font-weight: 700;
-            color: var(--accent-gold); margin-bottom: 0.5rem;
-        }
-        .exit-intent-desc {
-            font-size: 0.78rem; color: var(--text-secondary);
-            margin-bottom: 1rem; line-height: 1.5;
-        }
-        .exit-intent-gift {
-            background: rgba(255,193,7,0.08);
-            border: 1px dashed rgba(255,193,7,0.35);
-            border-radius: 10px;
-            padding: 0.75rem; margin-bottom: 1rem;
-        }
-        .exit-intent-gift-title { color: var(--accent-gold); font-size: 0.85rem; font-weight: 700; margin-bottom: 0.2rem; }
-        .exit-intent-gift-desc { color: var(--text-secondary); font-size: 0.7rem; }
-        .exit-intent-btn {
-            width: 100%; padding: 0.75rem;
-            background: var(--gradient-gold);
-            border: none; border-radius: 10px;
-            color: #000; font-weight: 700; font-size: 0.9rem;
-            cursor: pointer; margin-bottom: 0.5rem;
-        }
-        .exit-intent-skip {
-            background: none; border: none;
-            color: var(--text-muted); font-size: 0.7rem; cursor: pointer;
-        }
-
-        /* ==================== 限时冲刺弹窗 ==================== */
-        .rush-overlay {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.78);
-            z-index: 9998;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-        .rush-overlay.show { display: flex; }
-        .rush-modal {
-            background: linear-gradient(145deg,#1a0500,#0a0e17);
-            border: 2px solid #ff4757;
-            border-radius: 16px;
-            padding: 1.5rem;
-            max-width: 320px; width: 100%;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(255,71,87,0.25);
-        }
-        .rush-countdown {
-            font-size: 2.8rem; font-weight: 900;
-            color: #ff4757; font-family: monospace;
-            margin: 0.5rem 0; letter-spacing: 2px;
-        }
-        .rush-label {
-            background: #ff4757; color: white;
-            border-radius: 20px;
-            padding: 0.2rem 0.75rem;
-            font-size: 0.65rem; font-weight: 700;
-            display: inline-block; margin-bottom: 0.5rem;
-        }
-
-
-        /* 浮动邀请栏 */
-        .invite-float-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #1a2035 0%, #0a0e17 100%);
-            border-top: 1px solid var(--accent-gold);
-            padding: 0.75rem 1rem;
-            z-index: 999;
-            box-shadow: 0 -4px 20px rgba(255, 193, 7, 0.2);
-        }
-
-        .invite-float-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .invite-float-left {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .invite-float-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            animation: pulse-gold 2s infinite;
-        }
-
-        @keyframes pulse-gold {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(255, 193, 7, 0); }
-        }
-
-        .invite-float-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .invite-float-title {
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-        }
-
-        .invite-float-desc {
-            font-size: 0.625rem;
-            color: var(--text-secondary);
-        }
-
-        .invite-float-right {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .invite-count-badge {
-            background: rgba(0, 208, 132, 0.15);
-            border: 1px solid rgba(0, 208, 132, 0.3);
-            border-radius: 20px;
-            padding: 0.375rem 0.75rem;
-            font-size: 0.75rem;
-            color: var(--accent-green);
-            display: flex;
-            align-items: center;
-            gap: 0.375rem;
-        }
-
-        .invite-btn {
-            background: var(--gradient-gold);
-            color: #000;
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s;
-        }
-
-        .invite-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
-        }
-
-        /* VIP倒计时横幅 */
-        .vip-countdown-banner {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            border: 1px solid rgba(255, 193, 7, 0.3);
-            border-radius: 12px;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            animation: countdownPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes countdownPulse {
-            0%, 100% { border-color: rgba(255, 193, 7, 0.3); }
-            50% { border-color: rgba(255, 193, 7, 0.7); }
-        }
-
-        .countdown-icon { font-size: 1.2rem; }
-        .countdown-text { font-size: 0.8rem; color: #ffd700; }
-        .countdown-text b { color: #ff6b6b; font-size: 0.9rem; }
-
-        /* 三阶梯奖励 */
-        .tier-rewards {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .tier-reward-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.6rem 0.75rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px;
-            transition: all 0.3s;
-        }
-
-        .tier-reward-item.active {
-            background: rgba(0, 208, 132, 0.08);
-            border-color: rgba(0, 208, 132, 0.3);
-        }
-
-        .tier-reward-item.locked {
-            opacity: 0.6;
-        }
-
-        .tier-num {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--accent-gold);
-            color: #000;
-            font-size: 0.7rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .tier-reward-item.active .tier-num { background: var(--accent-green); }
-        .tier-reward-item.locked .tier-num { background: #555; }
-
-        .tier-info { flex: 1; }
-        .tier-name { font-size: 0.8rem; font-weight: 600; color: var(--text-primary); }
-        .tier-desc { font-size: 0.65rem; color: var(--text-secondary); }
-        .tier-status { font-size: 0.9rem; }
-        .tier-reward-item.active .tier-status { color: var(--accent-green); }
-        .tier-reward-item.locked .tier-status { color: #666; }
-
-        /* 分享按钮粒子爆炸动画 */
-        @keyframes shareExplode {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .share-exploding {
-            animation: shareExplode 0.4s ease-out;
-        }
-
-        /* 成就徽章弹窗 */
-        .achievement-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: linear-gradient(135deg, #1a1a2e, #0a0e17);
-            border: 2px solid var(--accent-gold);
-            border-radius: 20px;
-            padding: 2rem;
-            z-index: 20000;
-            text-align: center;
-            min-width: 280px;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .achievement-modal.show {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .achievement-badge {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .achievement-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-            margin-bottom: 0.5rem;
-        }
-
-        .achievement-desc {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        /* 登录弹窗样式已移除 */
-.login-modal-overlay{display:none}
-/* /* 登录弹窗 */
-        .login-modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(4px);
-            z-index: 15000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-
-        .login-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .login-modal {
-            background: linear-gradient(135deg, #1a1f35, #0f1525);
-            border: 1px solid rgba(255,215,0,0.2);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 360px;
-            padding: 1.75rem;
-            transform: translateY(20px);
-            transition: transform 0.3s;
-        }
-
-        .login-modal-overlay.active .login-modal {
-            transform: translateY(0);
-        }
-
-        .login-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
-
-        .login-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #ffd700;
-        }
-
-        .login-close {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
-            border: none;
-            color: #94a3b8;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-section { margin-bottom: 1rem; }
-        .login-subtitle { font-size: 0.8rem; color: #64748b; margin-bottom: 0.75rem; }
-
-        .login-input-row {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .login-input-row input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            color: #fff;
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        .login-input-row input:focus {
-            border-color: #ffd700;
-        }
-
-        .send-code-btn {
-            padding: 0.75rem 1rem;
-            background: rgba(255,215,0,0.1);
-            border: 1px solid rgba(255,215,0,0.3);
-            border-radius: 10px;
-            color: #ffd700;
-            font-size: 0.8rem;
-            font-weight: 600;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-
-        .send-code-btn:hover { background: rgba(255,215,0,0.2); }
-        .send-code-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .login-error {
-            color: #ff4757;
-            font-size: 0.75rem;
-            margin-bottom: 0.5rem;
-            min-height: 1rem;
-        }
-
-        .login-submit-btn {
-            width: 100%;
-            padding: 0.875rem;
-            background: linear-gradient(135deg, #ffd700, #f59e0b);
-            border: none;
-            border-radius: 10px;
-            color: #000;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .login-submit-btn:hover { opacity: 0.9; }
-        .login-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .login-divider {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 1.25rem 0;
-            color: #4a5568;
-            font-size: 0.75rem;
-        }
-
-        .login-divider::before,
-        .login-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(255,255,255,0.08);
-        }
-
-        .wechat-login-btn {
-            width: 100%;
-            padding: 0.875rem;
-            background: #07C160;
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .wechat-login-btn:hover { background: #06a050; }
-        .wechat-hint { font-size: 0.7rem; color: #64748b; text-align: center; margin-top: 0.5rem; }
-
-        .login-footer {
-            font-size: 0.7rem;
-            color: #4a5568;
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        /* 邀请海报弹窗 */
-        .invite-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 10000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .invite-modal-overlay.active {
-            display: flex;
-        }
-
-        .invite-modal {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            max-width: 400px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid var(--accent-gold);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-
-        .invite-modal-header {
-            background: var(--gradient-gold);
-            padding: 1.5rem;
-            text-align: center;
-            position: relative;
-        }
-
-        .invite-modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 28px;
-            height: 28px;
-            background: rgba(0, 0, 0, 0.2);
-            border: none;
-            border-radius: 50%;
-            color: #000;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .invite-modal-title {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #000;
-        }
-
-        .invite-modal-subtitle {
-            font-size: 0.75rem;
-            color: rgba(0, 0, 0, 0.6);
-            margin-top: 0.25rem;
-        }
-
-        .invite-modal-body {
-            padding: 1.5rem;
-        }
-
-        /* 用户等级卡片 */
-        .user-rank-card {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
-            border-radius: var(--radius-md);
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .user-rank-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .user-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: var(--gradient-gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            position: relative;
-        }
-
-        .user-level-badge {
-            position: absolute;
-            bottom: -4px;
-            right: -4px;
-            background: var(--accent-gold);
-            color: #000;
-            font-size: 0.625rem;
-            font-weight: 700;
-            padding: 0.125rem 0.375rem;
-            border-radius: 10px;
-        }
-
-        .user-info {
-            flex: 1;
-        }
-
-        .user-name {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .user-level {
-            font-size: 0.75rem;
-            color: var(--accent-gold);
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .user-stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-            text-align: center;
-        }
-
-        .user-stat-item {
-            background: var(--bg-primary);
-            border-radius: var(--radius-sm);
-            padding: 0.5rem;
-        }
-
-        .user-stat-value {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .user-stat-label {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-        }
-
-        /* 邀请海报 */
-        .poster-card {
-            background: var(--bg-primary);
-            border-radius: var(--radius-md);
-            padding: 1rem;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-
-        .poster-preview {
-            width: 100%;
-            aspect-ratio: 3/4;
-            background: linear-gradient(180deg, #0a0e17 0%, #1a2035 50%, #0a0e17 100%);
-            border-radius: var(--radius-sm);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .poster-preview::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255, 193, 7, 0.1), transparent, rgba(0, 208, 132, 0.1), transparent);
-            animation: rotate-bg 10s linear infinite;
-        }
-
-        @keyframes rotate-bg {
-            100% { transform: rotate(360deg); }
-        }
-
-        .poster-logo {
-            width: 64px;
-            height: 64px;
-            background: var(--gradient-gold);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 800;
-            color: #000;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .poster-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .poster-subtitle {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .poster-qr {
-            width: 120px;
-            height: 120px;
-            background: #fff;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 0.75rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .poster-qr-text {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-            position: relative;
-            z-index: 1;
-        }
-
-        .poster-invitecode {
-            background: rgba(255, 193, 7, 0.15);
-            border: 1px dashed var(--accent-gold);
-            border-radius: var(--radius-sm);
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-            letter-spacing: 0.1em;
-            position: relative;
-            z-index: 1;
-        }
-
-        .poster-rewards {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .poster-reward-item {
-            background: rgba(0, 208, 132, 0.1);
-            border: 1px solid rgba(0, 208, 132, 0.3);
-            border-radius: var(--radius-sm);
-            padding: 0.5rem;
-            flex: 1;
-        }
-
-        .poster-reward-value {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--accent-green);
-        }
-
-        .poster-reward-label {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-        }
-
-        .poster-btn-row {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .poster-btn {
-            flex: 1;
-            padding: 0.75rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-decoration: none;
-            text-align: center;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s;
-        }
-
-        .poster-btn-save {
+        ::-webkit-scrollbar-track {
             background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
         }
 
-        .poster-btn-share {
-            background: var(--gradient-gold);
-            color: #000;
-        }
-
-        .poster-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .wechat-share-tip {
-            margin-top: 0.75rem;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-align: center;
-            line-height: 1.4;
-            background: rgba(255,255,255,0.03);
-            padding: 0.5rem;
-            border-radius: 6px;
-        }
-
-        /* 邀请排行榜 */
-        .invite-rank-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .invite-rank-title {
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .rank-list {
-            background: var(--bg-primary);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-        }
-
-        .rank-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .rank-item:last-child {
-            border-bottom: none;
-        }
-
-        .rank-item.top1 .rank-medal { background: linear-gradient(135deg, #ffd700, #ffaa00); }
-        .rank-item.top2 .rank-medal { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); }
-        .rank-item.top3 .rank-medal { background: linear-gradient(135deg, #cd7f32, #a0522d); }
-
-        .rank-medal {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--bg-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .rank-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--gradient-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
-
-        .rank-info {
-            flex: 1;
-        }
-
-        .rank-name {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .rank-time {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-        }
-
-        .rank-count {
-            text-align: right;
-        }
-
-        .rank-count-value {
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-        }
-
-        .rank-count-label {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-        }
-
-        /* 奖励说明 */
-        .reward-rules {
-            background: var(--bg-primary);
-            border-radius: var(--radius-md);
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .reward-rules-title {
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .reward-rule-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .reward-rule-icon {
-            color: var(--accent-green);
-            font-weight: 700;
-        }
-
-        /* 隐藏内容解锁提示 */
-        .lock-content-overlay {
-            position: relative;
-        }
-
-        .lock-content-overlay::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60%;
-            background: linear-gradient(to bottom, transparent, var(--bg-primary));
-            pointer-events: none;
-        }
-
-        .lock-badge {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--gradient-gold);
-            color: #000;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--radius-md);
-            font-size: 0.875rem;
-            font-weight: 700;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(255, 193, 7, 0.4);
-        }
-
-        .lock-badge:hover {
-            transform: translate(-50%, -50%) scale(1.05);
-        }
-
-        /* FOMO 动态通知 */
-        .fomo-notification {
-            position: fixed;
-            position: fixed;
-            top: 80px;
-            right: 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--accent-green);
-            border-radius: var(--radius-md);
-            padding: 0.75rem 1rem;
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: var(--shadow-lg);
-            animation: slideInRight 0.5s ease;
-            max-width: 280px;
-        }
-
-        .fomo-notification.show {
-            display: flex;
-        }
-
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .fomo-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--gradient-green);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-        }
-
-        .fomo-text {
-            flex: 1;
-        }
-
-        .fomo-title {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .fomo-desc {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-        }
-
-        .fomo-close {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        */
-/* 分享成功提示 */
-        .share-success-toast {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            border: 1px solid var(--accent-green);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            z-index: 10001;
-            text-align: center;
-            display: none;
-        }
-
-        .share-success-toast.show {
-            display: block;
-            animation: zoomIn 0.3s ease;
-        }
-
-        @keyframes zoomIn {
-            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        }
-
-        .share-success-icon {
-            width: 64px;
-            height: 64px;
-            background: var(--gradient-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 1rem;
-        }
-
-        .share-success-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .share-success-desc {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .share-success-points {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--accent-gold);
-            margin-top: 0.5rem;
-        }
-
-        /* 进度条 */
-        .vip-progress {
-            margin-top: 0.5rem;
-        }
-
-        .vip-progress-bar {
-            height: 6px;
-            background: var(--bg-secondary);
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
             border-radius: 3px;
-            overflow: hidden;
         }
 
-        .vip-progress-fill {
-            height: 100%;
-            background: var(--gradient-gold);
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-
-        .vip-progress-text {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0.25rem;
-            font-size: 0.625rem;
-            color: var(--text-muted);
-        }
-
-        /* 底部留白（给浮动栏） */
-        .body-padding-bottom {
-            padding-bottom: 80px;
-        }
-
-        /* 响应式 */
-        @media (max-width: 768px) {
-            .invite-float-bar {
-                padding: 0.625rem 0.75rem;
-            }
-
-            .invite-float-desc {
-                display: none;
-            }
-
-            .invite-count-badge {
-                display: none;
-            }
-
-            .fomo-notification {
-                right: 0.5rem;
-                left: 0.5rem;
-                max-width: none;
-            }
-        }
-
-        /* ==================== 增强裂变：股票关注度徽章 ==================== */
-        .stock-watch-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.15rem;
-            background: rgba(255, 71, 87, 0.12);
-            border: 1px solid rgba(255, 71, 87, 0.25);
-            color: #ff6b7a;
-            font-size: 0.55rem;
-            padding: 0.05rem 0.35rem;
-            border-radius: 10px;
-            margin-left: 0.3rem;
-            vertical-align: middle;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .stock-watch-badge:hover {
-            background: rgba(255, 71, 87, 0.22);
-            transform: scale(1.05);
-        }
-        .stock-watch-badge .fire-icon { font-size: 0.6rem; }
-
-        /* ==================== 增强裂变：分享解锁隐藏内容 ==================== */
-        .locked-content-section {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            border: 1px solid rgba(255,193,7,0.2);
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 0.75rem 0;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .locked-content-section.unlocked {
-            border-color: rgba(0, 200, 83, 0.4);
-            background: linear-gradient(135deg, #0a1f16, #0d2818);
-        }
-        .locked-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(2px);
-            z-index: 2;
-        }
-        .locked-content-section.unlocked .locked-overlay { display: none; }
-        .locked-icon { font-size: 2rem; margin-bottom: 0.3rem; }
-        .locked-title { color: var(--accent-gold); font-size: 0.8rem; font-weight: 700; margin-bottom: 0.2rem; }
-        .locked-desc { color: var(--text-muted); font-size: 0.65rem; }
-        .unlocked-header {
-            display: none;
-            color: #00c853;
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        .locked-content-section.unlocked .unlocked-header { display: flex; align-items: center; justify-content: center; gap: 0.3rem; }
-        .tomorrow-stock-list { display: none; text-align: left; }
-        .locked-content-section.unlocked .tomorrow-stock-list { display: block; }
-        .tomorrow-stock-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.4rem 0.5rem;
-            background: rgba(255,255,255,0.04);
-            border-radius: 6px;
-            margin-bottom: 0.3rem;
-        }
-        .tomorrow-stock-left { display: flex; flex-direction: column; }
-        .tomorrow-stock-name { color: var(--text-primary); font-size: 0.75rem; font-weight: 600; }
-        .tomorrow-stock-reason { color: var(--text-muted); font-size: 0.6rem; }
-        .tomorrow-stock-pct { color: #00c853; font-size: 0.8rem; font-weight: 700; }
-        .share-unlock-btn {
-            background: var(--gradient-gold);
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            padding: 0.5rem 1.2rem;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 0.5rem;
-        }
-
-        /* ==================== 增强裂变：邀请进度条 ==================== */
-        .invite-progress-section {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            margin: 0.75rem 0;
-        }
-        .invite-progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        .invite-level-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            background: linear-gradient(135deg, #ff6b7a, #ff4757);
-            color: #fff;
-            font-size: 0.65rem;
-            font-weight: 700;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-        }
-        .invite-level-badge.lv2 { background: linear-gradient(135deg, #ffd700, #ffb300); color: #000; }
-        .invite-level-badge.lv3 { background: linear-gradient(135deg, #00c853, #00e676); color: #000; }
-        .invite-level-badge.lv4 { background: linear-gradient(135deg, #ff4757, #c0392b); }
-        .invite-count-text { color: var(--text-muted); font-size: 0.65rem; }
-        .invite-progress-bar-wrap {
-            background: rgba(255,255,255,0.08);
-            border-radius: 10px;
-            height: 8px;
-            overflow: hidden;
-            margin-bottom: 0.4rem;
-        }
-        .invite-progress-bar-fill {
-            height: 100%;
-            background: var(--gradient-gold);
-            border-radius: 10px;
-            transition: width 0.6s ease;
-            width: 0%;
-        }
-        .invite-next-reward { color: var(--text-muted); font-size: 0.6rem; text-align: center; }
-        .invite-levels-hint { display: flex; justify-content: space-between; margin-top: 0.4rem; }
-        .invite-levels-hint span { color: var(--text-muted); font-size: 0.55rem; }
-        .invite-levels-hint span.active { color: var(--accent-gold); }
-
-        /* ==================== 增强裂变：自动复制分享文案 ==================== */
-        .share-text-copy {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            margin-top: 0.5rem;
-        }
-        .share-text-input {
-            flex: 1;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 6px;
-            padding: 0.4rem 0.6rem;
-            color: var(--text-secondary);
-            font-size: 0.65rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .copy-btn {
-            background: rgba(0,200,83,0.15);
-            border: 1px solid rgba(0,200,83,0.3);
-            color: #00c853;
-            border-radius: 6px;
-            padding: 0.4rem 0.75rem;
-            font-size: 0.65rem;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .copy-btn:hover { background: rgba(0,200,83,0.25); }
-        .copy-btn.copied { background: rgba(0,200,83,0.3); color: #69f0ae; }
-        .copy-btn.failed { background: rgba(255,71,87,0.15); color: #ff6b7a; }
-
-        /* ==================== 增强裂变：裂变FOMO股票关注通知 ==================== */
-        .stock-watch-fomo {
-            position: fixed;
-            top: 80px;
-            left: 1rem;
-            background: var(--bg-card);
-            border: 1px solid rgba(255,107,122,0.4);
-            border-radius: var(--radius-md);
-            padding: 0.6rem 0.9rem;
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            gap: 0.6rem;
-            box-shadow: 0 4px 20px rgba(255,71,87,0.2);
-            animation: slideInLeft 0.5s ease;
-            max-width: 260px;
-        }
-        .stock-watch-fomo.show { display: flex; }
-        @keyframes slideInLeft {
-            from { transform: translateX(-100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .stock-watch-fomo .swf-icon { font-size: 1.5rem; }
-        .stock-watch-fomo .swf-info { flex: 1; }
-        .stock-watch-fomo .swf-text { color: var(--text-primary); font-size: 0.72rem; font-weight: 600; }
-        .stock-watch-fomo .swf-sub { color: var(--text-muted); font-size: 0.6rem; margin-top: 0.1rem; }
-        .swf-close {
-            background: none; border: none;
-            color: var(--text-muted); font-size: 1rem;
-            cursor: pointer; padding: 0; line-height: 1;
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">Q</div>
-                <div class="logo-text">热点通</div>
-            </div>
-            <nav class="header-nav">
-                <a href="#" class="active">热点</a>
-                <a href="#">精选</a>
-                <a href="#">圈子</a>
-                <a href="#">我的</a>
-            </nav>
-            <div class="header-auth-links" id="headerAuthLinks">
-                
-                
-                <a href="#" class="auth-link" id="btnRegister">注册</a>
-            </div>
-            <a href="#" class="header-cta">加入社群</a>
+    <!-- Banner -->
+    <div class="banner">
+        <span class="banner-text">🎁 <span class="banner-highlight">新用户免费体验3次</span> AI问股，介绍3人永久解锁</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-brand">
+            <div class="nav-brand-icon">📊</div>
+            <span>复盘宝</span>
         </div>
-    </header>
+        <ul class="nav-links">
+            <li><a href="#features">核心功能</a></li>
+            <li><a href="#howitworks">使用教程</a></li>
+            <li><a href="#pricing">定价</a></li>
+            <li><a href="#about">关于我们</a></li>
+        </ul>
+        <a href="#hero" class="nav-cta">立即体验</a>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-badge">
-            <span class="live-indicator"><span class="live-dot"></span> Live</span>
-            <span id="marketStatusText">实时热点资讯</span>
-            <button class="refresh-btn" id="refreshMarketBtn" onclick="refreshAllData()" title="刷新数据">🔄</button>
-        </div>
-        <h1>实时<span>热点资讯</span>平台</h1>
-        <p class="hero-desc">
-            每日更新热门话题，精选优质资讯，实时追踪社会热点，
-            让每一次阅读都有价值
+    <section class="hero" id="hero">
+        <span class="hero-badge">🔥 基于「龙韵智趋」战法</span>
+        <h1>AI智能股票复盘工具</h1>
+        <p class="hero-subtitle">
+            输入股票代码，AI基于修哥多年实战验证的「龙韵智趋」体系为你深度分析，挖掘龙头二波机会
         </p>
-        <div class="hero-buttons">
-            <a href="#community" class="btn btn-primary">
-                <span>👑</span> 免费加入
-            </a>
-            <a href="#strategies" class="btn btn-secondary">
-                <span>📊</span> 了解更多
-            </a>
-        </div>
-    </section>
-
-    <!-- Market Overview -->
-    <section class="market-overview">
-        <div class="market-grid" id="marketGrid">
-            <!-- Market data will be injected here -->
-        </div>
-    </section>
-
-    <!-- Stock List Section -->
-    <section class="stock-section" id="stocks">
-        <div class="section-header">
-            <h2 class="section-title">🔥 热门话题</h2>
-            <div class="section-tabs">
-                <button class="section-tab active" data-tab="hot">热门</button>
-                <button class="section-tab" data-tab="wave2">精选</button>
-                <button class="section-tab" data-tab="zt">最新</button>
-                <button class="section-tab" data-tab="focus">关注</button>
-                <button class="section-tab" data-tab="aiask">AI问股</button>
+        <div class="hero-features">
+            <div class="hero-feature">
+                <span class="hero-feature-icon">✓</span>
+                <span>免费体验3次</span>
             </div>
-        </div>
-        <div class="stock-list">
-            <div class="stock-table">
-                <div class="stock-table-header">
-                    <span>话题</span>
-                    <span>热度</span>
-                    <span>评论</span>
-                    <span>时间</span>
-                    <span>来源</span>
-                </div>
-                <div id="stockTableBody">
-                    <!-- Stock data will be injected here -->
-                </div>
+            <div class="hero-feature">
+                <span class="hero-feature-icon">✓</span>
+                <span>介绍3人永久解锁</span>
+            </div>
+            <div class="hero-feature">
+                <span class="hero-feature-icon">✓</span>
+                <span>龙韵智趋战法</span>
+            </div>
+            <div class="hero-feature">
+                <span class="hero-feature-icon">✓</span>
+                <span>每日推送复盘报告</span>
             </div>
         </div>
     </section>
 
-    <!-- AI问股 Section -->
-    <section class="ai-ask-section" id="aiask" style="display:none">
+    <!-- AI Ask Section -->
+    <section class="section" id="aiask">
         <div class="ai-ask-container">
             <div class="ai-ask-header">
-                <h3>🤖 龙韵智趋 AI</h3>
+                <h2>🤖 龙韵智趋 AI</h2>
                 <p>基于修哥二波战法的智能分析</p>
             </div>
-            <div class="ai-ask-status" id="aiAskStatus">
+            <div class="ai-ask-status">
                 <span>免费剩余: <span class="trials" id="aiTrials">3</span> 次</span>
                 <span>|</span>
                 <span>永久权限: <span class="lifetime" id="aiLifetime">未解锁</span></span>
@@ -2669,7 +735,8 @@
                 <div class="ai-ask-hint">
                     <div class="ai-ask-hint-icon">💬</div>
                     <p>输入股票代码或问题，AI为你分析</p>
-                    <p style="margin-top:0.5rem;font-size:0.8rem">例如: 600519贵州茅台怎么样?</p>
+                    <p>例如: 600519贵州茅台怎么样?</p>
+                    <p class="ai-ask-hint-example">或: 帮我找今日主线题材的龙头股</p>
                 </div>
             </div>
             <div class="ai-ask-input-row">
@@ -2679,841 +746,222 @@
         </div>
     </section>
 
-    <!-- Strategy Cards -->
-    <section class="strategy-section" id="strategies">
-        <div class="section-header">
-            <h2 class="section-title">📈 精选内容</h2>
-        </div>
-        <div class="strategy-grid" id="strategyGrid">
-            <!-- Strategy cards will be injected here -->
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <h2 class="section-title">为什么选择复盘宝?</h2>
+        <p class="section-desc">
+            复盘宝是基于「龙韵智趋」实战战法的AI股票分析工具，专注龙头股二波机会的发现与分析
+        </p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>龙韵智趋战法</h3>
+                <p>基于修哥多年实战验证的核心战法，主线确认→龙头判断→二波验证→买点信号，完整体系</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI智能分析</h3>
+                <p>输入任意股票问题，AI结合龙韵智趋体系给出专业分析建议，24小时随时可问</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>每日复盘推送</h3>
+                <p>每日18:00自动分析当日涨停板，识别主线题材和龙头股，推送到飞书群</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>免费体验3次</h3>
+                <p>新用户免费体验3次AI问股，满意后再决定是否解锁，介绍3人即可永久免费使用</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>永久权限解锁</h3>
+                <p>只需介绍3位好友添加客服微信，即可解锁永久AI问股权限，再也不用付费</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>飞书推送</h3>
+                <p>每日复盘报告自动推送到飞书群，手机查看方便，随时随地掌握市场动态</p>
+            </div>
         </div>
     </section>
 
-    <!-- Community Section -->
-    <section class="community-section" id="community">
-        <div class="community-card">
-            <div class="community-icon">👑</div>
-            <h2 class="community-title">加入热点资讯社群</h2>
-            <p class="community-desc">
-                获得独家内容、实时热点资讯、每日精选推荐
-            </p>
-            <div class="community-features">
-                <div class="community-feature">
-                    <div class="community-feature-icon">📊</div>
-                    <span class="community-feature-text">每日热点精选</span>
-                </div>
-                <div class="community-feature">
-                    <div class="community-feature-icon">🎯</div>
-                    <span class="community-feature-text">精准内容推荐</span>
-                </div>
-                <div class="community-feature">
-                    <div class="community-feature-icon">📚</div>
-                    <span class="community-feature-text">系统化内容库</span>
-                </div>
-                <div class="community-feature">
-                    <div class="community-feature-icon">💬</div>
-                    <span class="community-feature-text">实时交流互动</span>
-                </div>
+    <!-- How It Works -->
+    <section class="section" id="howitworks">
+        <h2 class="section-title">如何使用复盘宝</h2>
+        <p class="section-desc">
+            简单四步，开启AI智能股票复盘之旅
+        </p>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>扫码体验</h3>
+                <p>扫描客服二维码，免费获得3次AI问股体验机会</p>
             </div>
-            <div class="community-price">
-                <span class="community-price-value">¥299</span>
-                <span class="community-price-period">/ 月</span>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>输入问题</h3>
+                <p>输入股票代码或描述你的选股疑问，如"帮我分析贵州茅台"</p>
             </div>
-            <a href="#" class="community-btn">
-                <span>👑</span> 立即加入
-            </a>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>AI分析</h3>
+                <p>AI结合龙韵智趋战法，从主线、龙头、买点、止损等多维度分析</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>实战决策</h3>
+                <p>根据AI分析建议，结合自己的判断，做出实战决策</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section" id="pricing">
+        <h2 class="section-title">简单透明的定价</h2>
+        <p class="section-desc">
+            先体验，再决定。介绍3人即可永久免费使用
+        </p>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>体验版</h3>
+                <div class="pricing-price">¥0</div>
+                <p class="pricing-desc">先体验再决定</p>
+                <ul class="pricing-features">
+                    <li>免费3次AI问股</li>
+                    <li>龙韵智趋基础分析</li>
+                    <li>查看每日复盘报告</li>
+                    <li>有效期至用完次数</li>
+                </ul>
+                <button class="pricing-btn secondary" onclick="alert('请添加客服微信领取体验次数')">免费体验</button>
+            </div>
+            <div class="pricing-card popular">
+                <h3>永久解锁版</h3>
+                <div class="pricing-price">¥0 <span>原价¥299</span></div>
+                <p class="pricing-desc">介绍3人即可获得</p>
+                <ul class="pricing-features">
+                    <li>无限次AI问股</li>
+                    <li>龙韵智趋完整战法</li>
+                    <li>每日飞书推送</li>
+                    <li>优先获取主线信号</li>
+                    <li>永久有效</li>
+                </ul>
+                <button class="pricing-btn primary" onclick="alert('请添加客服微信：Xiuqiang5515，回复"永久解锁"')">介绍3人解锁</button>
+            </div>
+            <div class="pricing-card">
+                <h3>企业版</h3>
+                <div class="pricing-price">¥2999<span>/年</span></div>
+                <p class="pricing-desc">适合团队使用</p>
+                <ul class="pricing-features">
+                    <li>永久解锁版全部功能</li>
+                    <li>最多10个飞书群推送</li>
+                    <li>专属客服1对1服务</li>
+                    <li>定制选股策略</li>
+                    <li>优先体验新功能</li>
+                </ul>
+                <button class="pricing-btn secondary" onclick="alert('请添加客服微信洽谈企业版')">联系我们</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <h2 class="section-title">关于龙韵智趋</h2>
+        <p class="section-desc">
+            「龙韵智趋」是修哥多年实战验证的A股龙头股二波战法，专注从3-5板涨停股中挖掘二波机会
+        </p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>主线确认</h3>
+                <p>同板块≥2只同日2板 = 主线确认，等待龙头浮出水面</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👑</div>
+                <h3>龙头判断</h3>
+                <p>三板当天封板时间最早 = 龙头，题材梯队完整有首板跟上</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>二波验证</h3>
+                <p>连续两天首板≥5家 + 不跟跌 = 二波确认，等待回调买点</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>买点信号</h3>
+                <p>30分钟MA50 + 日K MA10±5% + 缩量承接 = 买入区间</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>止损规则</h3>
+                <p>跌破日K MA10且当日收不回，等次日拉涨平仓，不抄底不追高</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💎</div>
+                <h3>仓位管理</h3>
+                <p>3板0.25成/4板0.35成/5板0.5成，单只最多5成，最多持有3只</p>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer>
         <div class="footer-content">
-            <div class="footer-links">
-                <a href="#">免责声明</a>
-                <a href="#">隐私政策</a>
-                <a href="#">联系我们</a>
-                <a href="#">使用条款</a>
+            <div class="footer-brand">
+                <div class="footer-brand-icon">
+                    <div class="nav-brand-icon">📊</div>
+                    <span>复盘宝</span>
+                </div>
+                <p>基于「龙韵智趋」战法的AI智能股票复盘工具，帮助投资者发现龙头二波机会。</p>
             </div>
-            <p class="footer-copy">© 2024 热点通. All rights reserved.</p>
+            <div class="footer-links">
+                <div class="footer-links-group">
+                    <h4>产品</h4>
+                    <ul>
+                        <li><a href="#features">核心功能</a></li>
+                        <li><a href="#pricing">定价</a></li>
+                        <li><a href="#aiask">AI问股</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>战法</h4>
+                    <ul>
+                        <li><a href="#about">龙韵智趋</a></li>
+                        <li><a href="#howitworks">使用教程</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links-group">
+                    <h4>联系</h4>
+                    <ul>
+                        <li><a href="#">客服微信: Xiuqiang5515</a></li>
+                        <li><a href="#">飞书群</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 复盘宝 | 本产品仅供AI分析参考，不构成投资建议，投资有风险，决策需谨慎</p>
         </div>
     </footer>
 
-    <!-- 裂变系统：浮动邀请栏 -->
-    <div class="invite-float-bar" id="inviteFloatBar">
-        <div class="invite-float-inner">
-            <div class="invite-float-left">
-                <div class="invite-float-icon">🎁</div>
-                <div class="invite-float-text">
-                    <span class="invite-float-title">🔥 邀请码功能已上线</span>
-                    <span class="invite-float-desc">每邀1人各得3天VIP · 邀满3人得7天 · 邀满10人得30天VIP</span>
-                </div>
-            </div>
-            <div class="invite-float-right">
-                <div class="invite-count-badge" id="totalInvitesBadge">
-                    <span>🔥</span>
-                    <span><span id="totalInvitesCount">1,247</span>人已参与</span>
-                </div>
-                <button class="invite-btn" id="openInviteModalBtn">立即邀请</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 裂变系统：邀请海报弹窗 -->
-    <div class="invite-modal-overlay" id="inviteModal">
-        <div class="invite-modal">
-            <div class="invite-modal-header">
-                <button class="invite-modal-close" id="closeInviteModal">×</button>
-                <div class="invite-modal-title">🔥 邀请好友赚VIP</div>
-                <div class="invite-modal-subtitle">每邀1人各得3天VIP · 邀满3人得7天 · 邀满10人得30天</div>
-            </div>
-            <div class="invite-modal-body">
-                <!-- 用户等级卡片 -->
-                <div class="user-rank-card">
-                    <div class="user-rank-header">
-                        <div class="user-avatar">
-                            <span>我</span>
-                            <span class="user-level-badge" id="userLevelBadge">LV1</span>
-                        </div>
-                        <div class="user-info">
-                            <div class="user-name" id="userName">资讯达人</div>
-                            <div class="user-level">
-                                <span>🌟</span>
-                                <span id="userLevelName">青铜会员</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="user-stats-row">
-                        <div class="user-stat-item">
-                            <div class="user-stat-value" id="userInviteCount">0</div>
-                            <div class="user-stat-label">已邀请</div>
-                        </div>
-                        <div class="user-stat-item">
-                            <div class="user-stat-value" id="userPoints">0</div>
-                            <div class="user-stat-label">积分</div>
-                        </div>
-                        <div class="user-stat-item">
-                            <div class="user-stat-value" id="userVipDays">0</div>
-                            <div class="user-stat-label">VIP天数</div>
-                        </div>
-                    </div>
-                    <div class="vip-progress">
-                        <div class="vip-progress-bar">
-                            <div class="vip-progress-fill" id="vipProgressFill" style="width: 0%"></div>
-                        </div>
-                        <div class="vip-progress-text">
-                            <span>再邀请<span id="remainToVip">3</span>人升级黄金会员</span>
-                            <span id="vipProgressText">0/3</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- VIP倒计时提醒 -->
-                <div class="vip-countdown-banner" id="vipCountdownBanner">
-                    <span class="countdown-icon">⏰</span>
-                    <span class="countdown-text">您的VIP体验还剩 <b id="vipCountdownTime">--:--:--</b> 到期</span>
-                </div>
-
-                <!-- 增强裂变：分享解锁明日牛股 -->
-                <div class="locked-content-section" id="lockedContentSection">
-                    <div class="locked-overlay" id="lockedOverlay">
-                        <div class="locked-icon">🔒</div>
-                        <div class="locked-title">明日强势股票名单</div>
-                        <div class="locked-desc">分享即可解锁今日精选明日强势股票</div>
-                        <button class="share-unlock-btn" id="shareUnlockBtn" onclick="triggerShareUnlock()">🔥 分享解锁</button>
-                    </div>
-                    <div class="unlocked-header">✅ 已解锁 · 明日强势股票名单</div>
-                    <div class="tomorrow-stock-list" id="tomorrowStockList">
-                        <div class="tomorrow-stock-item">
-                            <div class="tomorrow-stock-left">
-                                <div class="tomorrow-stock-name">润建股份 <span style="color:#ff6b7a;font-size:0.6rem">算力题材</span></div>
-                                <div class="tomorrow-stock-reason">7天4板 · 主力控盘 · 明日高开预期</div>
-                            </div>
-                            <div class="tomorrow-stock-pct">预计+8%</div>
-                        </div>
-                        <div class="tomorrow-stock-item">
-                            <div class="tomorrow-stock-left">
-                                <div class="tomorrow-stock-name">众合科技 <span style="color:#ff6b7a;font-size:0.6rem">算力+AI</span></div>
-                                <div class="tomorrow-stock-reason">2板反包 · 量价齐升 · 明日冲板预期</div>
-                            </div>
-                            <div class="tomorrow-stock-pct">预计+5%</div>
-                        </div>
-                        <div class="tomorrow-stock-item">
-                            <div class="tomorrow-stock-left">
-                                <div class="tomorrow-stock-name">大唐发电 <span style="color:#ffd700;font-size:0.6rem">电力龙头</span></div>
-                                <div class="tomorrow-stock-reason">5板龙头 · MA13支撑 · 明日溢价预期</div>
-                            </div>
-                            <div class="tomorrow-stock-pct">预计+3%</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 增强裂变：邀请进度条 -->
-                <div class="invite-progress-section" id="inviteProgressSection">
-                    <div class="invite-progress-header">
-                        <span class="invite-level-badge" id="inviteLevelBadge">LV1<span style="margin-left:0.2rem" id="inviteLevelName">青铜</span></span>
-                        <span class="invite-count-text" id="inviteProgressCountText">已邀请 <span id="inviteProgressCount">0</span>人</span>
-                    </div>
-                    <div class="invite-progress-bar-wrap">
-                        <div class="invite-progress-bar-fill" id="inviteProgressBar"></div>
-                    </div>
-                    <div class="invite-next-reward" id="inviteNextReward">再邀请 <span id="inviteToNext">3</span> 人解锁黄金会员（+7天VIP）</div>
-                    <div class="invite-levels-hint">
-                        <span class="active">LV1青铜</span>
-                        <span id="lv2Hint">LV2黄金</span>
-                        <span id="lv3Hint">LV3钻石</span>
-                        <span id="lv4Hint">LV4至尊</span>
-                    </div>
-                </div>
-
-                <!-- 增强裂变：自动复制分享文案 -->
-                <div style="margin-top:0.75rem">
-                    <div style="color:var(--text-muted);font-size:0.65rem;margin-bottom:0.4rem">📋 一键复制分享文案（分享到朋友圈/群聊）</div>
-                    <div class="share-text-copy">
-                        <div class="share-text-input" id="shareTextInput">📈 润建股份 7天4板！算力租赁概念龙头，带我一起把握这波行情👇</div>
-                        <button class="copy-btn" id="copyShareTextBtn" onclick="copyShareText()">复制文案</button>
-                    </div>
-                    <div style="margin-top:0.4rem">
-                        <div style="color:var(--text-muted);font-size:0.65rem;margin-bottom:0.4rem">🔗 邀请链接（复制后分享给好友）</div>
-                        <div class="share-text-copy">
-                            <div class="share-text-input" id="inviteLinkInput" style="font-size:0.6rem"></div>
-                            <button class="copy-btn" id="copyLinkBtn" onclick="copyInviteLink()">复制链接</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 三阶梯奖励 -->
-                <div class="tier-rewards">
-                    <div class="tier-reward-item ${spreadState.inviteCount >= 0 ? 'active' : ''}" id="tier1">
-                        <div class="tier-num">1</div>
-                        <div class="tier-info">
-                            <div class="tier-name">青铜奖励</div>
-                            <div class="tier-desc">邀请1人 → 双方各得3天VIP</div>
-                        </div>
-                        <div class="tier-status">✓</div>
-                    </div>
-                    <div class="tier-reward-item ${spreadState.inviteCount >= 3 ? 'active' : 'locked'}" id="tier2">
-                        <div class="tier-num">2</div>
-                        <div class="tier-info">
-                            <div class="tier-name">黄金奖励</div>
-                            <div class="tier-desc">累计邀请3人 → 额外奖励15天VIP</div>
-                        </div>
-                        <div class="tier-status">🔒</div>
-                    </div>
-                    <div class="tier-reward-item ${spreadState.inviteCount >= 10 ? 'active' : 'locked'}" id="tier3">
-                        <div class="tier-num">3</div>
-                        <div class="tier-info">
-                            <div class="tier-name">钻石奖励</div>
-                            <div class="tier-desc">累计邀请10人 → 成为合伙人，享永久分成</div>
-                        </div>
-                        <div class="tier-status">🔒</div>
-                    </div>
-                </div>
-
-                <!-- 邀请海报 -->
-                <div class="poster-card">
-                    <div class="poster-preview" id="posterPreview" style="background:#0a0e17; border-radius:12px; padding:20px; text-align:center;">
-                        <div class="poster-logo">Q</div>
-                        <div class="poster-title">热点通</div>
-                        <div class="poster-subtitle">实时热点资讯平台 · 每日精选内容</div>
-                        <div class="poster-qr" id="posterQrCode">
-                            <span style="font-size: 0.625rem; color: #666;">二维码区域</span>
-                        </div>
-                        <div class="poster-invitecode" id="posterInviteCode">QM2026XXXX</div>
-                        <div class="poster-rewards">
-                            <div class="poster-reward-item">
-                                <div class="poster-reward-value">+3天</div>
-                                <div class="poster-reward-label">我得VIP</div>
-                            </div>
-                            <div class="poster-reward-item">
-                                <div class="poster-reward-value">+3天</div>
-                                <div class="poster-reward-label">好友得VIP</div>
-                            </div>
-                            <div class="poster-reward-item">
-                                <div class="poster-reward-value">免费</div>
-                                <div class="poster-reward-label">资料包</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="poster-btn-row">
-                        <button class="poster-btn poster-btn-save" id="savePosterBtn">📥 保存海报</button>
-                        <button class="poster-btn poster-btn-share" id="sharePosterBtn">📤 分享海报</button>
-                    </div>
-                    <div class="wechat-share-tip">
-                        💡 <b>微信分享方法：</b>点击「保存海报」→ 打开微信 → 右上角「+」→「发表」→「相册」选海报图 → 发送即可
-                    </div>
-                </div>
-
-                <!-- 邀请排行榜 -->
-                <div class="invite-rank-section">
-                    <div class="invite-rank-title">🏆 邀请排行榜</div>
-                    <div class="rank-list" id="rankList">
-                        <div class="rank-item top1">
-                            <div class="rank-medal">🥇</div>
-                            <div class="rank-avatar">股</div>
-                            <div class="rank-info">
-                                <div class="rank-name">股市老王</div>
-                                <div class="rank-time">累计邀请 89 人</div>
-                            </div>
-                            <div class="rank-count">
-                                <div class="rank-count-value">267天</div>
-                                <div class="rank-count-label">VIP时长</div>
-                            </div>
-                        </div>
-                        <div class="rank-item top2">
-                            <div class="rank-medal">🥈</div>
-                            <div class="rank-avatar">量</div>
-                            <div class="rank-info">
-                                <div class="rank-name">内容达人</div>
-                                <div class="rank-time">累计邀请 56 人</div>
-                            </div>
-                            <div class="rank-count">
-                                <div class="rank-count-value">168天</div>
-                                <div class="rank-count-label">VIP时长</div>
-                            </div>
-                        </div>
-                        <div class="rank-item top3">
-                            <div class="rank-medal">🥉</div>
-                            <div class="rank-avatar">趋势</div>
-                            <div class="rank-info">
-                                <div class="rank-name">趋势猎手</div>
-                                <div class="rank-time">累计邀请 43 人</div>
-                            </div>
-                            <div class="rank-count">
-                                <div class="rank-count-value">129天</div>
-                                <div class="rank-count-label">VIP时长</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 奖励规则 -->
-                <div class="reward-rules">
-                    <div class="reward-rules-title">📜 邀请规则</div>
-                    <div class="reward-rule-item">
-                        <span class="reward-rule-icon">✓</span>
-                        <span>每成功邀请1位好友，双方各得3天VIP会员</span>
-                    </div>
-                    <div class="reward-rule-item">
-                        <span class="reward-rule-icon">✓</span>
-                        <span>邀请满3人升级黄金会员，享受更多专属权益</span>
-                    </div>
-                    <div class="reward-rule-item">
-                        <span class="reward-rule-icon">✓</span>
-                        <span>邀请满10人升级钻石会员，优先获取精选内容</span>
-                    </div>
-                    <div class="reward-rule-item">
-                        <span class="reward-rule-icon">✓</span>
-                        <span>被邀请好友首月订阅享8折优惠</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- FOMO 动态通知 -->
-    <div class="fomo-notification" id="fomoNotification">
-        <div class="fomo-avatar" id="fomoAvatar">新</div>
-        <div class="fomo-text">
-            <div class="fomo-title" id="fomoTitle">深圳张先生 刚加入社群</div>
-            <div class="fomo-desc" id="fomoDesc">获得了7天VIP体验</div>
-        </div>
-        <button class="fomo-close" id="closeFomo">×</button>
-    </div>
-
-    <!-- 增强裂变：股票关注度FOMO通知 -->
-    <div class="stock-watch-fomo" id="stockWatchFomo">
-        <div class="swf-icon">👀</div>
-        <div class="swf-info">
-            <div class="swf-text" id="swfText">王先生 正在关注 润建股份</div>
-            <div class="swf-sub" id="swfSub">3分钟前 · 已有47人关注</div>
-        </div>
-        <button class="swf-close" id="closeSwf">×</button>
-    </div>
-
-
-    <!-- 离开意图拦截弹窗 -->
-    <div class="exit-intent-overlay" id="exitIntentOverlay">
-        <div class="exit-intent-modal">
-            <button class="exit-intent-close" id="closeExitIntent">×</button>
-            <div class="exit-intent-icon">🎁</div>
-            <div class="exit-intent-title">别急着走！送你限时好礼</div>
-            <div class="exit-intent-desc">
-                错过这份精选热点，你会后悔的<br>
-                <span style="color:#ff4757;font-weight:700">仅剩 <span id="exitIntentSlots">12</span> 个免费名额</span>
-            </div>
-            <div class="exit-intent-gift">
-                <div class="exit-intent-gift-title">🔥 立即领取</div>
-                <div class="exit-intent-gift-desc">分享到朋友圈/群聊，双方各得 <strong style="color:#ffc107">+3天VIP</strong></div>
-            </div>
-            <button class="exit-intent-btn" id="exitShareNow">立即分享领取VIP</button>
-            <button class="exit-intent-skip" id="skipExitIntent">残忍离开 ×</button>
-        </div>
-    </div>
-
-    <!-- 限时冲刺弹窗（双倍VIP奖励） -->
-    <div class="rush-overlay" id="rushOverlay">
-        <div class="rush-modal">
-            <div class="rush-label">⚡ 限时冲刺 · 双倍VIP</div>
-            <div style="font-size:1.4rem;font-weight:800;color:white;margin-bottom:0.25rem">分享即可双倍奖励</div>
-            <div class="rush-countdown" id="rushCountdown">30:00</div>
-            <div style="color:#94a3b8;font-size:0.7rem;margin-bottom:1rem">超时恢复单倍奖励，趁现在！</div>
-            <div style="background:rgba(255,71,87,0.12);border:1px solid rgba(255,71,87,0.3);border-radius:10px;padding:0.75rem;margin-bottom:1rem">
-                <div style="color:#ff4757;font-size:0.75rem;font-weight:700;margin-bottom:0.2rem">当前奖励</div>
-                <div style="color:white;font-size:1.1rem;font-weight:800">邀请1人 = <span style="color:#ffc107">+6天VIP</span></div>
-            </div>
-            <button class="exit-intent-btn" id="rushShareBtn" style="background:linear-gradient(135deg,#ff4757,#c0392b)">⚡ 立即冲刺分享</button>
-            <button class="exit-intent-skip" id="skipRush">稍后再说</button>
-        </div>
-    </div>
-
-    <!-- 成就徽章弹窗 -->
-    <div class="achievement-modal" id="achievementModal">
-        <div class="achievement-badge" id="achievementBadge">🎉</div>
-        <div class="achievement-title" id="achievementTitle">成就解锁！</div>
-        <div class="achievement-desc" id="achievementDesc"></div>
-    </div>
-
-    <!-- 登录弹窗 -->
-    
-<!-- login modal removed -->
-</div>
-
-    <!-- 分享成功提示 -->
-    <div class="share-success-toast" id="shareSuccessToast">
-        <div class="share-success-icon">✓</div>
-        <div class="share-success-title">分享成功！</div>
-        <div class="share-success-desc">感谢您的分享，好友扫码即可加入</div>
-        <div class="share-success-points">+3 VIP天数</div>
-    </div>
-
     <script>
-        // ==================== API Configuration ====================
-        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://127.0.0.1:5000/api'
-            : 'https://h5-backend-tgoe.onrender.com/api';
+        const API_BASE = 'https://h5-backend-tgoe.onrender.com';
 
-        // ==================== Data State ====================
-        let marketData = [];
-        let stockData = [];
-        let hotSectors = [];
-
-        const strategyData = [
-            {
-                title: '热点追踪',
-                desc: '实时追踪热门话题，第一时间获取热点资讯',
-                stats: { winRate: '85%', profit: '10w+', trades: '8k+' },
-                price: '¥1999',
-                period: '/季度',
-                badge: 'hot',
-                tag: '热卖'
-            },
-            {
-                title: '精选内容包',
-                desc: '每日更新热门话题，精选优质资讯',
-                stats: { winRate: '85%', profit: '5w+', trades: '3k+' },
-                price: '¥2999',
-                period: '/季度',
-                badge: 'new',
-                tag: '新品'
-            },
-            {
-                title: '精选内容',
-                desc: '精选资讯推送，实时内容更新',
-                stats: { winRate: '92%', profit: '20w+', trades: '15k+' },
-                price: '¥9999',
-                period: '/年',
-                badge: 'vip',
-                tag: 'VIP',
-                isVip: true
-            }
-        ];
-
-        // ==================== Render Functions ====================
-        function renderMarketData() {
-            const grid = document.getElementById('marketGrid');
-            grid.innerHTML = marketData.map(market => {
-                const changeSign = market.type === 'up' ? '+' : '';
-                const changeClass = market.type === 'up' ? 'up' : 'down';
-                const barWidth = Math.min(Math.abs(market.changePercent) * 20, 100);
-                
-                return `
-                    <div class="market-card">
-                        <div class="market-card-header">
-                            <div class="market-index">
-                                <span class="market-index-name">${market.name}</span>
-                                <span class="market-index-code">${market.code}</span>
-                            </div>
-                            <div class="market-header-right">
-                                <span class="market-tag">实时</span>
-                                <span class="market-update-time">${market.update_time || ''}</span>
-                            </div>
-                        </div>
-                        <div class="market-value">${market.value.toFixed(2)}</div>
-                        <div class="market-change">
-                            <span class="market-change-value ${changeClass}">
-                                ${changeSign}${market.change.toFixed(2)}
-                            </span>
-                            <span class="market-change-value ${changeClass}">
-                                ${changeSign}${market.changePercent.toFixed(2)}%
-                            </span>
-                        </div>
-                        <div class="market-bar">
-                            <div class="market-bar-fill ${changeClass}" style="width: ${barWidth}%"></div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderStockData() {
-            const tbody = document.getElementById('stockTableBody');
-            tbody.innerHTML = stockData.map(stock => {
-                const changeSign = stock.change >= 0 ? '+' : '';
-                const changeClass = stock.change >= 0 ? 'up' : 'down';
-                const arrow = stock.change >= 0 ? '▲' : '▼';
-                
-                return `
-                    <div class="stock-row">
-                        <div class="stock-info">
-                            <span class="stock-name">${stock.name}</span>
-                            <span class="stock-code">${stock.code}</span>
-                        </div>
-                        <span class="stock-price">¥${stock.price.toFixed(2)}</span>
-                        <span class="stock-percent ${changeClass}">
-                            ${arrow} ${changeSign}${(stock.pct || stock.percent || 0).toFixed(2)}%
-                        </span>
-                        <span class="stock-volume">${stock.volume}</span>
-                        <span class="stock-volume">${stock.turnover}%</span>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderStrategyData() {
-            const grid = document.getElementById('strategyGrid');
-            grid.innerHTML = strategyData.map(strategy => `
-                <div class="strategy-card ${strategy.isVip ? 'featured' : ''}">
-                    <span class="strategy-badge ${strategy.badge}">${strategy.tag}</span>
-                    <h3 class="strategy-title">${strategy.title}</h3>
-                    <p class="strategy-desc">${strategy.desc}</p>
-                    <div class="strategy-stats">
-                        <div class="strategy-stat">
-                            <div class="strategy-stat-value">${strategy.stats.winRate}</div>
-                            <div class="strategy-stat-label">胜率</div>
-                        </div>
-                        <div class="strategy-stat">
-                            <div class="strategy-stat-value">${strategy.stats.profit}</div>
-                            <div class="strategy-stat-label">收益率</div>
-                        </div>
-                        <div class="strategy-stat">
-                            <div class="strategy-stat-value">${strategy.stats.trades}</div>
-                            <div class="strategy-stat-label">交易次数</div>
-                        </div>
-                    </div>
-                    <div class="strategy-footer">
-                        <div class="strategy-price">
-                            ${strategy.price}<span>${strategy.period}</span>
-                        </div>
-                        <a href="#" class="strategy-btn ${strategy.isVip ? 'vip-btn' : ''}">
-                            立即订阅
-                        </a>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // ==================== Tab Switching ====================
-        let currentTab = 'hot';
-
-        function filterStockData(tab) {
-            currentTab = tab;
-            let filtered = [];
-            if (tab === 'hot') {
-                // 热门：按涨幅排序，取前20
-                filtered = [...stockData].sort((a, b) => (b.pct || 0) - (a.pct || 0)).slice(0, 20);
-            } else if (tab === 'wave2') {
-                // 二波：只取status为'二波'的
-                filtered = stockData.filter(s => s.status === '二波');
-            } else if (tab === 'zt') {
-                // 最新：不做过滤，显示所有
-                filtered = stockData;
-            } else if (tab === 'focus') {
-                // 关注：取本地存储的自选股
-                const focusCodes = JSON.parse(localStorage.getItem('focus_stocks') || '[]');
-                filtered = stockData.filter(s => focusCodes.includes(s.code));
-                if (filtered.length === 0) {
-                    // 没有自选时显示空状态提示
-                    filtered = stockData.slice(0, 5).map(s => ({...s, _isFocusHint: true}));
-                }
-            } else if (tab === 'aiask') {
-                // AI问股：显示AI问股界面
-                showAiAskSection();
-                return;
-            }
-            renderFilteredStockData(filtered, tab);
-        }
-
-        function renderFilteredStockData(data, tab) {
-            const tbody = document.getElementById('stockTableBody');
-            if (!data || data.length === 0) {
-                tbody.innerHTML = `<div class="empty-state" style="padding:2rem;text-align:center;color:var(--text-muted)">暂无数据${tab === 'focus' ? '，去热门列表添加关注' : ''}</div>`;
-                return;
-            }
-            tbody.innerHTML = data.map(stock => {
-                const changeSign = (stock.pct || 0) >= 0 ? '+' : '';
-                const changeClass = (stock.pct || 0) >= 0 ? 'up' : 'down';
-                const arrow = (stock.pct || 0) >= 0 ? '▲' : '▼';
-                const isFocusHint = stock._isFocusHint;
-                return `
-                    <div class="stock-row ${isFocusHint ? 'stock-row-focus-hint' : ''}" ${!isFocusHint ? `onclick="showStockDetail('${stock.code}')"` : ''} style="${!isFocusHint ? 'cursor:pointer' : ''}">
-                        <div class="stock-info">
-                            <span class="stock-name">${stock.name}</span>
-                            <span class="stock-code">${stock.code}</span>
-                            ${isFocusHint ? '<span class="focus-hint-tag">关注后可查看</span>' : ''}
-                        </div>
-                        <span class="stock-price">¥${(stock.price || 0).toFixed(2)}</span>
-                        <span class="stock-percent ${changeClass}">
-                            ${arrow} ${changeSign}${(stock.pct || 0).toFixed(2)}%
-                        </span>
-                        <span class="stock-volume">${stock.boards ? stock.boards+'板' : '-'}</span>
-                        <span class="stock-volume">${stock.turnover ? stock.turnover+'%' : '-'}</span>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function initTabs() {
-            const tabs = document.querySelectorAll('.section-tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    filterStockData(tab.dataset.tab);
-                });
-            });
-        }
-
-        // ==================== Stock Detail Modal ====================
-        async function showStockDetail(code) {
-            const modal = document.getElementById('stockDetailModal') || createStockDetailModal();
-            modal.classList.add('active');
-            document.getElementById('stockDetailContent').innerHTML = `
-                <div style="display:flex;justify-content:center;align-items:center;padding:3rem">
-                    <div class="skeleton" style="width:200px;height:20px"></div>
-                </div>`;
-            try {
-                const res = await fetch(`${API_BASE}/stock/${code}`);
-                const json = await res.json();
-                if (json.code === 0 && json.data) {
-                    const d = json.data;
-                    const pct = d.pct || 0;
-                    const type = pct >= 0 ? 'up' : 'down';
-                    const sign = pct >= 0 ? '+' : '';
-                    document.getElementById('stockDetailContent').innerHTML = `
-                        <div class="detail-header">
-                            <div class="detail-name">${d.name || code}</div>
-                            <div class="detail-code">${code}</div>
-                        </div>
-                        <div class="detail-price-row">
-                            <span class="detail-price">${(d.price || 0).toFixed(2)}</span>
-                            <span class="detail-change ${type}">${sign}${d.change || 0} (${sign}${pct}%)</span>
-                        </div>
-                        <div class="detail-grid">
-                            <div class="detail-item"><span class="detail-label">今开</span><span class="detail-value">${(d.open || 0).toFixed(2)}</span></div>
-                            <div class="detail-item"><span class="detail-label">最高</span><span class="detail-value up">${(d.high || 0).toFixed(2)}</span></div>
-                            <div class="detail-item"><span class="detail-label">最低</span><span class="detail-value down">${(d.low || 0).toFixed(2)}</span></div>
-                            <div class="detail-item"><span class="detail-label">成交量</span><span class="detail-value">${d.volume || 0} 万手</span></div>
-                            <div class="detail-item"><span class="detail-label">成交额</span><span class="detail-value">${d.turnover || 0} 亿</span></div>
-                            <div class="detail-item"><span class="detail-label">振幅</span><span class="detail-value">${d.amplitude || 0}%</span></div>
-                        </div>
-                        <div class="detail-actions">
-                            <button class="detail-btn" onclick="toggleFocus('${code}')">⭐ ${isFocused(code) ? '取消关注' : '加关注'}</button>
-                            <button class="detail-btn detail-btn-close" onclick="closeStockDetail()">关闭</button>
-                        </div>`;
-                } else {
-                    document.getElementById('stockDetailContent').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted)加载失败</div>';
-                }
-            } catch (e) {
-                document.getElementById('stockDetailContent').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted)网络错误</div>';
-            }
-        }
-
-        function createStockDetailModal() {
-            const modal = document.createElement('div');
-            modal.id = 'stockDetailModal';
-            modal.className = 'modal';
-            modal.innerHTML = `<div class="modal-content" style="background:var(--bg-card);border-radius:var(--radius-lg);max-width:360px;width:90%;margin:2rem auto;padding:1.5rem">
-                    <div id="stockDetailContent"></div>
-                </div>`;
-            modal.addEventListener('click', (e) => { if (e.target === modal) closeStockDetail(); });
-            document.body.appendChild(modal);
-            return modal;
-        }
-
-        function closeStockDetail() {
-            const m = document.getElementById('stockDetailModal');
-            if (m) m.classList.remove('active');
-        }
-
-        function toggleFocus(code) {
-            let focuses = JSON.parse(localStorage.getItem('focus_stocks') || '[]');
-            if (focuses.includes(code)) {
-                focuses = focuses.filter(c => c !== code);
-            } else {
-                focuses.push(code);
-            }
-            localStorage.setItem('focus_stocks', JSON.stringify(focuses));
-            showStockDetail(code);  // 刷新
-        }
-
-        function isFocused(code) {
-            const focuses = JSON.parse(localStorage.getItem('focus_stocks') || '[]');
-            return focuses.includes(code);
-        }
-
-        // ==================== API Fetch Functions ====================
-
-        // 显示骨架屏
-        function showSkeleton(type) {
-            const el = document.getElementById('indicesContainer');
-            if (!el) return;
-            if (type === 'indices') {
-                el.innerHTML = `
-                    <div class="skeleton-card" style="display:flex;gap:1rem;align-items:center">
-                        <div><div class="skeleton" style="width:80px;height:14px;margin-bottom:6px"></div><div class="skeleton" style="width:50px;height:10px"></div></div>
-                        <div><div class="skeleton" style="width:80px;height:14px;margin-bottom:6px"></div><div class="skeleton" style="width:50px;height:10px"></div></div>
-                        <div><div class="skeleton" style="width:80px;height:14px;margin-bottom:6px"></div><div class="skeleton" style="width:50px;height:10px"></div></div>
-                        <div><div class="skeleton" style="width:80px;height:14px;margin-bottom:6px"></div><div class="skeleton" style="width:50px;height:10px"></div></div>
-                    </div>`;
-            }
-        }
-
-        // 数字滚动动画
-        function animateNumber(el, target, suffix='', decimals=2) {
-            const start = 0;
-            const duration = 800;
-            const startTime = performance.now();
-            function update(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3); // ease-out-cubic
-                const current = start + (target - start) * eased;
-                el.textContent = current.toFixed(decimals) + suffix;
-                if (progress < 1) requestAnimationFrame(update);
-            }
-            requestAnimationFrame(update);
-        }
-
-        async function fetchMarketData() {
-            try {
-                showSkeleton('indices');
-                const res = await fetch(`${API_BASE}/indices?refresh=true`);
-                const json = await res.json();
-                if (json.code === 0 && json.data) {
-                    marketData = json.data;
-                    renderMarketData();
-                }
-            } catch (e) {
-                console.warn('大盘数据加载失败，使用缓存:', e.message);
-            }
-        }
-
-        async function fetchStockData() {
-            try {
-                const listEl = document.getElementById('ztListContainer');
-                if (listEl) {
-                    listEl.innerHTML = Array(5).fill().map(() =>
-                        `<div class="skeleton-card"><div class="skeleton skeleton-line medium"></div><div class="skeleton skeleton-line short"></div></div>`
-                    ).join('');
-                }
-                const res = await fetch(`${API_BASE}/ztlist?refresh=true`);
-                const json = await res.json();
-                if (json.code === 0 && json.data) {
-                    stockData = json.data;
-                    filterStockData(currentTab);  // 使用当前tab渲染
-                }
-            } catch (e) {
-                console.warn('热门话题数据加载失败:', e.message);
-            }
-        }
-
-        async function fetchHotSectors() {
-            try {
-                const res = await fetch(`${API_BASE}/hot-sectors?refresh=true`);
-                const json = await res.json();
-                if (json.code === 0 && json.data) {
-                    hotSectors = json.data;
-                    renderHotSectors();
-                }
-            } catch (e) {
-                console.warn('热门题材加载失败:', e.message);
-            }
-        }
-
-        // ==================== Render Hot Sectors ====================
-        function renderHotSectors() {
-            const grid = document.getElementById('hotSectorsGrid');
-            if (!grid) return;
-            if (hotSectors.length === 0) {
-                grid.innerHTML = '<div class="empty-state">暂无数据</div>';
-                return;
-            }
-            grid.innerHTML = hotSectors.map(sector => `
-                <div class="sector-card ${sector.status}">
-                    <div class="sector-name">${sector.name}</div>
-                    <div class="sector-pct ${sector.status}">${sector.pct >= 0 ? '+' : ''}${sector.pct.toFixed(2)}%</div>
-                    <div class="sector-count">${sector.stock_count}只</div>
-                    <div class="sector-lead">热帖: ${sector.lead_stock}</div>
-                </div>
-            `).join('');
-        }
-
-        // ==================== Real-time Updates ====================
-        // 手动刷新所有数据
-        async function refreshAllData() {
-            const btn = document.getElementById('refreshMarketBtn');
-            if (btn) btn.classList.add('loading');
-            await Promise.all([
-                fetchMarketData(),
-                fetchStockData(),
-                fetchHotSectors(),
-            ]);
-            if (btn) {
-                setTimeout(() => btn.classList.remove('loading'), 500);
-            }
-        }
-
-        function startLiveUpdates() {
-            // 每2分钟刷新大盘数据
-            fetchMarketData();
-            fetchStockData();
-            fetchHotSectors();
-            setInterval(fetchMarketData, 120000);
-            setInterval(fetchStockData, 120000);
-            setInterval(fetchHotSectors, 120000);
-        }
-
-        // ==================== Initialize ====================
-        // ==================== AI问股 Functions ====================
         let aiAskTrials = 3;
         let aiAskLifetime = false;
         let aiAskPhone = localStorage.getItem('phone') || '';
 
-        function showAiAskSection() {
-            document.getElementById('stocks').style.display = 'none';
-            document.getElementById('aiask').style.display = 'block';
-            document.getElementById('strategies').style.display = 'none';
-            document.getElementById('community').style.display = 'none';
-            updateAiAskStatus();
-        }
-
         function updateAiAskStatus() {
+            const trialsEl = document.getElementById('aiTrials');
+            const lifetimeEl = document.getElementById('aiLifetime');
+            if (!trialsEl || !lifetimeEl) return;
+
             if (aiAskLifetime) {
-                document.getElementById('aiTrials').textContent = '∞';
-                document.getElementById('aiLifetime').textContent = '已解锁';
+                trialsEl.textContent = '∞';
+                lifetimeEl.textContent = '已解锁';
             } else {
-                document.getElementById('aiTrials').textContent = aiAskTrials;
-                document.getElementById('aiLifetime').textContent = '未解锁';
+                trialsEl.textContent = aiAskTrials;
+                lifetimeEl.textContent = '未解锁';
             }
         }
 
@@ -3532,12 +980,19 @@
             }
         }
 
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+
         async function sendAiAsk() {
             const input = document.getElementById('aiAskInput');
+            const messagesDiv = document.getElementById('aiMessages');
+            if (!input || !messagesDiv) return;
+
             const message = input.value.trim();
             if (!message) return;
-
-            const messagesDiv = document.getElementById('aiMessages');
 
             // 清空提示
             const hint = messagesDiv.querySelector('.ai-ask-hint');
@@ -3555,13 +1010,14 @@
             waitingDiv.className = 'ai-msg ai-msg-waiting';
             waitingDiv.innerHTML = `
                 <div class="ai-msg-avatar">🤖</div>
-                <div class="ai-msg-content">分析中...</div>
+                <div class="ai-msg-content">分析中，请稍候...</div>
             `;
             messagesDiv.appendChild(waitingDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             input.value = '';
-            document.getElementById('aiAskSendBtn').disabled = true;
+            const sendBtn = document.getElementById('aiAskSendBtn');
+            if (sendBtn) sendBtn.disabled = true;
 
             try {
                 const res = await fetch(`${API_BASE}/chat`, {
@@ -3574,25 +1030,22 @@
                 waitingDiv.remove();
 
                 if (json.code === 2) {
-                    // 需要付费
                     messagesDiv.innerHTML += `
                         <div class="ai-msg">
                             <div class="ai-msg-avatar">🤖</div>
                             <div class="ai-msg-content">
-                                今日免费次数已用完！<br>
+                                今日免费次数已用完！<br><br>
                                 💰 单次9.9元<br>
                                 🎁 介绍3人可永久解锁
                             </div>
                         </div>`;
                 } else if (json.code === 0) {
-                    // AI回复
                     messagesDiv.innerHTML += `
                         <div class="ai-msg">
                             <div class="ai-msg-avatar">🤖</div>
                             <div class="ai-msg-content">${escapeHtml(json.data.reply)}</div>
                         </div>`;
 
-                    // 更新剩余次数
                     if (json.data.remaining_trials !== undefined && json.data.remaining_trials !== null) {
                         aiAskTrials = json.data.remaining_trials;
                     }
@@ -3617,17 +1070,10 @@
                     </div>`;
             }
 
-            document.getElementById('aiAskSendBtn').disabled = false;
+            if (sendBtn) sendBtn.disabled = false;
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML.replace(/\n/g, '<br>');
-        }
-
-        // 回车发送
         document.addEventListener('DOMContentLoaded', () => {
             const input = document.getElementById('aiAskInput');
             if (input) {
@@ -3640,988 +1086,16 @@
             fetchAiAskStatus();
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderMarketData();
-            renderFilteredStockData(stockData, 'hot');
-            renderStrategyData();
-            initTabs();
-            startLiveUpdates();
-        });
-
-        // ==================== Smooth Scroll ====================
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    target.scrollIntoView({behavior: 'smooth', block: 'start'});
                 }
             });
         });
-
-        // ==================== 裂变系统 JavaScript ====================
-
-        // 用户登录状态
-        window.currentUser = null;
-
-        /* updateLoginState removed */</span><a href="#" id="btnLogout" style="color:#ff4757;font-size:0.8rem;margin-left:0.5rem;">退出</a>`;
-                    document.getElementById('btnLogout').addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const autoToken = localStorage.getItem('auto_token');
-                        if (autoToken) {
-                            fetch(`${API_BASE}/auth/logout`, {
-                                method: 'POST',
-                                headers: { 'X-Auto-Token': autoToken }
-                            });
-                        }
-                        localStorage.removeItem('auth_token');
-                        localStorage.removeItem('auto_token');
-                        localStorage.removeItem('user_id');
-                        window.currentUser = null;
-                        updateLoginState();
-                        authLinks.innerHTML = '<span style="color:#64748b;margin:0 0.2rem">|</span><a href="#" id="btnRegister">注册</a>';
-                        bindAuthLinks();
-                    });
-                } else {
-                    authLinks.classList.remove('logged-in');
-                }
-            }
-        }
-
-        /* checkLoginStatus removed *//auth/auto_login`, {
-                    method: 'POST',
-                    headers: { 'X-Auto-Token': autoToken }
-                }).then(r => r.json()).then(data => {
-                    if (data.code === 0 && data.data?.token) {
-                        localStorage.setItem('auth_token', data.data.token);
-                        window.currentUser = data.data.user;
-                        updateLoginState();
-                        return;
-                    }
-                    // auto_token失效，尝试auth_token
-                    tryAuthToken();
-                }).catch(() => tryAuthToken());
-                return;
-            }
-
-            tryAuthToken();
-        }
-
-        function tryAuthToken() {
-            const token = localStorage.getItem('auth_token');
-            if (!token) {
-                window.currentUser = null;
-                updateLoginState();
-                return;
-            }
-            fetch(`${API_BASE}/auth/status`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            }).then(r => r.json()).then(data => {
-                if (data.code === 0 && data.data?.logged_in) {
-                    window.currentUser = data.data.user;
-                } else {
-                    localStorage.removeItem('auth_token');
-                    localStorage.removeItem('user_id');
-                    window.currentUser = null;
-                }
-                updateLoginState();
-            }).catch(() => {
-                localStorage.removeItem('auth_token');
-                localStorage.removeItem('user_id');
-                window.currentUser = null;
-                updateLoginState();
-            });
-        }
-
-        // 裂变状态管理
-        const spreadState = {
-            userId: localStorage.getItem('spread_user_id') || generateUserId(),
-            inviteCode: localStorage.getItem('spread_invite_code') || generateInviteCode(),
-            inviteCount: parseInt(localStorage.getItem('spread_invite_count') || '0'),
-            points: parseInt(localStorage.getItem('spread_points') || '0'),
-            vipDays: parseInt(localStorage.getItem('spread_vip_days') || '0'),
-            level: localStorage.getItem('spread_level') || 'bronze',
-            totalParticipants: 1247
-        };
-
-        // 生成用户ID和邀请码
-        function generateUserId() {
-            const id = 'U' + Date.now().toString(36).toUpperCase();
-            localStorage.setItem('spread_user_id', id);
-            return id;
-        }
-
-        function generateInviteCode() {
-            const code = 'QM2026' + Math.random().toString(36).substring(2, 6).toUpperCase();
-            localStorage.setItem('spread_invite_code', code);
-            return code;
-        }
-
-        // 等级配置
-        const levelConfig = {
-            bronze: { minInvites: 0, name: '青铜会员', badge: 'LV1', color: '#cd7f32' },
-            gold: { minInvites: 3, name: '黄金会员', badge: 'LV2', color: '#ffd700' },
-            diamond: { minInvites: 10, name: '钻石会员', badge: 'LV3', color: '#b9f2ff' }
-        };
-
-        // 初始化裂变系统
-        function initSpreadSystem() {
-            // 保存用户邀请码到localStorage
-            document.getElementById('posterInviteCode').textContent = spreadState.inviteCode;
-
-            // 从URL获取邀请码（新用户通过邀请链接进入）
-            const urlParams = new URLSearchParams(window.location.search);
-            const refCode = urlParams.get('ref');
-            if (refCode) {
-                // 有邀请码，说明是被邀请来的
-                localStorage.setItem('spread_ref_code', refCode);
-                // 可以在这里调用API记录邀请关系
-                console.log('通过邀请码进入:', refCode);
-            }
-
-            // 初始化邀请码到分享链接
-            initShareLinks();
-
-            // 启动VIP倒计时
-            startVipCountdown();
-
-            // 更新阶梯奖励UI
-            updateTierUI();
-
-            // 自动上报邀请关系（如果有ref参数）
-            autoRecordInvite();
-
-            // 更新UI显示
-            updateSpreadUI();
-
-            // 启动FOMO通知
-            startFomoNotifications();
-
-            // 绑定事件
-            bindSpreadEvents();
-
-            // 生成二维码占位（实际需要后端生成）
-            generateQrCode();
-        }
-
-        // 更新裂变UI
-        function updateSpreadUI() {
-            // 更新用户数据
-            document.getElementById('userInviteCount').textContent = spreadState.inviteCount;
-            document.getElementById('userPoints').textContent = spreadState.points;
-            document.getElementById('userVipDays').textContent = spreadState.vipDays;
-
-            // 更新等级
-            const levelInfo = levelConfig[spreadState.level];
-            document.getElementById('userLevelBadge').textContent = levelInfo.badge;
-            document.getElementById('userLevelName').textContent = levelInfo.name;
-
-            // 更新进度条
-            const nextLevel = spreadState.level === 'bronze' ? 'gold' : 'diamond';
-            const nextConfig = levelConfig[nextLevel];
-            const currentInvites = spreadState.inviteCount;
-            const progress = Math.min((currentInvites / nextConfig.minInvites) * 100, 100);
-            const remain = Math.max(nextConfig.minInvites - currentInvites, 0);
-
-            document.getElementById('vipProgressFill').style.width = progress + '%';
-            document.getElementById('vipProgressText').textContent = `${currentInvites}/${nextConfig.minInvites}`;
-            document.getElementById('remainToVip').textContent = remain;
-
-            // 更新总参与人数
-            document.getElementById('totalInvitesCount').textContent =
-                (spreadState.totalParticipants + spreadState.inviteCount).toLocaleString();
-        }
-
-        // 初始化分享链接
-        function initShareLinks() {
-            const shareUrl = window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode;
-            const shareTitle = '热点通 - 实时热点资讯平台';
-            const shareDesc = '免费获取精选内容、实时热点、专属服务';
-
-            // 微信分享（需要引导用户在浏览器中打开）
-            window.shareData = {
-                url: shareUrl,
-                title: shareTitle,
-                desc: shareDesc
-            };
-        }
-
-        // 自动上报邀请关系
-        function autoRecordInvite() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const refCode = urlParams.get('ref');
-            if (!refCode) return;
-
-            const visitorId = spreadState.userId;
-
-            // 上报到后端
-            fetch(`${API_BASE}/invite/record`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    visitor_id: visitorId,
-                    invite_code: refCode
-                })
-            }).then(res => res.json()).then(data => {
-                console.log('邀请记录已上报:', data);
-            }).catch(e => {
-                console.log('上报失败（可能后端未启动）:', e.message);
-            });
-
-            // 保存到本地
-            localStorage.setItem('spread_ref_code', refCode);
-        }
-
-        // 获取并显示我的邀请统计
-        function refreshMyStats() {
-            const code = spreadState.inviteCode;
-            fetch(`${API_BASE}/invite/stats?code=${code}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.code === 0 && data.data) {
-                        const d = data.data;
-                        spreadState.inviteCount = d.total_invites || spreadState.inviteCount;
-                        spreadState.vipDays = d.total_vip_days || spreadState.vipDays;
-                        if (d.level) {
-                            spreadState.level = d.level;
-                            localStorage.setItem('spread_level', d.level);
-                        }
-                        localStorage.setItem('spread_invite_count', spreadState.inviteCount);
-                        localStorage.setItem('spread_vip_days', spreadState.vipDays);
-                        updateSpreadUI();
-                        updateTierUI();
-                    }
-                }).catch(() => {});
-        }
-
-        // 刷新排行榜
-        function refreshLeaderboard() {
-            fetch(`${API_BASE}/invite/leaderboard`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.code === 0 && data.data) {
-                        renderLeaderboard(data.data);
-                    }
-                }).catch(() => {});
-        }
-
-        function renderLeaderboard(leaders) {
-            const list = document.getElementById('rankList');
-            if (!list) return;
-            list.innerHTML = leaders.map((item, i) => `
-                <div class="rank-item ${i === 0 ? 'top1' : i === 1 ? 'top2' : ''}">
-                    <div class="rank-medal">${item.medal || '#' + item.rank}</div>
-                    <div class="rank-avatar">${(item.owner_name || '某').charAt(0)}</div>
-                    <div class="rank-info">
-                        <div class="rank-name">${item.owner_name}</div>
-                        <div class="rank-time">累计邀请 ${item.total_invites} 人</div>
-                    </div>
-                    <div class="rank-count">
-                        <div class="rank-count-value">${item.total_vip_days}天</div>
-                        <div class="rank-count-label">VIP时长</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // 生成真实二维码
-        function generateQrCode() {
-            const qrContainer = document.getElementById('posterQrCode');
-            const shareUrl = window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode;
-            qrContainer.innerHTML = '';
-            try {
-                new QRCode(qrContainer, {
-                    text: shareUrl,
-                    width: 100,
-                    height: 100,
-                    colorDark: '#ffffff',
-                    colorLight: '#0a0e17',
-                    correctLevel: QRCode.CorrectLevel.M
-                });
-            } catch(e) {
-                qrContainer.innerHTML = '<div style="font-size:10px;color:#666;">二维码</div>';
-            }
-        }
-
-        // VIP倒计时计时器
-        function startVipCountdown() {
-            const vipExpiry = localStorage.getItem('spread_vip_expiry');
-            if (!vipExpiry) {
-                // 首次访问，给7天VIP体验
-                const expiry = Date.now() + 7 * 24 * 60 * 60 * 1000;
-                localStorage.setItem('spread_vip_expiry', expiry);
-            }
-
-            function updateCountdown() {
-                const expiry = parseInt(localStorage.getItem('spread_vip_expiry') || Date.now() + 7 * 24 * 60 * 60 * 1000);
-                const now = Date.now();
-                const diff = Math.max(0, expiry - now);
-
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                const el = document.getElementById('vipCountdownTime');
-                if (el) {
-                    el.textContent = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
-                }
-            }
-
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-        }
-
-        // 显示成就弹窗
-        function showAchievement(badge, title, desc) {
-            document.getElementById('achievementBadge').textContent = badge;
-            document.getElementById('achievementTitle').textContent = title;
-            document.getElementById('achievementDesc').textContent = desc;
-            const modal = document.getElementById('achievementModal');
-            modal.classList.add('show');
-            setTimeout(() => modal.classList.remove('show'), 3000);
-        }
-
-        // 更新阶梯奖励UI
-        function updateTierUI() {
-            const tier1 = document.getElementById('tier1');
-            const tier2 = document.getElementById('tier2');
-            const tier3 = document.getElementById('tier3');
-            if (!tier1) return;
-
-            const count = spreadState.inviteCount;
-
-            // Tier 1 - always active if invited at least once
-            if (count >= 1) {
-                tier1.classList.add('active');
-                tier1.querySelector('.tier-status').textContent = '✓';
-            }
-
-            // Tier 2 - Gold (3 invites)
-            if (count >= 3) {
-                tier2.classList.remove('locked');
-                tier2.classList.add('active');
-                tier2.querySelector('.tier-status').textContent = '✓';
-                // Show achievement for first time reaching Gold
-                if (localStorage.getItem('tier2_unlocked') !== '1') {
-                    localStorage.setItem('tier2_unlocked', '1');
-                    setTimeout(() => showAchievement('🥇', '黄金会员解锁！', '累计邀请3人，额外获得15天VIP'), 500);
-                }
-            }
-
-            // Tier 3 - Diamond (10 invites)
-            if (count >= 10) {
-                tier3.classList.remove('locked');
-                tier3.classList.add('active');
-                tier3.querySelector('.tier-status').textContent = '✓';
-                if (localStorage.getItem('tier3_unlocked') !== '1') {
-                    localStorage.setItem('tier3_unlocked', '1');
-                    setTimeout(() => showAchievement('💎', '钻石合伙人解锁！', '成为合伙人，享永久分成权益'), 500);
-                }
-            }
-        }
-
-        // 绑定登录/注册按钮
-        function bindAuthLinks() {
-            const loginBtn = document.getElementById('btnLogin');
-            const registerBtn = document.getElementById('btnRegister');
-            if (loginBtn) loginBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                // loginModal removed
-                document.body.style.overflow = 'hidden';
-            });
-            if (registerBtn) registerBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                // loginModal removed
-                document.body.style.overflow = 'hidden';
-            });
-        }
-
-        // 绑定裂变事件
-        function bindSpreadEvents() {
-            // 绑定登录/注册头部链接
-            bindAuthLinks();
-
-            // 打开邀请弹窗（无需登录，未登录用户也能分享海报）
-            document.getElementById('openInviteModalBtn').addEventListener('click', () => {
-                document.getElementById('inviteModal').classList.add('active');
-                document.body.style.overflow = 'hidden';
-                // 刷新自己的数据和排行榜
-                refreshMyStats();
-                refreshLeaderboard();
-            });
-
-            // 关闭登录弹窗
-            // closeLoginModal removed => {
-                // loginModal removed
-                document.body.style.overflow = '';
-            });
-
-            // 点击遮罩关闭
-            // loginModal listener removed => {
-                if (e.target === document.getElementById('loginModal')) {
-                    // loginModal removed
-                    document.body.style.overflow = '';
-                }
-            });
-
-            // 发送验证码
-            // sendCodeBtn removed
-                if (phone.length !== 11) {
-                    // loginError removed
-                    return;
-                }
-                // loginError removed
-                btn.disabled = true;
-                btn.textContent = '发送中...';
-                try {
-                    const res = await fetch(`${API_BASE}/auth/send_code`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ phone })
-                    });
-                    const data = await res.json();
-                    if (data.code === 0) {
-                        btn.textContent = '已发送';
-                        let countdown = 60;
-                        const timer = setInterval(() => {
-                            countdown--;
-                            if (countdown <= 0) {
-                                btn.disabled = false;
-                                btn.textContent = '重新发送';
-                                clearInterval(timer);
-                            } else {
-                                btn.textContent = `${countdown}秒`;
-                            }
-                        }, 1000);
-                        // ⚠️ 演示环境显示验证码
-                        if (data.debug_code) {
-                            // loginCode removed
-                        }
-                    } else {
-                        // loginError removed
-                        btn.disabled = false;
-                        btn.textContent = '发送验证码';
-                    }
-                } catch(e) {
-                    // loginError removed
-                    btn.disabled = false;
-                    btn.textContent = '发送验证码';
-                }
-            });
-
-            // 登录提交
-            // loginSubmitBtn removed => {
-                const phone = // loginPhone removed
-                const code = // loginCode removed
-                const btn = document.getElementById('loginSubmitBtn');
-                const errorEl = document.getElementById('loginError');
-                if (!phone || !code) {
-                    errorEl.textContent = '请填写手机号和验证码';
-                    return;
-                }
-                errorEl.textContent = '';
-                btn.disabled = true;
-                btn.textContent = '登录中...';
-                try {
-                    const res = await fetch(`${API_BASE}/auth/login`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ phone, code })
-                    });
-                    const data = await res.json();
-                    if (data.code === 0) {
-                        // 登录成功：保存auth_token和auto_token
-                        localStorage.setItem('auth_token', data.data.token);
-                        localStorage.setItem('auto_token', data.data.auto_token || '');
-                        localStorage.setItem('user_id', data.data.user.id);
-                        window.currentUser = data.data.user;
-                        updateLoginState();
-                        // loginModal removed
-                        document.body.style.overflow = '';
-                        // 打开邀请弹窗
-                        document.getElementById('inviteModal').classList.add('active');
-                        document.body.style.overflow = 'hidden';
-                        refreshMyStats();
-                        refreshLeaderboard();
-                    } else {
-                        errorEl.textContent = data.msg;
-                    }
-                } catch(e) {
-                    errorEl.textContent = '网络错误，请重试';
-                } finally {
-                    btn.disabled = false;
-                    btn.textContent = '登录 / 注册';
-                }
-            });
-
-            // 微信登录：显示二维码 → 用户用微信扫码授权
-            let wechatPollTimer = null;
-            let wechatQrEl = null;
-
-            // wechatLoginBtn removed => {
-                const hintEl = document.getElementById('wechatHint');
-                const qrBox = document.getElementById('wechatQrBox');
-
-                // 检测是否手机端
-                const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-                if (isMobile) {
-                    // 手机端：直接跳转微信授权
-                    hintEl.innerHTML = '<small style="color:#94a3b8">正在拉起微信授权...</small>';
-                    try {
-                        const res = await fetch(`${API_BASE}/auth/wechat/qr`);
-                        const data = await res.json();
-                        if (data.code !== 0 || !data.data?.auth_url) {
-                            hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
-                            return;
-                        }
-                        // 微信手机端：直接跳转
-                        window.location.href = data.data.auth_url;
-                    } catch(e) {
-                        hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
-                    }
-                    return;
-                }
-
-                // 电脑端：显示二维码
-                if (wechatQrEl) qrBox.innerHTML = '';
-                hintEl.innerHTML = '正在加载授权二维码...';
-
-                try {
-                    const res = await fetch(`${API_BASE}/auth/wechat/qr`);
-                    const data = await res.json();
-                    if (data.code !== 0 || !data.data?.auth_url) {
-                        hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
-                        return;
-                    }
-
-                    hintEl.innerHTML = '<small style="color:#94a3b8">用微信扫下方二维码授权登录</small>';
-
-                    // 生成二维码
-                    wechatQrEl = document.createElement('div');
-                    wechatQrEl.id = 'wechatQrEl';
-                    qrBox.innerHTML = '';
-                    qrBox.appendChild(wechatQrEl);
-                    new QRCode(wechatQrEl, {
-                        text: data.data.auth_url,
-                        width: 180,
-                        height: 180,
-                        colorDark: '#000000',
-                        colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.M
-                    });
-
-                    // 轮询登录状态
-                    const pollUrl = data.data.poll_url;
-                    let pollCount = 0;
-                    wechatPollTimer = setInterval(async () => {
-                        pollCount++;
-                        if (pollCount > 150) { // 5分钟超时
-                            clearInterval(wechatPollTimer);
-                            hintEl.textContent = '授权超时，请重试';
-                            return;
-                        }
-                        try {
-                            const pollRes = await fetch(pollUrl);
-                            const pollData = await pollRes.json();
-                            if (pollData.code === 0 && pollData.data?.ready) {
-                                clearInterval(wechatPollTimer);
-                                const token = pollData.data.token;
-                                const user = pollData.data.user;
-                                localStorage.setItem('auth_token', token);
-                                localStorage.setItem('user_id', user.id);
-                                window.currentUser = user;
-                                updateLoginState();
-                                // loginModal removed
-                                document.body.style.overflow = '';
-                                qrBox.innerHTML = '<div style="color:#52c41a;font-size:2rem;">✅</div><div style="color:#52c41a">授权成功</div>';
-                            }
-                        } catch(e) {}
-                    }, 2000);
-
-                } catch(e) {
-                    hintEl.textContent = '微信登录暂不可用，请使用手机号登录';
-                }
-            });
-
-            // 关闭邀请弹窗
-            document.getElementById('closeInviteModal').addEventListener('click', () => {
-                document.getElementById('inviteModal').classList.remove('active');
-                document.body.style.overflow = '';
-            });
-
-            // 点击遮罩关闭
-            document.getElementById('inviteModal').addEventListener('click', (e) => {
-                if (e.target.id === 'inviteModal') {
-                    document.getElementById('inviteModal').classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
-
-            // 保存海报（生成图片下载）
-            document.getElementById('savePosterBtn').addEventListener('click', async () => {
-                const btn = document.getElementById('savePosterBtn');
-                btn.textContent = '⏳ 生成中...';
-                btn.disabled = true;
-
-                try {
-                    const posterEl = document.getElementById('posterPreview');
-                    const canvas = await html2canvas(posterEl, {
-                        scale: 2,
-                        backgroundColor: '#0a0e17',
-                        useCORS: true,
-                        logging: false
-                    });
-
-                    const link = document.createElement('a');
-                    link.download = `热点通_${spreadState.inviteCode}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-
-                    showShareSuccess('海报已保存到相册');
-                } catch(e) {
-                    showShareSuccess('保存失败，请截图分享');
-                } finally {
-                    btn.textContent = '📥 保存海报';
-                    btn.disabled = false;
-                }
-            });
-
-            // 分享海报
-            document.getElementById('sharePosterBtn').addEventListener('click', () => {
-                if (navigator.share) {
-                    // 原生分享API（移动端）
-                    navigator.share({
-                        title: '📢 热点通 - 实时热点资讯平台',
-                         text: '免费获取精选内容、实时热点资讯，限量名额正在发放中',
-                        url: window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode
-                    }).then(() => {
-                        recordShare();
-                        showShareSuccess('分享成功！');
-                    });
-                } else {
-                    // 复制链接
-                    const shareUrl = window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode;
-                    navigator.clipboard.writeText(shareUrl).then(() => {
-                        recordShare();
-                        showShareSuccess('链接已复制到剪贴板');
-                    });
-                }
-            });
-
-            // 关闭FOMO通知
-            document.getElementById('closeFomo').addEventListener('click', () => {
-                document.getElementById('fomoNotification').classList.remove('show');
-            });
-        }
-
-        // 记录分享（模拟）
-        function recordShare() {
-            spreadState.inviteCount++;
-            spreadState.points += 30;
-            spreadState.vipDays += 3;
-
-            // 延长VIP到期时间
-            const currentExpiry = parseInt(localStorage.getItem('spread_vip_expiry') || Date.now());
-            localStorage.setItem('spread_vip_expiry', currentExpiry + 3 * 24 * 60 * 60 * 1000);
-
-            // 检查升级
-            if (spreadState.inviteCount >= 10 && spreadState.level !== 'diamond') {
-                spreadState.level = 'diamond';
-                localStorage.setItem('spread_level', 'diamond');
-            } else if (spreadState.inviteCount >= 3 && spreadState.level === 'bronze') {
-                spreadState.level = 'gold';
-                localStorage.setItem('spread_level', 'gold');
-            }
-
-            localStorage.setItem('spread_invite_count', spreadState.inviteCount);
-            localStorage.setItem('spread_points', spreadState.points);
-            localStorage.setItem('spread_vip_days', spreadState.vipDays);
-
-            // 分享后按钮爆炸动画
-            const btn = document.getElementById('sharePosterBtn');
-            if (btn) {
-                btn.classList.add('share-exploding');
-                setTimeout(() => btn.classList.remove('share-exploding'), 500);
-            }
-
-            updateSpreadUI();
-            updateTierUI();
-        }
-
-        // 显示分享成功
-        function showShareSuccess(message) {
-            const toast = document.getElementById('shareSuccessToast');
-            toast.querySelector('.share-success-desc').textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
-        }
-
-        // FOMO通知系统 - 热点资讯语境 + 紧迫感
-        const fomoMessages = [
-            { city: '深圳', name: '资讯达人', action: '加入了热点通', reward: '获得3天会员 · 限时0元领' },
-            { city: '上海', name: '资讯达人', action: '领取了精选内容', reward: '+3天会员体验' },
-            { city: '北京', name: '内容达人', action: '领到了会员', reward: '查看最新热门话题' },
-            { city: '杭州', name: '资深用户', action: '下载了精选内容', reward: '+7天会员' },
-            { city: '武汉', name: '内容达人', action: '领到了会员', reward: '查看今日热点资讯' },
-            { city: '长沙', name: '内容达人', action: '获取了会员', reward: '查看精选话题内容' }
-        ];
-
-        let fomoIndex = 0;
-        let vipSlotsLeft = 87; // 模拟剩余VIP名额
-
-        function showFomoNotification() {
-            const msg = fomoMessages[fomoIndex % fomoMessages.length];
-            const notification = document.getElementById('fomoNotification');
-
-            // 随机选择动作，保持新鲜感
-            const randomMsg = fomoMessages[Math.floor(Math.random() * fomoMessages.length)];
-            const timeAgo = ['刚刚', Math.floor(Math.random() * 30 + 5) + '秒前', Math.floor(Math.random() * 2 + 1) + '分钟前'][Math.floor(Math.random() * 3)];
-
-            document.getElementById('fomoAvatar').textContent = randomMsg.name[0];
-            document.getElementById('fomoTitle').textContent = `${timeAgo} · ${randomMsg.city} ${randomMsg.name.slice(0, 2)} 刚${randomMsg.action}`;
-            document.getElementById('fomoDesc').textContent = `🔥 ${randomMsg.reward} · 仅剩${vipSlotsLeft}个名额`;
-
-            notification.classList.add('show');
-
-            // 名额随机减少，制造紧迫感
-            if (Math.random() > 0.5) {
-                vipSlotsLeft = Math.max(12, vipSlotsLeft - Math.floor(Math.random() * 3));
-            }
-
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 4000);
-
-            fomoIndex++;
-        }
-
-        function startFomoNotifications() {
-            // 首次10秒就显示（新访客留不到30秒）
-            setTimeout(() => {
-                showFomoNotification();
-                // 之后每20-40秒显示
-                setInterval(() => {
-                    if (Math.random() > 0.25) { // 75%概率显示
-                        showFomoNotification();
-                    }
-                }, 20000 + Math.random() * 20000);
-            }, 10000);
-        }
-
-        // 页面滚动时隐藏/显示浮动栏
-        function initScrollBehavior() {
-            let lastScrollY = window.scrollY;
-            const floatBar = document.getElementById('inviteFloatBar');
-
-            window.addEventListener('scroll', () => {
-                const currentScrollY = window.scrollY;
-
-                // 向下滚动超过300px隐藏
-                if (currentScrollY > lastScrollY && currentScrollY > 300) {
-                    floatBar.style.transform = 'translateY(100%)';
-                    floatBar.style.transition = 'transform 0.3s ease';
-                } else {
-                    floatBar.style.transform = 'translateY(0)';
-                }
-
-                lastScrollY = currentScrollY;
-            });
-        }
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            checkLoginStatus();
-            initSpreadSystem();
-            initScrollBehavior();
-        });
-
-        // ==================== 增强裂变系统 ====================
-        // ---- 实时在线人数 ----
-        let liveViewerCount = 127 + Math.floor(Math.random() * 50);
-        function updateLiveCount() {
-            const el = document.getElementById('liveViewerCount');
-            if (el) {
-                liveViewerCount = Math.max(80, liveViewerCount + Math.floor(Math.random() * 11) - 5);
-                el.textContent = liveViewerCount;
-            }
-        }
-        setInterval(updateLiveCount, 8000 + Math.random() * 7000);
-
-        // ---- VIP紧急模式（剩余<24小时闪烁） ----
-        function checkVipUrgency() {
-            const expiry = parseInt(localStorage.getItem('spread_vip_expiry') || 0);
-            if (!expiry) return;
-            const hoursLeft = (expiry - Date.now()) / (1000 * 60 * 60);
-            const header = document.querySelector('.header');
-            const floatBar = document.getElementById('inviteFloatBar');
-            if (hoursLeft <= 24 && hoursLeft > 0) {
-                header?.classList.add('vip-urgent');
-                floatBar?.classList.add('vip-urgent');
-            } else {
-                header?.classList.remove('vip-urgent');
-                floatBar?.classList.remove('vip-urgent');
-            }
-        }
-        setInterval(checkVipUrgency, 60000);
-
-        // ---- 离开意图拦截 ----
-        let exitIntentShown = false;
-        function showExitIntent() {
-            if (exitIntentShown || parseInt(localStorage.getItem('spread_invite_count') || 0) >= 3) return;
-            const overlay = document.getElementById('exitIntentOverlay');
-            if (overlay) {
-                overlay.classList.add('show');
-                const slotsEl = document.getElementById('exitIntentSlots');
-                if (slotsEl) slotsEl.textContent = (12 - Math.floor(Math.random() * 5)).toString();
-            }
-            exitIntentShown = true;
-        }
-        // 桌面端
-        document.addEventListener('mouseout', (e) => {
-            if (!e.relatedTarget) showExitIntent();
-        });
-        // 移动端返回手势
-        window.addEventListener('popstate', () => {
-            history.pushState(null, '', location.href);
-            showExitIntent();
-        });
-        history.pushState(null, '', location.href);
-
-        document.getElementById('closeExitIntent')?.addEventListener('click', () => {
-            document.getElementById('exitIntentOverlay')?.classList.remove('show');
-        });
-        document.getElementById('skipExitIntent')?.addEventListener('click', () => {
-            document.getElementById('exitIntentOverlay')?.classList.remove('show');
-        });
-        document.getElementById('exitShareNow')?.addEventListener('click', () => {
-            document.getElementById('exitIntentOverlay')?.classList.remove('show');
-            document.getElementById('inviteModal')?.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            refreshMyStats?.();
-            refreshLeaderboard?.();
-        });
-
-        // ---- 连续打卡系统 ----
-        function checkDailyStreak() {
-            const today = new Date().toDateString();
-            const lastVisit = localStorage.getItem('spread_last_visit');
-            let streak = parseInt(localStorage.getItem('spread_streak_days') || '0');
-            if (lastVisit === today) return;
-            if (lastVisit) {
-                const yesterday = new Date();
-                yesterday.setDate(yesterday.getDate() - 1);
-                if (new Date(lastVisit).toDateString() === yesterday.toDateString()) {
-                    streak++;
-                } else {
-                    streak = 1;
-                }
-            } else {
-                streak = 1;
-            }
-            localStorage.setItem('spread_streak_days', streak.toString());
-            localStorage.setItem('spread_last_visit', today);
-            if (streak >= 3) {
-                const bonusDays = Math.min(streak - 2, 7);
-                const currentExpiry = parseInt(localStorage.getItem('spread_vip_expiry') || Date.now());
-                localStorage.setItem('spread_vip_expiry', currentExpiry + bonusDays * 24 * 60 * 60 * 1000);
-                setTimeout(() => showAchievement('🔥', `连续${streak}天打卡！`, `获得 ${bonusDays} 天VIP连续奖励`), 500);
-            }
-        }
-        checkDailyStreak();
-
-        // ---- 限时冲刺系统 ----
-        let rushActive = false;
-        let rushSeconds = 0;
-        let rushTimer = null;
-        function triggerRushEvent() {
-            if (rushActive) return;
-            const todayRushes = parseInt(sessionStorage.getItem('rush_today') || '0');
-            if (todayRushes >= 2 || Math.random() > 0.30) return;
-            rushActive = true;
-            rushSeconds = 30 * 60;
-            sessionStorage.setItem('rush_today', (todayRushes + 1).toString());
-            document.getElementById('rushOverlay')?.classList.add('show');
-            rushTimer = setInterval(() => {
-                rushSeconds--;
-                const el = document.getElementById('rushCountdown');
-                if (el) {
-                    const m = Math.floor(rushSeconds / 60);
-                    const s = rushSeconds % 60;
-                    el.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                }
-                if (rushSeconds <= 0) {
-                    rushActive = false;
-                    clearInterval(rushTimer);
-                    document.getElementById('rushOverlay')?.classList.remove('show');
-                }
-            }, 1000);
-        }
-        document.getElementById('skipRush')?.addEventListener('click', () => {
-            document.getElementById('rushOverlay')?.classList.remove('show');
-            rushActive = false;
-            clearInterval(rushTimer);
-        });
-        document.getElementById('rushShareBtn')?.addEventListener('click', () => {
-            document.getElementById('rushOverlay')?.classList.remove('show');
-            rushActive = false;
-            clearInterval(rushTimer);
-            document.getElementById('inviteModal')?.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            refreshMyStats?.();
-            refreshLeaderboard?.();
-        });
-        // 5-15分钟后随机触发
-        setTimeout(triggerRushEvent, 5 * 60 * 1000 + Math.random() * 10 * 60 * 1000);
-
-        // ---- 双倍VIP版本的recordShare ----
-        const _origRecordShare = recordShare;
-        window.recordShare = function() {
-            const bonus = rushActive ? 6 : 3;
-            spreadState.inviteCount++;
-            spreadState.points += 10 * (rushActive ? 2 : 1);
-            spreadState.vipDays += bonus;
-            const currentExpiry = parseInt(localStorage.getItem('spread_vip_expiry') || Date.now());
-            localStorage.setItem('spread_vip_expiry', currentExpiry + bonus * 24 * 60 * 60 * 1000);
-            if (spreadState.inviteCount >= 10 && spreadState.level !== 'diamond') {
-                spreadState.level = 'diamond';
-                localStorage.setItem('spread_level', 'diamond');
-            } else if (spreadState.inviteCount >= 3 && spreadState.level === 'bronze') {
-                spreadState.level = 'gold';
-                localStorage.setItem('spread_level', 'gold');
-            }
-            localStorage.setItem('spread_invite_count', spreadState.inviteCount);
-            localStorage.setItem('spread_points', spreadState.points);
-            localStorage.setItem('spread_vip_days', spreadState.vipDays);
-            const btn = document.getElementById('sharePosterBtn');
-            if (btn) {
-                btn.classList.add('share-exploding');
-                setTimeout(() => btn.classList.remove('share-exploding'), 500);
-            }
-            updateSpreadUI?.();
-            updateTierUI?.();
-            checkVipUrgency();
-            if (rushActive) {
-                setTimeout(() => showAchievement('⚡', '双倍VIP冲刺！', `获得 +${bonus}天VIP！`), 500);
-                rushActive = false;
-                clearInterval(rushTimer);
-                document.getElementById('rushOverlay')?.classList.remove('show');
-            }
-        };
-
-
-        // 暴露API给外部调用（用于追踪实际邀请）
-        window.updateInviteCount = function(count) {
-            spreadState.inviteCount = count;
-            localStorage.setItem('spread_invite_count', count);
-            updateSpreadUI();
-        };
-
-        window.getInviteLink = function() {
-            return window.location.href.split('?')[0] + '?ref=' + spreadState.inviteCode;
-        };
     </script>
 </body>
 </html>
