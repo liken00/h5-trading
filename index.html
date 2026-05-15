@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>复盘宝 - AI智能股票复盘工具 | 龙韵智趋</title>
-    <meta name="description" content="复盘宝 - 基于「龙韵智趋」战法的AI股票复盘工具，免费体验3次AI问股，永久解锁仅需介绍3人。">
+    <meta name="description" content="复盘宝 - 基于「龙韵智趋」战法的AI股票复盘工具，免费体验3次AI问股，介绍3人永久解锁。">
     <style>
         :root {
             --bg-primary: #0a0e17;
@@ -16,7 +16,7 @@
             --accent-green: #00d084;
             --accent-blue: #3b82f6;
             --accent-gold: #fbbf24;
-            --border-color: #2a3548;
+            --border-color: #1e293b;
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 16px;
@@ -41,46 +41,28 @@
             text-decoration: none;
         }
 
-        /* Banner */
-        .banner {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 0.75rem 2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .banner-text {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .banner-highlight {
-            color: var(--accent-green);
-            font-weight: 700;
-        }
-
         /* Navigation */
         nav {
-            background: rgba(10, 14, 23, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 23, 0.98);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
+            padding: 0 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
+            height: 64px;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
         }
 
         .nav-brand {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.25rem;
+            gap: 0.5rem;
+            font-size: 1.2rem;
             font-weight: 700;
         }
 
@@ -88,59 +70,162 @@
             width: 32px;
             height: 32px;
             background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
-            border-radius: var(--radius-sm);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            align-items: center;
+            gap: 0;
             list-style: none;
+            height: 100%;
+        }
+
+        .nav-links > li {
+            height: 100%;
+            display: flex;
+            align-items: center;
         }
 
         .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0 1.25rem;
+            height: 100%;
             color: var(--text-secondary);
             font-size: 0.9rem;
-            transition: color 0.2s;
+            transition: color 0.2s, background 0.2s;
+            white-space: nowrap;
         }
 
         .nav-links a:hover {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.03);
+        }
+
+        .nav-links a.active {
             color: var(--accent-green);
         }
 
-        .nav-cta {
-            background: var(--accent-green);
-            color: #000;
-            padding: 0.5rem 1.25rem;
-            border-radius: var(--radius-sm);
-            font-weight: 700;
-            font-size: 0.9rem;
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
         }
 
-        /* Main Hero */
-        .hero {
+        .dropdown > a {
+            cursor: pointer;
+            padding: 0 1.25rem;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .dropdown > a:hover,
+        .dropdown:hover > a {
+            color: var(--text-primary);
+            background: rgba(255,255,255,0.03);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            min-width: 200px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            padding: 0.5rem 0;
+            z-index: 200;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.15s ease;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 0.6rem 1.25rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            transition: all 0.15s;
+            border-radius: 0;
+        }
+
+        .dropdown-content a:hover {
+            color: var(--accent-green);
+            background: rgba(0, 208, 132, 0.08);
+        }
+
+        .dropdown-content a:first-child {
+            border-radius: 10px 10px 0 0;
+        }
+
+        .dropdown-content a:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile menu */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Banner */
+        .banner {
+            background: linear-gradient(90deg, rgba(0,208,132,0.1), rgba(59,130,246,0.1));
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.6rem 5%;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 64px;
+        }
+
+        .banner span {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        /* Main content */
+        main {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 4rem 2rem;
-            text-align: center;
+            padding: 0 5%;
         }
 
-        .hero-badge {
-            display: inline-block;
-            background: rgba(0, 208, 132, 0.1);
-            border: 1px solid rgba(0, 208, 132, 0.3);
-            color: var(--accent-green);
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            margin-bottom: 1.5rem;
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 5rem 0 3rem;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 2.75rem;
             font-weight: 800;
             margin-bottom: 1rem;
             background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
@@ -148,93 +233,96 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .hero-subtitle {
-            font-size: 1.2rem;
+        .hero p {
             color: var(--text-secondary);
-            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto 2rem;
         }
 
-        .hero-features {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .hero-feature {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .hero-feature-icon {
-            color: var(--accent-green);
-        }
-
-        /* AI Ask Container */
-        .ai-ask-container {
-            max-width: 700px;
+        /* AI Ask */
+        .ai-ask-box {
+            max-width: 680px;
             margin: 0 auto 4rem;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
+            border-radius: 16px;
             overflow: hidden;
         }
 
-        .ai-ask-header {
+        .ai-ask-title {
             background: linear-gradient(135deg, var(--accent-green), #00b36b);
-            padding: 1.5rem;
-            text-align: center;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
-        .ai-ask-header h2 {
+        .ai-ask-title-icon {
+            font-size: 1.3rem;
+        }
+
+        .ai-ask-title-text {
             color: #000;
-            font-size: 1.25rem;
             font-weight: 700;
-            margin-bottom: 0.25rem;
+            font-size: 1rem;
         }
 
-        .ai-ask-header p {
-            color: rgba(0,0,0,0.6);
-            font-size: 0.85rem;
+        .ai-ask-title-sub {
+            color: rgba(0,0,0,0.5);
+            font-size: 0.8rem;
         }
 
         .ai-ask-status {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            padding: 0.75rem 1rem;
+            gap: 2rem;
+            padding: 0.6rem 1rem;
             background: var(--bg-secondary);
             font-size: 0.85rem;
-            color: var(--text-secondary);
+            color: var(--text-muted);
         }
 
-        .ai-ask-status .trials {
+        .ai-ask-status .val {
             color: var(--accent-gold);
             font-weight: 700;
         }
 
-        .ai-ask-status .lifetime {
+        .ai-ask-status .val.green {
             color: var(--accent-green);
-            font-weight: 700;
         }
 
         .ai-ask-messages {
-            height: 300px;
+            height: 280px;
             overflow-y: auto;
-            padding: 1.5rem;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .ai-hint {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+        }
+
+        .ai-hint-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .ai-hint p {
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .ai-hint-example {
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
         .ai-msg {
-            margin-bottom: 1rem;
             display: flex;
             gap: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .ai-msg.user {
@@ -242,14 +330,14 @@
         }
 
         .ai-msg-avatar {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: var(--accent-green);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1rem;
+            font-size: 0.9rem;
             flex-shrink: 0;
         }
 
@@ -258,60 +346,33 @@
         }
 
         .ai-msg-content {
-            max-width: 75%;
-            padding: 0.75rem 1rem;
-            border-radius: var(--radius-md);
+            max-width: 78%;
+            padding: 0.7rem 1rem;
             background: var(--bg-secondary);
+            border-radius: 12px;
             font-size: 0.9rem;
             line-height: 1.6;
         }
 
         .ai-msg.user .ai-msg-content {
-            background: rgba(0, 208, 132, 0.15);
-        }
-
-        .ai-msg-waiting .ai-msg-content {
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        .ai-ask-hint {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: var(--text-muted);
-        }
-
-        .ai-ask-hint-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .ai-ask-hint p {
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .ai-ask-hint-example {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 0.5rem;
+            background: rgba(0, 208, 132, 0.12);
         }
 
         .ai-ask-input-row {
             display: flex;
             gap: 0.75rem;
-            padding: 1.25rem 1.5rem;
+            padding: 1rem 1.5rem;
             border-top: 1px solid var(--border-color);
         }
 
         .ai-ask-input {
             flex: 1;
-            padding: 0.75rem 1rem;
+            padding: 0.7rem 1rem;
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
+            border-radius: 10px;
             color: var(--text-primary);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .ai-ask-input:focus {
@@ -319,55 +380,55 @@
             border-color: var(--accent-green);
         }
 
-        .ai-ask-send-btn {
-            padding: 0.75rem 1.5rem;
+        .ai-ask-send {
+            padding: 0.7rem 1.5rem;
             background: var(--accent-green);
             color: #000;
             border: none;
-            border-radius: var(--radius-md);
+            border-radius: 10px;
             font-weight: 700;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: opacity 0.2s;
         }
 
-        .ai-ask-send-btn:disabled {
+        .ai-ask-send:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
 
         /* Section */
         .section {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
+            padding: 4rem 0;
         }
 
-        .section-title {
-            font-size: 2rem;
+        .section-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.75rem;
             font-weight: 700;
-            text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
-        .section-desc {
+        .section-header p {
             color: var(--text-secondary);
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 3rem;
+            font-size: 0.95rem;
         }
 
-        /* Features Grid */
+        /* Features */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
         }
 
         .feature-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
+            border-radius: 14px;
+            padding: 1.5rem;
             transition: border-color 0.2s, transform 0.2s;
         }
 
@@ -377,181 +438,173 @@
         }
 
         .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(0, 208, 132, 0.1);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            margin-bottom: 0.75rem;
         }
 
         .feature-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
         }
 
         .feature-card p {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        /* How It Works */
-        .steps-grid {
+        /* Steps */
+        .steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
         }
 
         .step {
             text-align: center;
-            padding: 1.5rem;
+            padding: 1.5rem 1rem;
         }
 
-        .step-number {
-            width: 48px;
-            height: 48px;
+        .step-num {
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin: 0 auto 1rem;
             color: #000;
+            margin: 0 auto 1rem;
         }
 
         .step h3 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            margin-bottom: 0.4rem;
         }
 
         .step p {
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         /* Pricing */
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            max-width: 800px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            max-width: 960px;
             margin: 0 auto;
         }
 
-        .pricing-card {
+        .price-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
+            border-radius: 14px;
+            padding: 2rem 1.5rem;
             text-align: center;
             position: relative;
         }
 
-        .pricing-card.popular {
+        .price-card.popular {
             border-color: var(--accent-green);
         }
 
-        .pricing-card.popular::before {
+        .price-card.popular::before {
             content: '最受欢迎';
             position: absolute;
-            top: -12px;
+            top: -11px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--accent-green);
             color: #000;
-            padding: 0.25rem 1rem;
+            padding: 0.2rem 0.8rem;
             border-radius: 50px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
         }
 
-        .pricing-card h3 {
-            font-size: 1.25rem;
+        .price-card h3 {
+            font-size: 1.1rem;
             margin-bottom: 0.5rem;
         }
 
-        .pricing-price {
+        .price-card .price {
             font-size: 2.5rem;
             font-weight: 800;
             color: var(--accent-green);
-            margin-bottom: 0.5rem;
         }
 
-        .pricing-price span {
-            font-size: 1rem;
-            color: var(--text-secondary);
+        .price-card .price span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
             font-weight: 400;
         }
 
-        .pricing-desc {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            margin-bottom: 1.5rem;
+        .price-card .desc {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 1.25rem;
         }
 
-        .pricing-features {
+        .price-card ul {
             list-style: none;
             text-align: left;
             margin-bottom: 1.5rem;
         }
 
-        .pricing-features li {
-            padding: 0.5rem 0;
-            font-size: 0.9rem;
+        .price-card li {
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .pricing-features li::before {
+        .price-card li::before {
             content: '✓';
             color: var(--accent-green);
             font-weight: 700;
         }
 
-        .pricing-btn {
+        .price-btn {
             display: block;
             width: 100%;
-            padding: 0.75rem;
-            border-radius: var(--radius-md);
+            padding: 0.7rem;
+            border-radius: 10px;
             font-weight: 700;
+            font-size: 0.9rem;
             text-align: center;
             cursor: pointer;
-            transition: opacity 0.2s;
             border: none;
-            font-size: 0.95rem;
+            transition: opacity 0.2s;
         }
 
-        .pricing-btn.primary {
+        .price-btn.primary {
             background: var(--accent-green);
             color: #000;
         }
 
-        .pricing-btn.secondary {
+        .price-btn.secondary {
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-primary);
         }
 
-        .pricing-btn:hover {
-            opacity: 0.9;
+        .price-btn:hover {
+            opacity: 0.88;
         }
 
         /* Footer */
         footer {
             background: var(--bg-secondary);
             border-top: 1px solid var(--border-color);
-            padding: 3rem 2rem;
+            padding: 3rem 5%;
             margin-top: 4rem;
         }
 
-        .footer-content {
+        .footer-inner {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
@@ -562,32 +615,32 @@
         }
 
         .footer-brand {
-            max-width: 300px;
+            max-width: 280px;
         }
 
         .footer-brand-icon {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.25rem;
+            gap: 0.5rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .footer-brand p {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
         }
 
         .footer-links {
             display: flex;
-            gap: 3rem;
+            gap: 4rem;
         }
 
         .footer-links-group h4 {
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
         }
 
         .footer-links-group ul {
@@ -595,12 +648,12 @@
         }
 
         .footer-links-group li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .footer-links-group a {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
             transition: color 0.2s;
         }
 
@@ -611,302 +664,329 @@
         .footer-bottom {
             max-width: 1200px;
             margin: 2rem auto 0;
-            padding-top: 2rem;
+            padding-top: 1.5rem;
             border-top: 1px solid var(--border-color);
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            nav {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .nav-links {
-                gap: 1rem;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero-features {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .ai-ask-messages {
-                height: 250px;
-            }
-
-            .footer-content {
-                flex-direction: column;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
+            font-size: 0.75rem;
         }
 
         /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 380px; }
         }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
+        @media (max-width: 640px) {
+            .mobile-toggle { display: block; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: var(--bg-secondary);
+                flex-direction: column;
+                border-bottom: 1px solid var(--border-color);
+                padding: 1rem 0;
+            }
+            .nav-links.open { display: flex; }
+            .nav-links > li { height: auto; width: 100%; }
+            .nav-links a { width: 100%; padding: 0.75rem 5%; }
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                border: none;
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                background: rgba(0,0,0,0.2);
+                padding: 0;
+            }
+            .dropdown:hover .dropdown-content { display: none; }
+            .dropdown.open .dropdown-content { display: block; }
+            .dropdown-content a { padding: 0.6rem 2rem; }
+            .hero h1 { font-size: 2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .steps { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
-    <!-- Banner -->
-    <div class="banner">
-        <span class="banner-text">🎁 <span class="banner-highlight">新用户免费体验3次</span> AI问股，介绍3人永久解锁</span>
-    </div>
-
     <!-- Navigation -->
     <nav>
-        <div class="nav-brand">
+        <a href="#" class="nav-brand">
             <div class="nav-brand-icon">📊</div>
             <span>复盘宝</span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#features">核心功能</a></li>
-            <li><a href="#howitworks">使用教程</a></li>
+        </a>
+
+        <button class="mobile-toggle" onclick="toggleMobileMenu()">☰</button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero" class="active">首页</a></li>
+
+            <li class="dropdown" onclick="toggleDropdown(this)">
+                <a href="javascript:void(0)">龙韵智趋战法 ▾</a>
+                <div class="dropdown-content">
+                    <a href="#strategy-mainline">主线确认</a>
+                    <a href="#strategy-leader">龙头判断</a>
+                    <a href="#strategy-wave2">二波验证</a>
+                    <a href="#strategy-entry">买点信号</a>
+                    <a href="#strategy-stop">止损规则</a>
+                    <a href="#strategy-position">仓位管理</a>
+                </div>
+            </li>
+
+            <li class="dropdown" onclick="toggleDropdown(this)">
+                <a href="javascript:void(0)">每日复盘 ▾</a>
+                <div class="dropdown-content">
+                    <a href="#daily-hot">今日涨停板</a>
+                    <a href="#daily-sector">主线题材</a>
+                    <a href="#daily-leader">龙头追踪</a>
+                </div>
+            </li>
+
             <li><a href="#pricing">定价</a></li>
+
             <li><a href="#about">关于我们</a></li>
         </ul>
-        <a href="#hero" class="nav-cta">立即体验</a>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <span class="hero-badge">🔥 基于「龙韵智趋」战法</span>
-        <h1>AI智能股票复盘工具</h1>
-        <p class="hero-subtitle">
-            输入股票代码，AI基于修哥多年实战验证的「龙韵智趋」体系为你深度分析，挖掘龙头二波机会
-        </p>
-        <div class="hero-features">
-            <div class="hero-feature">
-                <span class="hero-feature-icon">✓</span>
-                <span>免费体验3次</span>
-            </div>
-            <div class="hero-feature">
-                <span class="hero-feature-icon">✓</span>
-                <span>介绍3人永久解锁</span>
-            </div>
-            <div class="hero-feature">
-                <span class="hero-feature-icon">✓</span>
-                <span>龙韵智趋战法</span>
-            </div>
-            <div class="hero-feature">
-                <span class="hero-feature-icon">✓</span>
-                <span>每日推送复盘报告</span>
-            </div>
-        </div>
-    </section>
+    <!-- Banner -->
+    <div class="banner">
+        🎁 新用户免费体验<strong style="color:var(--accent-green)">3次</strong> AI问股　｜　介绍3人永久解锁全部功能
+    </div>
 
-    <!-- AI Ask Section -->
-    <section class="section" id="aiask">
-        <div class="ai-ask-container">
-            <div class="ai-ask-header">
-                <h2>🤖 龙韵智趋 AI</h2>
-                <p>基于修哥二波战法的智能分析</p>
+    <main>
+        <!-- Hero -->
+        <section class="hero" id="hero">
+            <h1>AI智能股票复盘工具</h1>
+            <p>基于修哥多年实战验证的「龙韵智趋」体系，专注龙头股二波机会，发现 → 分析 → 决策</p>
+        </section>
+
+        <!-- AI Ask -->
+        <div class="ai-ask-box">
+            <div class="ai-ask-title">
+                <span class="ai-ask-title-icon">🤖</span>
+                <div>
+                    <div class="ai-ask-title-text">龙韵智趋 AI</div>
+                    <div class="ai-ask-title-sub">基于二波战法的智能分析</div>
+                </div>
             </div>
             <div class="ai-ask-status">
-                <span>免费剩余: <span class="trials" id="aiTrials">3</span> 次</span>
+                <span>免费剩余: <span class="val" id="aiTrials">3</span> 次</span>
                 <span>|</span>
-                <span>永久权限: <span class="lifetime" id="aiLifetime">未解锁</span></span>
+                <span>永久权限: <span class="val green" id="aiLifetime">未解锁</span></span>
             </div>
             <div class="ai-ask-messages" id="aiMessages">
-                <div class="ai-ask-hint">
-                    <div class="ai-ask-hint-icon">💬</div>
+                <div class="ai-hint">
+                    <div class="ai-hint-icon">💬</div>
                     <p>输入股票代码或问题，AI为你分析</p>
                     <p>例如: 600519贵州茅台怎么样?</p>
-                    <p class="ai-ask-hint-example">或: 帮我找今日主线题材的龙头股</p>
+                    <p class="ai-hint-example">或: 帮我找今日主线题材的龙头股</p>
                 </div>
             </div>
             <div class="ai-ask-input-row">
-                <input type="text" class="ai-ask-input" id="aiAskInput" placeholder="输入股票代码或问题..." />
-                <button class="ai-ask-send-btn" id="aiAskSendBtn" onclick="sendAiAsk()">发送</button>
+                <input type="text" class="ai-ask-input" id="aiAskInput"
+                    placeholder="输入股票代码或问题，如：帮我分析贵州茅台..."
+                    onkeypress="if(event.key==='Enter')sendAiAsk()" />
+                <button class="ai-ask-send" id="aiAskSendBtn" onclick="sendAiAsk()">发送</button>
             </div>
         </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="section" id="features">
-        <h2 class="section-title">为什么选择复盘宝?</h2>
-        <p class="section-desc">
-            复盘宝是基于「龙韵智趋」实战战法的AI股票分析工具，专注龙头股二波机会的发现与分析
-        </p>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🎯</div>
-                <h3>龙韵智趋战法</h3>
-                <p>基于修哥多年实战验证的核心战法，主线确认→龙头判断→二波验证→买点信号，完整体系</p>
+        <!-- Features -->
+        <section class="section" id="features">
+            <div class="section-header">
+                <h2>核心功能</h2>
+                <p>四大模块，完整覆盖选股 → 分析 → 决策全流程</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">🤖</div>
-                <h3>AI智能分析</h3>
-                <p>输入任意股票问题，AI结合龙韵智趋体系给出专业分析建议，24小时随时可问</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>龙韵智趋战法</h3>
+                    <p>主线确认 → 龙头判断 → 二波验证 → 买点信号，完整实战体系</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI智能分析</h3>
+                    <p>输入任意股票问题，AI结合战法给出专业分析建议</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>每日复盘推送</h3>
+                    <p>每日18:00自动分析涨停板，识别主线题材和龙头股</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>止损规则</h3>
+                    <p>跌破MA10当日收不回，等次日拉涨平仓，纪律第一</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>仓位管理</h3>
+                    <p>3板0.25成 / 4板0.35成 / 5板0.5成，严格分层</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>飞书推送</h3>
+                    <p>每日复盘报告推送飞书群，手机随时查看</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">📈</div>
-                <h3>每日复盘推送</h3>
-                <p>每日18:00自动分析当日涨停板，识别主线题材和龙头股，推送到飞书群</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">💰</div>
-                <h3>免费体验3次</h3>
-                <p>新用户免费体验3次AI问股，满意后再决定是否解锁，介绍3人即可永久免费使用</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔒</div>
-                <h3>永久权限解锁</h3>
-                <p>只需介绍3位好友添加客服微信，即可解锁永久AI问股权限，再也不用付费</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <h3>飞书推送</h3>
-                <p>每日复盘报告自动推送到飞书群，手机查看方便，随时随地掌握市场动态</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- How It Works -->
-    <section class="section" id="howitworks">
-        <h2 class="section-title">如何使用复盘宝</h2>
-        <p class="section-desc">
-            简单四步，开启AI智能股票复盘之旅
-        </p>
-        <div class="steps-grid">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3>扫码体验</h3>
-                <p>扫描客服二维码，免费获得3次AI问股体验机会</p>
+        <!-- Steps -->
+        <section class="section" id="how">
+            <div class="section-header">
+                <h2>使用步骤</h2>
+                <p>简单四步，开启AI智能复盘</p>
             </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3>输入问题</h3>
-                <p>输入股票代码或描述你的选股疑问，如"帮我分析贵州茅台"</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h3>扫码体验</h3>
+                    <p>添加客服微信，免费获得3次体验</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h3>输入问题</h3>
+                    <p>输入股票代码或描述选股疑问</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h3>AI分析</h3>
+                    <p>AI结合龙韵智趋战法深度分析</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <h3>实战决策</h3>
+                    <p>结合AI建议，做出属于自己的判断</p>
+                </div>
             </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3>AI分析</h3>
-                <p>AI结合龙韵智趋战法，从主线、龙头、买点、止损等多维度分析</p>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <h3>实战决策</h3>
-                <p>根据AI分析建议，结合自己的判断，做出实战决策</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Pricing Section -->
-    <section class="section" id="pricing">
-        <h2 class="section-title">简单透明的定价</h2>
-        <p class="section-desc">
-            先体验，再决定。介绍3人即可永久免费使用
-        </p>
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <h3>体验版</h3>
-                <div class="pricing-price">¥0</div>
-                <p class="pricing-desc">先体验再决定</p>
-                <ul class="pricing-features">
-                    <li>免费3次AI问股</li>
-                    <li>龙韵智趋基础分析</li>
-                    <li>查看每日复盘报告</li>
-                    <li>有效期至用完次数</li>
-                </ul>
-                <button class="pricing-btn secondary" onclick="alert('请添加客服微信领取体验次数')">免费体验</button>
+        <!-- Strategy Details -->
+        <section class="section" id="strategy-mainline">
+            <div class="section-header">
+                <h2>龙韵智趋战法</h2>
+                <p>修哥多年实战验证的龙头二波体系</p>
             </div>
-            <div class="pricing-card popular">
-                <h3>永久解锁版</h3>
-                <div class="pricing-price">¥0 <span>原价¥299</span></div>
-                <p class="pricing-desc">介绍3人即可获得</p>
-                <ul class="pricing-features">
-                    <li>无限次AI问股</li>
-                    <li>龙韵智趋完整战法</li>
-                    <li>每日飞书推送</li>
-                    <li>优先获取主线信号</li>
-                    <li>永久有效</li>
-                </ul>
-                <button class="pricing-btn primary" onclick="alert('请添加客服微信：Xiuqiang5515，回复"永久解锁"')">介绍3人解锁</button>
+            <div class="features-grid">
+                <div class="feature-card" id="strategy-mainline">
+                    <div class="feature-icon">🔍</div>
+                    <h3>主线确认</h3>
+                    <p>同板块 ≥2只 同日2板 = 主线确认。等待龙头浮出水面。</p>
+                </div>
+                <div class="feature-card" id="strategy-leader">
+                    <div class="feature-icon">👑</div>
+                    <h3>龙头判断</h3>
+                    <p>三板当天封板时间最早 = 龙头。≥双三板时看四板封板时间。</p>
+                </div>
+                <div class="feature-card" id="strategy-wave2">
+                    <div class="feature-icon">📊</div>
+                    <h3>二波验证</h3>
+                    <p>连续两天首板 ≥5家 + 不跟跌 = 二波确认。等待回调买点。</p>
+                </div>
+                <div class="feature-card" id="strategy-entry">
+                    <div class="feature-icon">🎯</div>
+                    <h3>买点信号</h3>
+                    <p>30分钟MA50 + 日K MA10±5% + 缩量承接 + 题材异动</p>
+                </div>
+                <div class="feature-card" id="strategy-stop">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>止损规则</h3>
+                    <p>跌破日K MA10且当日收不回 = 止损信号，等次日拉涨平仓</p>
+                </div>
+                <div class="feature-card" id="strategy-position">
+                    <div class="feature-icon">💎</div>
+                    <h3>仓位管理</h3>
+                    <p>3板0.25成 / 4板0.35成 / 5板0.5成，单只最多5成，最多3只</p>
+                </div>
             </div>
-            <div class="pricing-card">
-                <h3>企业版</h3>
-                <div class="pricing-price">¥2999<span>/年</span></div>
-                <p class="pricing-desc">适合团队使用</p>
-                <ul class="pricing-features">
-                    <li>永久解锁版全部功能</li>
-                    <li>最多10个飞书群推送</li>
-                    <li>专属客服1对1服务</li>
-                    <li>定制选股策略</li>
-                    <li>优先体验新功能</li>
-                </ul>
-                <button class="pricing-btn secondary" onclick="alert('请添加客服微信洽谈企业版')">联系我们</button>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- About Section -->
-    <section class="section" id="about">
-        <h2 class="section-title">关于龙韵智趋</h2>
-        <p class="section-desc">
-            「龙韵智趋」是修哥多年实战验证的A股龙头股二波战法，专注从3-5板涨停股中挖掘二波机会
-        </p>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🔍</div>
-                <h3>主线确认</h3>
-                <p>同板块≥2只同日2板 = 主线确认，等待龙头浮出水面</p>
+        <!-- Pricing -->
+        <section class="section" id="pricing">
+            <div class="section-header">
+                <h2>定价</h2>
+                <p>先体验，再决定。介绍3人即可永久免费</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">👑</div>
-                <h3>龙头判断</h3>
-                <p>三板当天封板时间最早 = 龙头，题材梯队完整有首板跟上</p>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>体验版</h3>
+                    <div class="price">¥0</div>
+                    <div class="desc">先体验再决定</div>
+                    <ul>
+                        <li>免费3次AI问股</li>
+                        <li>龙韵智趋基础分析</li>
+                        <li>查看每日复盘报告</li>
+                        <li>有效期至用完次数</li>
+                    </ul>
+                    <button class="price-btn secondary" onclick="alert('请添加客服微信：Xiuqiang5515')">免费体验</button>
+                </div>
+                <div class="price-card popular">
+                    <h3>永久解锁版</h3>
+                    <div class="price">¥0 <span>原价¥299</span></div>
+                    <div class="desc">介绍3人即可获得</div>
+                    <ul>
+                        <li>无限次AI问股</li>
+                        <li>龙韵智趋完整战法</li>
+                        <li>每日飞书推送</li>
+                        <li>优先获取主线信号</li>
+                        <li>永久有效</li>
+                    </ul>
+                    <button class="price-btn primary" onclick="alert('请添加客服微信：Xiuqiang5515，回复"永久解锁"')">介绍3人解锁</button>
+                </div>
+                <div class="price-card">
+                    <h3>企业版</h3>
+                    <div class="price">¥2999<span>/年</span></div>
+                    <div class="desc">适合团队使用</div>
+                    <ul>
+                        <li>永久解锁版全部功能</li>
+                        <li>最多10个飞书群推送</li>
+                        <li>专属客服1对1服务</li>
+                        <li>定制选股策略</li>
+                        <li>优先体验新功能</li>
+                    </ul>
+                    <button class="price-btn secondary" onclick="alert('请添加客服微信洽谈企业版')">联系我们</button>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>二波验证</h3>
-                <p>连续两天首板≥5家 + 不跟跌 = 二波确认，等待回调买点</p>
+        </section>
+
+        <!-- About -->
+        <section class="section" id="about">
+            <div class="section-header">
+                <h2>关于我们</h2>
+                <p>「龙韵智趋」是修哥多年实战验证的A股龙头股二波战法</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎯</div>
-                <h3>买点信号</h3>
-                <p>30分钟MA50 + 日K MA10±5% + 缩量承接 = 买入区间</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>实战验证</h3>
+                    <p>战法经过多年A股实战验证，专注3-5板龙头股的二波机会挖掘</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI赋能</h3>
+                    <p>将修哥的战法体系AI化，让更多投资者享受体系化选股的帮助</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>合规提示</h3>
+                    <p>本产品仅供AI分析参考，不构成投资建议，投资有风险</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">🛡️</div>
-                <h3>止损规则</h3>
-                <p>跌破日K MA10且当日收不回，等次日拉涨平仓，不抄底不追高</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">💎</div>
-                <h3>仓位管理</h3>
-                <p>3板0.25成/4板0.35成/5板0.5成，单只最多5成，最多持有3只</p>
-            </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
+        <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-brand-icon">
                     <div class="nav-brand-icon">📊</div>
@@ -920,65 +1000,35 @@
                     <ul>
                         <li><a href="#features">核心功能</a></li>
                         <li><a href="#pricing">定价</a></li>
-                        <li><a href="#aiask">AI问股</a></li>
+                        <li><a href="#hero">AI问股</a></li>
                     </ul>
                 </div>
                 <div class="footer-links-group">
                     <h4>战法</h4>
                     <ul>
-                        <li><a href="#about">龙韵智趋</a></li>
-                        <li><a href="#howitworks">使用教程</a></li>
+                        <li><a href="#strategy-mainline">主线确认</a></li>
+                        <li><a href="#strategy-leader">龙头判断</a></li>
+                        <li><a href="#strategy-entry">买点信号</a></li>
                     </ul>
                 </div>
                 <div class="footer-links-group">
                     <h4>联系</h4>
                     <ul>
-                        <li><a href="#">客服微信: Xiuqiang5515</a></li>
+                        <li><a href="#">客服：Xiuqiang5515</a></li>
                         <li><a href="#">飞书群</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2026 复盘宝 | 本产品仅供AI分析参考，不构成投资建议，投资有风险，决策需谨慎</p>
+            © 2026 复盘宝 | 本产品仅供AI分析参考，不构成投资建议，投资有风险，决策需谨慎
         </div>
     </footer>
 
     <script>
         const API_BASE = 'https://h5-backend-tgoe.onrender.com';
-
-        let aiAskTrials = 3;
-        let aiAskLifetime = false;
-        let aiAskPhone = localStorage.getItem('phone') || '';
-
-        function updateAiAskStatus() {
-            const trialsEl = document.getElementById('aiTrials');
-            const lifetimeEl = document.getElementById('aiLifetime');
-            if (!trialsEl || !lifetimeEl) return;
-
-            if (aiAskLifetime) {
-                trialsEl.textContent = '∞';
-                lifetimeEl.textContent = '已解锁';
-            } else {
-                trialsEl.textContent = aiAskTrials;
-                lifetimeEl.textContent = '未解锁';
-            }
-        }
-
-        async function fetchAiAskStatus() {
-            if (!aiAskPhone) return;
-            try {
-                const res = await fetch(`${API_BASE}/ai-ask/status?phone=${aiAskPhone}`);
-                const json = await res.json();
-                if (json.code === 0 && json.data) {
-                    aiAskTrials = json.data.free_trials;
-                    aiAskLifetime = json.data.lifetime_access;
-                    updateAiAskStatus();
-                }
-            } catch (e) {
-                console.log('获取AI问股状态失败', e);
-            }
-        }
+        let aiTrials = 3;
+        let aiLifetime = false;
 
         function escapeHtml(text) {
             const div = document.createElement('div');
@@ -986,113 +1036,109 @@
             return div.innerHTML.replace(/\n/g, '<br>');
         }
 
+        function updateStatus() {
+            const tEl = document.getElementById('aiTrials');
+            const lEl = document.getElementById('aiLifetime');
+            if (!tEl || !lEl) return;
+            if (aiLifetime) {
+                tEl.textContent = '∞';
+                lEl.textContent = '已解锁';
+            } else {
+                tEl.textContent = aiTrials;
+                lEl.textContent = '未解锁';
+            }
+        }
+
         async function sendAiAsk() {
             const input = document.getElementById('aiAskInput');
-            const messagesDiv = document.getElementById('aiMessages');
-            if (!input || !messagesDiv) return;
+            const messages = document.getElementById('aiMessages');
+            if (!input || !messages) return;
+            const msg = input.value.trim();
+            if (!msg) return;
 
-            const message = input.value.trim();
-            if (!message) return;
-
-            // 清空提示
-            const hint = messagesDiv.querySelector('.ai-ask-hint');
+            const hint = messages.querySelector('.ai-hint');
             if (hint) hint.remove();
 
-            // 添加用户消息
-            messagesDiv.innerHTML += `
+            messages.innerHTML += `
                 <div class="ai-msg user">
                     <div class="ai-msg-avatar">👤</div>
-                    <div class="ai-msg-content">${escapeHtml(message)}</div>
+                    <div class="ai-msg-content">${escapeHtml(msg)}</div>
                 </div>`;
 
-            // 添加等待消息
-            const waitingDiv = document.createElement('div');
-            waitingDiv.className = 'ai-msg ai-msg-waiting';
-            waitingDiv.innerHTML = `
+            const waiting = document.createElement('div');
+            waiting.className = 'ai-msg ai-msg-waiting';
+            waiting.innerHTML = `
                 <div class="ai-msg-avatar">🤖</div>
-                <div class="ai-msg-content">分析中，请稍候...</div>
-            `;
-            messagesDiv.appendChild(waitingDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                <div class="ai-msg-content">分析中，请稍候...</div>`;
+            messages.appendChild(waiting);
+            messages.scrollTop = messages.scrollHeight;
 
             input.value = '';
-            const sendBtn = document.getElementById('aiAskSendBtn');
-            if (sendBtn) sendBtn.disabled = true;
+            const btn = document.getElementById('aiAskSendBtn');
+            if (btn) btn.disabled = true;
 
             try {
                 const res = await fetch(`${API_BASE}/chat`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({message, phone: aiAskPhone})
+                    body: JSON.stringify({message: msg})
                 });
                 const json = await res.json();
-
-                waitingDiv.remove();
+                waiting.remove();
 
                 if (json.code === 2) {
-                    messagesDiv.innerHTML += `
+                    messages.innerHTML += `
                         <div class="ai-msg">
                             <div class="ai-msg-avatar">🤖</div>
-                            <div class="ai-msg-content">
-                                今日免费次数已用完！<br><br>
-                                💰 单次9.9元<br>
-                                🎁 介绍3人可永久解锁
-                            </div>
+                            <div class="ai-msg-content">今日免费次数已用完！<br><br>💰 单次9.9元<br>🎁 介绍3人可永久解锁</div>
                         </div>`;
                 } else if (json.code === 0) {
-                    messagesDiv.innerHTML += `
+                    messages.innerHTML += `
                         <div class="ai-msg">
                             <div class="ai-msg-avatar">🤖</div>
-                            <div class="ai-msg-content">${escapeHtml(json.data.reply)}</div>
+                            <div class="ai-msg-content">${escapeHtml(json.data?.reply || '分析完成')}</div>
                         </div>`;
-
-                    if (json.data.remaining_trials !== undefined && json.data.remaining_trials !== null) {
-                        aiAskTrials = json.data.remaining_trials;
-                    }
-                    if (json.data.lifetime_access) {
-                        aiAskLifetime = true;
-                    }
-                    updateAiAskStatus();
+                    if (json.data?.remaining_trials !== undefined) aiTrials = json.data.remaining_trials;
+                    if (json.data?.lifetime_access) aiLifetime = true;
+                    updateStatus();
                 } else {
-                    waitingDiv.remove();
-                    messagesDiv.innerHTML += `
+                    messages.innerHTML += `
                         <div class="ai-msg">
                             <div class="ai-msg-avatar">🤖</div>
-                            <div class="ai-msg-content">抱歉，出了点问题。请稍后再试。</div>
+                            <div class="ai-msg-content">抱歉，出了点问题，请稍后再试。</div>
                         </div>`;
                 }
             } catch (e) {
-                waitingDiv.remove();
-                messagesDiv.innerHTML += `
+                waiting.remove();
+                messages.innerHTML += `
                     <div class="ai-msg">
                         <div class="ai-msg-avatar">🤖</div>
                         <div class="ai-msg-content">网络异常，请检查网络连接。</div>
                     </div>`;
             }
 
-            if (sendBtn) sendBtn.disabled = false;
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            if (btn) btn.disabled = false;
+            messages.scrollTop = messages.scrollHeight;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const input = document.getElementById('aiAskInput');
-            if (input) {
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        sendAiAsk();
-                    }
-                });
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        function toggleDropdown(el) {
+            if (window.innerWidth <= 640) {
+                el.classList.toggle('open');
             }
-            fetchAiAskStatus();
-        });
+        }
 
         // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const target = document.querySelector(a.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({behavior: 'smooth', block: 'start'});
+                    document.getElementById('navLinks')?.classList.remove('open');
                 }
             });
         });
