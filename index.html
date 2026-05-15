@@ -646,6 +646,137 @@
             text-align: right;
         }
 
+        /* ==================== AI问股 Section ==================== */
+        .ai-ask-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .ai-ask-container {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+        .ai-ask-header {
+            background: linear-gradient(135deg, #00d084, #00b36b);
+            padding: 1rem;
+            text-align: center;
+        }
+        .ai-ask-header h3 {
+            color: #000;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .ai-ask-header p {
+            color: rgba(0,0,0,0.6);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+        .ai-ask-status {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        .ai-ask-status .trials {
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+        .ai-ask-status .lifetime {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+        .ai-ask-messages {
+            height: 350px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        .ai-msg {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .ai-msg.user {
+            flex-direction: row-reverse;
+        }
+        .ai-msg-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .ai-msg.user .ai-msg-avatar {
+            background: var(--accent-blue);
+        }
+        .ai-msg-content {
+            max-width: 75%;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            background: var(--bg-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .ai-msg.user .ai-msg-content {
+            background: rgba(0, 208, 132, 0.15);
+        }
+        .ai-msg-waiting .ai-msg-content {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        .ai-ask-input-row {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .ai-ask-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        .ai-ask-input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+        }
+        .ai-ask-send-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent-green);
+            color: #000;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .ai-ask-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .ai-ask-hint {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+        .ai-ask-hint-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        .ai-ask-hint p {
+            font-size: 0.9rem;
+        }
+
         /* ==================== Strategy Cards ==================== */
         .strategy-section {
             padding: 2rem 1rem;
@@ -2503,6 +2634,7 @@
                 <button class="section-tab" data-tab="wave2">精选</button>
                 <button class="section-tab" data-tab="zt">最新</button>
                 <button class="section-tab" data-tab="focus">关注</button>
+                <button class="section-tab" data-tab="aiask">AI问股</button>
             </div>
         </div>
         <div class="stock-list">
@@ -2517,6 +2649,32 @@
                 <div id="stockTableBody">
                     <!-- Stock data will be injected here -->
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI问股 Section -->
+    <section class="ai-ask-section" id="aiask" style="display:none">
+        <div class="ai-ask-container">
+            <div class="ai-ask-header">
+                <h3>🤖 龙韵智趋 AI</h3>
+                <p>基于修哥二波战法的智能分析</p>
+            </div>
+            <div class="ai-ask-status" id="aiAskStatus">
+                <span>免费剩余: <span class="trials" id="aiTrials">3</span> 次</span>
+                <span>|</span>
+                <span>永久权限: <span class="lifetime" id="aiLifetime">未解锁</span></span>
+            </div>
+            <div class="ai-ask-messages" id="aiMessages">
+                <div class="ai-ask-hint">
+                    <div class="ai-ask-hint-icon">💬</div>
+                    <p>输入股票代码或问题，AI为你分析</p>
+                    <p style="margin-top:0.5rem;font-size:0.8rem">例如: 600519贵州茅台怎么样?</p>
+                </div>
+            </div>
+            <div class="ai-ask-input-row">
+                <input type="text" class="ai-ask-input" id="aiAskInput" placeholder="输入股票代码或问题..." />
+                <button class="ai-ask-send-btn" id="aiAskSendBtn" onclick="sendAiAsk()">发送</button>
             </div>
         </div>
     </section>
@@ -3087,6 +3245,10 @@
                     // 没有自选时显示空状态提示
                     filtered = stockData.slice(0, 5).map(s => ({...s, _isFocusHint: true}));
                 }
+            } else if (tab === 'aiask') {
+                // AI问股：显示AI问股界面
+                showAiAskSection();
+                return;
             }
             renderFilteredStockData(filtered, tab);
         }
@@ -3332,6 +3494,152 @@
         }
 
         // ==================== Initialize ====================
+        // ==================== AI问股 Functions ====================
+        let aiAskTrials = 3;
+        let aiAskLifetime = false;
+        let aiAskPhone = localStorage.getItem('phone') || '';
+
+        function showAiAskSection() {
+            document.getElementById('stocks').style.display = 'none';
+            document.getElementById('aiask').style.display = 'block';
+            document.getElementById('strategies').style.display = 'none';
+            document.getElementById('community').style.display = 'none';
+            updateAiAskStatus();
+        }
+
+        function updateAiAskStatus() {
+            if (aiAskLifetime) {
+                document.getElementById('aiTrials').textContent = '∞';
+                document.getElementById('aiLifetime').textContent = '已解锁';
+            } else {
+                document.getElementById('aiTrials').textContent = aiAskTrials;
+                document.getElementById('aiLifetime').textContent = '未解锁';
+            }
+        }
+
+        async function fetchAiAskStatus() {
+            if (!aiAskPhone) return;
+            try {
+                const res = await fetch(`${API_BASE}/ai-ask/status?phone=${aiAskPhone}`);
+                const json = await res.json();
+                if (json.code === 0 && json.data) {
+                    aiAskTrials = json.data.free_trials;
+                    aiAskLifetime = json.data.lifetime_access;
+                    updateAiAskStatus();
+                }
+            } catch (e) {
+                console.log('获取AI问股状态失败', e);
+            }
+        }
+
+        async function sendAiAsk() {
+            const input = document.getElementById('aiAskInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesDiv = document.getElementById('aiMessages');
+
+            // 清空提示
+            const hint = messagesDiv.querySelector('.ai-ask-hint');
+            if (hint) hint.remove();
+
+            // 添加用户消息
+            messagesDiv.innerHTML += `
+                <div class="ai-msg user">
+                    <div class="ai-msg-avatar">👤</div>
+                    <div class="ai-msg-content">${escapeHtml(message)}</div>
+                </div>`;
+
+            // 添加等待消息
+            const waitingDiv = document.createElement('div');
+            waitingDiv.className = 'ai-msg ai-msg-waiting';
+            waitingDiv.innerHTML = `
+                <div class="ai-msg-avatar">🤖</div>
+                <div class="ai-msg-content">分析中...</div>
+            `;
+            messagesDiv.appendChild(waitingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            input.value = '';
+            document.getElementById('aiAskSendBtn').disabled = true;
+
+            try {
+                const res = await fetch(`${API_BASE}/chat`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message, phone: aiAskPhone})
+                });
+                const json = await res.json();
+
+                waitingDiv.remove();
+
+                if (json.code === 2) {
+                    // 需要付费
+                    messagesDiv.innerHTML += `
+                        <div class="ai-msg">
+                            <div class="ai-msg-avatar">🤖</div>
+                            <div class="ai-msg-content">
+                                今日免费次数已用完！<br>
+                                💰 单次9.9元<br>
+                                🎁 介绍3人可永久解锁
+                            </div>
+                        </div>`;
+                } else if (json.code === 0) {
+                    // AI回复
+                    messagesDiv.innerHTML += `
+                        <div class="ai-msg">
+                            <div class="ai-msg-avatar">🤖</div>
+                            <div class="ai-msg-content">${escapeHtml(json.data.reply)}</div>
+                        </div>`;
+
+                    // 更新剩余次数
+                    if (json.data.remaining_trials !== undefined && json.data.remaining_trials !== null) {
+                        aiAskTrials = json.data.remaining_trials;
+                    }
+                    if (json.data.lifetime_access) {
+                        aiAskLifetime = true;
+                    }
+                    updateAiAskStatus();
+                } else {
+                    waitingDiv.remove();
+                    messagesDiv.innerHTML += `
+                        <div class="ai-msg">
+                            <div class="ai-msg-avatar">🤖</div>
+                            <div class="ai-msg-content">抱歉，出了点问题。请稍后再试。</div>
+                        </div>`;
+                }
+            } catch (e) {
+                waitingDiv.remove();
+                messagesDiv.innerHTML += `
+                    <div class="ai-msg">
+                        <div class="ai-msg-avatar">🤖</div>
+                        <div class="ai-msg-content">网络异常，请检查网络连接。</div>
+                    </div>`;
+            }
+
+            document.getElementById('aiAskSendBtn').disabled = false;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+
+        // 回车发送
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('aiAskInput');
+            if (input) {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        sendAiAsk();
+                    }
+                });
+            }
+            fetchAiAskStatus();
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             renderMarketData();
             renderFilteredStockData(stockData, 'hot');
