@@ -603,6 +603,17 @@
 
 <!-- Index Content -->
 <div class="page-content active" id="page-home">
+    <!-- 今日9:25 选股 Banner (数据驱动) -->
+    <div class="today-banner" id="todayBanner" onclick="openTodayDetail()" style="background:linear-gradient(135deg,#1f6feb 0%,#1158c7 100%);margin:12px;border-radius:12px;padding:16px;cursor:pointer;position:relative;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <div style="background:rgba(255,255,255,0.2);border-radius:6px;padding:3px 8px;font-size:11px;color:#fff;font-weight:600;">9:25 选股</div>
+            <div id="todayDate" style="font-size:12px;color:rgba(255,255,255,0.85);">--</div>
+        </div>
+        <div id="todayTitle" style="font-size:18px;color:#fff;font-weight:700;line-height:1.4;margin-bottom:4px;">加载中...</div>
+        <div id="todaySummary" style="font-size:12px;color:rgba(255,255,255,0.8);">基于双二板 + MA10 回调战法精选</div>
+        <div id="todayCount" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:32px;color:rgba(255,255,255,0.3);font-weight:800;">--</div>
+    </div>
+
     <!-- Indices Strip -->
     <div class="indices-bar" id="indicesBar">
         <div class="skeleton" style="width:70px;height:32px;border-radius:6px;"></div>
@@ -1181,6 +1192,89 @@ function showTopicDetail(name) {
 function closeTopicModal() {
     document.getElementById('topicModal').classList.remove('active');
 }
+
+// ==================== 今日选股 (数据驱动, 静态读取 data/today.json) ====================
+async function loadToday() {
+    try {
+        const resp = await fetch('data/today.json?_=' + Date.now());
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const data = await resp.json();
+        const banner = document.getElementById('todayBanner');
+        if (!banner) return;
+        const dateEl = document.getElementById('todayDate');
+        const titleEl = document.getElementById('todayTitle');
+        const summaryEl = document.getElementById('todaySummary');
+        const countEl = document.getElementById('todayCount');
+        if (dateEl) dateEl.textContent = data.date || '';
+        if (titleEl) titleEl.textContent = data.title || '今日选股';
+        if (summaryEl) summaryEl.textContent = data.summary || '';
+        if (countEl) countEl.textContent = data.stocks ? data.stocks.length : '--';
+    } catch (e) {
+        console.warn('today.json load failed:', e);
+        const titleEl = document.getElementById('todayTitle');
+        if (titleEl) titleEl.textContent = '今日选股待发布';
+    }
+}
+
+function openTodayDetail() {
+    // 跳到独立的今日选股详情页（如果存在）或弹窗
+    const url = 'today.html';
+    fetch(url, { method: 'HEAD' }).then(r => {
+        if (r.ok) {
+            window.location.href = url;
+        } else {
+            // 没有独立页，弹窗显示
+            showTodayModal();
+        }
+    }).catch(() => showTodayModal());
+}
+
+async function showTodayModal() {
+    try {
+        const resp = await fetch('data/today.json?_=' + Date.now());
+        if (!resp.ok) return;
+        const data = await resp.json();
+        const stocks = data.stocks || [];
+        const html = `
+            <div style="text-align:left;padding:0 4px;">
+                <div style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">${data.date || ''} · ${data.summary || ''}</div>
+                ${stocks.map((s, i) => `
+                    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+                            <div>
+                                <span style="color:var(--accent-blue);font-weight:600;font-size:15px;">${i+1}. ${s.code || ''}</span>
+                                <span style="color:var(--text-primary);font-size:15px;margin-left:6px;">${s.name || ''}</span>
+                            </div>
+                            <div style="color:var(--text-muted);font-size:11px;">${(s.tags || []).join(' / ')}</div>
+                        </div>
+                        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:6px;">📌 ${s.strategy || ''}</div>
+                        <div style="display:flex;gap:12px;font-size:12px;">
+                            <div>💰 入<span style="color:var(--accent-blue);">${s.entry_price || '-'}</span></div>
+                            <div>🎯 目标<span style="color:var(--accent-green);">${s.target_price || '-'}</span></div>
+                            <div>🛑 止损<span style="color:var(--accent-red);">${s.stop_loss || '-'}</span></div>
+                            <div>📊 ${s.position || ''}</div>
+                        </div>
+                        ${s.note ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">💡 ${s.note}</div>` : ''}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        // 复用 search modal
+        const modal = document.getElementById('searchModal');
+        if (modal) {
+            const titleEl = modal.querySelector('.modal-title') || document.createElement('div');
+            titleEl.textContent = data.title || '今日选股';
+            const resultsEl = modal.querySelector('#searchResults') || modal.querySelector('.modal-box');
+            if (resultsEl) resultsEl.innerHTML = html;
+            modal.classList.add('active');
+        }
+    } catch (e) {
+        console.warn('showTodayModal failed:', e);
+    }
+}
+
+// 页面加载时拉今日选股
+loadToday();
 
 // ==================== 占位函数 ====================
 function showBannerDetail() { openSearch(); }

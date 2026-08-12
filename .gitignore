@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+.Python
+venv/
+.venv/
+*.egg-info/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# 数据敏感
+.env
+*.log
+
+# 大文件
+*.mp4
+*.zip
+*.tar.gz

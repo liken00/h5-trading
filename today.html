@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>今日选股 - 涨停复盘宝</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-card-hover: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #484f58;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --border: #30363d;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 24px;
+        }
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 16px;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .header-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .container {
+            padding: 16px;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #1f6feb 0%, #1158c7 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .summary-title {
+            font-size: 16px;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .summary-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.5;
+        }
+        .stock-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .stock-info { flex: 1; }
+        .stock-rank {
+            color: var(--accent-blue);
+            font-weight: 700;
+            font-size: 16px;
+            margin-right: 6px;
+        }
+        .stock-name {
+            font-size: 16px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        .stock-code {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .stock-tags {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            background: var(--bg-card-hover);
+            color: var(--text-secondary);
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        .stock-strategy {
+            background: var(--bg-primary);
+            border-left: 3px solid var(--accent-blue);
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .stock-prices {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .price-item {
+            background: var(--bg-primary);
+            border-radius: 6px;
+            padding: 8px 10px;
+            text-align: center;
+        }
+        .price-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+        .price-value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .price-value.entry { color: var(--accent-blue); }
+        .price-value.target { color: var(--accent-green); }
+        .price-value.stop { color: var(--accent-red); }
+        .stock-position {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .position-value {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+        .stock-note {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+            padding: 6px 8px;
+            background: rgba(210,153,34,0.08);
+            border-radius: 4px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--accent-blue);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-title">📊 今日选股</div>
+        <div class="header-meta" id="headerMeta">加载中...</div>
+    </div>
+
+    <div class="container" id="container">
+        <div class="loading">数据加载中...</div>
+    </div>
+
+    <div style="text-align:center;">
+        <a href="index.html" class="back-btn">← 返回首页</a>
+    </div>
+
+    <script>
+async function loadToday() {
+    const container = document.getElementById('container');
+    const headerMeta = document.getElementById('headerMeta');
+    try {
+        const resp = await fetch('data/today.json?_=' + Date.now());
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const data = await resp.json();
+        renderToday(data, container, headerMeta);
+    } catch (e) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <div>暂无今日选股数据</div>
+                <div style="font-size:12px;margin-top:8px;">${e.message}</div>
+            </div>
+        `;
+        headerMeta.textContent = '数据加载失败';
+    }
+}
+
+function renderToday(data, container, headerMeta) {
+    const stocks = data.stocks || [];
+    headerMeta.innerHTML = `${data.date || ''} · 发布 ${data.publish_time || ''} · 共 <span style="color:var(--accent-blue);font-weight:600;">${stocks.length}</span> 只`;
+
+    if (stocks.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📭</div>
+                <div>今日暂无选股</div>
+            </div>
+        `;
+        return;
+    }
+
+    let html = `
+        <div class="summary-card">
+            <div class="summary-title">${data.title || '今日选股'}</div>
+            <div class="summary-desc">${data.summary || ''}</div>
+        </div>
+    `;
+
+    stocks.forEach((s, i) => {
+        const tags = (s.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+        html += `
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div class="stock-info">
+                        <span class="stock-rank">#${i+1}</span>
+                        <span class="stock-name">${s.name || ''}</span>
+                        <div class="stock-code">${s.code || ''}</div>
+                    </div>
+                    <div class="stock-tags">${tags}</div>
+                </div>
+                <div class="stock-strategy">📌 ${s.strategy || '无战法依据'}</div>
+                <div class="stock-prices">
+                    <div class="price-item">
+                        <div class="price-label">买入价</div>
+                        <div class="price-value entry">${s.entry_price || '-'}</div>
+                    </div>
+                    <div class="price-item">
+                        <div class="price-label">目标价</div>
+                        <div class="price-value target">${s.target_price || '-'}</div>
+                    </div>
+                    <div class="price-item">
+                        <div class="price-label">止损价</div>
+                        <div class="price-value stop">${s.stop_loss || '-'}</div>
+                    </div>
+                </div>
+                <div class="stock-position">
+                    <span>建议仓位</span>
+                    <span class="position-value">${s.position || '-'}</span>
+                </div>
+                ${s.note ? `<div class="stock-note">💡 ${s.note}</div>` : ''}
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+loadToday();
+    </script>
+</body>
+</html>
