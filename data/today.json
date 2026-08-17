@@ -1,78 +1,41 @@
 {
-  "date": "2026-08-12",
-  "publish_time": "2026-08-12 12:50",
-  "title": "今日 5 只龙头候选 (自动)",
-  "summary": "双二板主线 5 个 | 自动扫描全市场涨停股池",
+  "date": "2026-08-17",
+  "publish_time": "2026-08-17 10:00",
+  "title": "今日 3 只龙头候选 - 涨停复制战法",
+  "summary": "3 只涨停强势股复制：共进股份 2 板 / 金螳螂 4 板一字 / 神奇制药 2 板封死",
   "stocks": [
     {
-      "code": "600721",
-      "name": "百花医药",
-      "strategy": "连板数 7 | 涨幅 10.0%",
-      "entry_price": 14.1,
-      "target_price": 14.73,
-      "stop_loss": 13.61,
+      "code": "603118",
+      "name": "共进股份",
+      "strategy": "二板一字封死",
+      "entry_price": 19.32,
+      "target_price": 20.2,
+      "stop_loss": 19.1,
+      "position": "0.25成",
+      "tags": ["主线", "涨停"],
+      "note": "2 板一字封死，缩量创新高，关注明日是否继续一字"
+    },
+    {
+      "code": "002081",
+      "name": "金螳螂",
+      "strategy": "四板一字",
+      "entry_price": 5.82,
+      "target_price": 6.1,
+      "stop_loss": 5.75,
       "position": "0.35成",
-      "tags": [
-        "主线",
-        "涨停"
-      ],
-      "note": "自动选股 - 选自医疗服务板块"
+      "tags": ["主线", "涨停"],
+      "note": "4 板一字最强（涨 9.97%），是今日梯队最高"
     },
     {
-      "code": "603758",
-      "name": "秦安股份",
-      "strategy": "连板数 4 | 涨幅 10.0%",
-      "entry_price": 14.02,
-      "target_price": 14.65,
-      "stop_loss": 13.53,
-      "position": "0.35成",
-      "tags": [
-        "主线",
-        "涨停"
-      ],
-      "note": "自动选股 - 选自汽车零部板块"
-    },
-    {
-      "code": "300862",
-      "name": "蓝盾光电",
-      "strategy": "连板数 3 | 涨幅 20.0%",
-      "entry_price": 33.0,
-      "target_price": 34.48,
-      "stop_loss": 31.85,
+      "code": "600613",
+      "name": "神奇制药",
+      "strategy": "二板封死",
+      "entry_price": 7.05,
+      "target_price": 7.4,
+      "stop_loss": 6.95,
       "position": "0.25成",
-      "tags": [
-        "主线",
-        "涨停"
-      ],
-      "note": "自动选股 - 选自通用设备板块"
-    },
-    {
-      "code": "000802",
-      "name": "北京文化",
-      "strategy": "连板数 3 | 涨幅 10.1%",
-      "entry_price": 5.72,
-      "target_price": 5.97,
-      "stop_loss": 5.52,
-      "position": "0.25成",
-      "tags": [
-        "主线",
-        "涨停"
-      ],
-      "note": "自动选股 - 选自影视院线板块"
-    },
-    {
-      "code": "002248",
-      "name": "华东数控",
-      "strategy": "连板数 3 | 涨幅 10.0%",
-      "entry_price": 12.23,
-      "target_price": 12.78,
-      "stop_loss": 11.8,
-      "position": "0.25成",
-      "tags": [
-        "主线",
-        "涨停"
-      ],
-      "note": "自动选股 - 选自通用设备板块"
+      "tags": ["主线", "涨停", "主推"],
+      "note": "今日主推 — 封单 21 手，封死力度强，9:25 集合竞价高开可关注"
     }
   ]
 }
