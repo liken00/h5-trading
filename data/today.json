@@ -1,41 +1,66 @@
 {
   "date": "2026-08-17",
-  "publish_time": "2026-08-17 10:00",
-  "title": "今日 3 只龙头候选 - 涨停复制战法",
-  "summary": "3 只涨停强势股复制：共进股份 2 板 / 金螳螂 4 板一字 / 神奇制药 2 板封死",
+  "publish_time": "2026-08-17 09:30",
+  "title": "今日 4 只龙头候选 - 涨停复制战法",
+  "summary": "集合竞价后识别 4 只涨停股：神奇制药/华东数控/正裕工业/飞达生物（无主线双二板，题材分散）",
   "stocks": [
-    {
-      "code": "603118",
-      "name": "共进股份",
-      "strategy": "二板一字封死",
-      "entry_price": 19.32,
-      "target_price": 20.2,
-      "stop_loss": 19.1,
-      "position": "0.25成",
-      "tags": ["主线", "涨停"],
-      "note": "2 板一字封死，缩量创新高，关注明日是否继续一字"
-    },
-    {
-      "code": "002081",
-      "name": "金螳螂",
-      "strategy": "四板一字",
-      "entry_price": 5.82,
-      "target_price": 6.1,
-      "stop_loss": 5.75,
-      "position": "0.35成",
-      "tags": ["主线", "涨停"],
-      "note": "4 板一字最强（涨 9.97%），是今日梯队最高"
-    },
     {
       "code": "600613",
       "name": "神奇制药",
-      "strategy": "二板封死",
-      "entry_price": 7.05,
-      "target_price": 7.4,
-      "stop_loss": 6.95,
+      "strategy": "涨停 10.07% + 封单 31729 手",
+      "entry_price": 7.76,
+      "target_price": 8.15,
+      "stop_loss": 7.65,
       "position": "0.25成",
-      "tags": ["主线", "涨停", "主推"],
-      "note": "今日主推 — 封单 21 手，封死力度强，9:25 集合竞价高开可关注"
+      "tags": ["主推", "涨停", "医药"],
+      "note": "今日主推 — 涨幅最高 10.07%，封单 31729 手最强，集合竞价后首选关注",
+      "boards": "未知（图无连板数）",
+      "sector_guess": "医药/化学制药"
+    },
+    {
+      "code": "002248",
+      "name": "华东数控",
+      "strategy": "涨停 9.98% + 封单 14622 手",
+      "entry_price": 202.70,
+      "target_price": 213.00,
+      "stop_loss": 199.00,
+      "position": "0.25成",
+      "tags": ["涨停", "通用设备"],
+      "note": "涨停 9.98%，封单 14622 手，关注通用设备/数控机床题材延续",
+      "boards": "未知（图无连板数）",
+      "sector_guess": "通用设备/数控机床"
+    },
+    {
+      "code": "603089",
+      "name": "正裕工业",
+      "strategy": "涨停 9.97% + 封单 14068 手",
+      "entry_price": 11.80,
+      "target_price": 12.40,
+      "stop_loss": 11.60,
+      "position": "0.25成",
+      "tags": ["涨停", "汽车零部件"],
+      "note": "涨停 9.97%，封单 14068 手，汽车零部件题材",
+      "boards": "未知（图无连板数）",
+      "sector_guess": "汽车零部件"
+    },
+    {
+      "code": "603078",
+      "name": "飞达生物",
+      "strategy": "涨停 9.97% + 封单 23840 手",
+      "entry_price": 16.22,
+      "target_price": 17.05,
+      "stop_loss": 15.95,
+      "position": "0.25成",
+      "tags": ["涨停", "生物制品"],
+      "note": "涨停 9.97%，封单 23840 手（涨停中较强），生物制品题材",
+      "boards": "未知（图无连板数）",
+      "sector_guess": "生物制品"
     }
-  ]
+  ],
+  "_ocr_source": {
+    "image": "集合竞价结果截图",
+    "ocr_method": "vision_analyze",
+    "mainlines_detected": "无（图里没有双二板主线）",
+    "notes": "图里没有所属行业列和连板数列，题材靠股票名推断"
+  }
 }
