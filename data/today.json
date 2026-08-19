@@ -1,66 +1,48 @@
 {
-  "date": "2026-08-17",
-  "publish_time": "2026-08-17 09:30",
-  "title": "今日 4 只龙头候选 - 涨停复制战法",
-  "summary": "集合竞价后识别 4 只涨停股：神奇制药/华东数控/正裕工业/飞达生物（无主线双二板，题材分散）",
+  "date": "2026-08-18",
+  "publish_time": "2026-08-18 09:30",
+  "title": "今日 2 只龙头候选 - 涨停复制战法",
+  "summary": "集合竞价后识别 2 只涨停股：金健米业 + 神奇制药（akshare 实时验证）",
   "stocks": [
+    {
+      "code": "600127",
+      "name": "金健米业",
+      "strategy": "涨停 9.99% + 实时验证",
+      "entry_price": 7.82,
+      "target_price": 8.20,
+      "stop_loss": 7.70,
+      "position": "0.25成",
+      "tags": ["涨停", "农产品加工"],
+      "note": "今日候选 — 集合竞价后 +9.99% 涨停（akshare 实时验证一致）",
+      "verified": "akshare 2026-08-18 验证：现价 7.82 / 涨 9.99%"
+    },
     {
       "code": "600613",
       "name": "神奇制药",
-      "strategy": "涨停 10.07% + 封单 31729 手",
-      "entry_price": 7.76,
-      "target_price": 8.15,
-      "stop_loss": 7.65,
+      "strategy": "涨停 10.05% + 实时验证",
+      "entry_price": 8.54,
+      "target_price": 8.95,
+      "stop_loss": 8.40,
       "position": "0.25成",
       "tags": ["主推", "涨停", "医药"],
-      "note": "今日主推 — 涨幅最高 10.07%，封单 31729 手最强，集合竞价后首选关注",
-      "boards": "未知（图无连板数）",
-      "sector_guess": "医药/化学制药"
-    },
-    {
-      "code": "002248",
-      "name": "华东数控",
-      "strategy": "涨停 9.98% + 封单 14622 手",
-      "entry_price": 202.70,
-      "target_price": 213.00,
-      "stop_loss": 199.00,
-      "position": "0.25成",
-      "tags": ["涨停", "通用设备"],
-      "note": "涨停 9.98%，封单 14622 手，关注通用设备/数控机床题材延续",
-      "boards": "未知（图无连板数）",
-      "sector_guess": "通用设备/数控机床"
-    },
-    {
-      "code": "603089",
-      "name": "正裕工业",
-      "strategy": "涨停 9.97% + 封单 14068 手",
-      "entry_price": 11.80,
-      "target_price": 12.40,
-      "stop_loss": 11.60,
-      "position": "0.25成",
-      "tags": ["涨停", "汽车零部件"],
-      "note": "涨停 9.97%，封单 14068 手，汽车零部件题材",
-      "boards": "未知（图无连板数）",
-      "sector_guess": "汽车零部件"
-    },
-    {
-      "code": "603078",
-      "name": "飞达生物",
-      "strategy": "涨停 9.97% + 封单 23840 手",
-      "entry_price": 16.22,
-      "target_price": 17.05,
-      "stop_loss": 15.95,
-      "position": "0.25成",
-      "tags": ["涨停", "生物制品"],
-      "note": "涨停 9.97%，封单 23840 手（涨停中较强），生物制品题材",
-      "boards": "未知（图无连板数）",
-      "sector_guess": "生物制品"
+      "note": "今日主推 — 实际 +10.05% 涨停（OCR 把涨停误读为 +5.54%，akshare 实时纠正）",
+      "verified": "akshare 2026-08-18 验证：现价 8.54 / 涨 10.05%"
     }
   ],
   "_ocr_source": {
     "image": "集合竞价结果截图",
-    "ocr_method": "vision_analyze",
-    "mainlines_detected": "无（图里没有双二板主线）",
-    "notes": "图里没有所属行业列和连板数列，题材靠股票名推断"
+    "ocr_method": "vision_analyze + akshare 交叉验证",
+    "ocr_discrepancies": [
+      {
+        "stock": "神奇制药",
+        "ocr_pct": "+5.54%",
+        "actual_pct": "+10.05%",
+        "ocr_price": "8.19",
+        "actual_price": "8.54",
+        "fix": "用 akshare 实时数据覆盖"
+      }
+    ],
+    "mainlines_detected": "无（各涨停分散在不同题材，无双二板）",
+    "notes": "图里没有所属行业列和连板数列，已用 akshare 实时数据覆盖 OCR 数据"
   }
 }
