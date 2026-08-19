@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开通 VIP - 涨停复盘宝</title>
+    <link rel="stylesheet" href="index.html">
+    <style>
+        body { padding: 20px; min-height: 100vh; }
+        .vip-card {
+            background: var(--bg-card);
+            border: 1px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        .vip-title { color: var(--accent-blue); font-size: 24px; font-weight: 700; text-align: center; }
+        .vip-subtitle { color: var(--text-secondary); text-align: center; margin-bottom: 20px; }
+        .price-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .price-label { color: var(--text-secondary); }
+        .price-value { color: var(--accent-gold); font-weight: 700; }
+        .qr-section {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: white;
+            margin: 12px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        .step {
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--accent-blue);
+            padding: 12px;
+            margin: 12px 0;
+        }
+        .step-num { color: var(--accent-blue); font-weight: 700; }
+        .activate-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        input.card-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button.activate-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button.activate-btn:disabled { background: var(--text-muted); cursor: not-allowed; }
+        .msg { margin-top: 12px; padding: 12px; border-radius: 4px; display: none; }
+        .msg.success { background: rgba(63, 185, 80, 0.2); color: var(--accent-green); }
+        .msg.error { background: rgba(248, 81, 73, 0.2); color: var(--accent-red); }
+    </style>
+</head>
+<body>
+    <div style="max-width: 600px; margin: 0 auto;">
+        <a href="index.html" style="color: var(--accent-blue); text-decoration: none;">← 返回首页</a>
+
+        <div class="vip-card">
+            <div class="vip-title">� 涨停复盘宝 VIP</div>
+            <div class="vip-subtitle">每日 9:25 公开 5 只龙头 + 战法依据 + 收盘复盘</div>
+
+            <div class="price-row">
+                <span class="price-label">� 月卡</span>
+                <span class="price-value">¥3000 / 月</span>
+            </div>
+            <div class="price-row">
+                <span class="price-label">� 年卡（推荐）</span>
+                <span class="price-value">¥30000 / 年</span>
+            </div>
+            <div class="price-row" style="border: none;">
+                <span class="price-label">💎 VIP 终身</span>
+                <span class="price-value">¥99999（联系修哥）</span>
+            </div>
+        </div>
+
+        <div class="vip-card">
+            <div class="vip-title" style="font-size: 18px;">开通流程</div>
+            <div class="step">
+                <span class="step-num">1.</span> 加修哥微信（下方二维码）
+            </div>
+            <div class="step">
+                <span class="step-num">2.</span> 转账 ¥3000（月卡）或 ¥30000（年卡）
+            </div>
+            <div class="step">
+                <span class="step-num">3.</span> 修哥发卡密给你（一次性密码）
+            </div>
+            <div class="step">
+                <span class="step-num">4.</span> 下方输入卡密 → 立即激活 VIP
+            </div>
+        </div>
+
+        <div class="qr-section">
+            <div style="color: var(--text-primary); font-weight: 600;">📱 加修哥微信</div>
+            <div class="qr-placeholder">
+                [修哥微信收款码]<br>
+                <small>（替换为你的微信收款码图片）</small>
+            </div>
+            <div style="color: var(--text-muted); font-size: 12px;">
+                扫一扫加微信 → 备注「VIP」→ 转账后秒发卡密
+            </div>
+        </div>
+
+        <div class="activate-box">
+            <div style="color: var(--accent-blue); font-weight: 600; margin-bottom: 12px;">🎫 激活卡密</div>
+            <input type="text" id="cardInput" class="card-input" placeholder="VIP-XXXX-XXXX" />
+            <button id="activateBtn" class="activate-btn">激活 VIP</button>
+            <div id="msg" class="msg"></div>
+        </div>
+
+        <div style="text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 30px;">
+            💡 支付遇到问题？加微信「涨停复盘宝VIP」咨询
+        </div>
+    </div>
+
+    <script>
+        // API 地址（部署 Cloudflare Workers 后填）
+        const API_BASE = 'https://card-auth.xxxxx.workers.dev';
+
+        const btn = document.getElementById('activateBtn');
+        const input = document.getElementById('cardInput');
+        const msg = document.getElementById('msg');
+
+        btn.addEventListener('click', async () => {
+            const card = input.value.trim();
+            if (!card) {
+                showMsg('请输入卡密', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = '激活中...';
+            msg.style.display = 'none';
+
+            try {
+                const r = await fetch(API_BASE + '/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        card: card,
+                        phone: ''  // 可选：用户填手机号
+                    })
+                });
+
+                const data = await r.json();
+
+                if (data.valid) {
+                    showMsg(`✅ ${data.message || '激活成功！'} 到期：${data.expires_at}`, 'success');
+                    localStorage.setItem('vip_card', card);
+                    localStorage.setItem('vip_expire', data.expires_at);
+                } else {
+                    showMsg(`❌ ${data.error || '卡密无效'}`, 'error');
+                }
+            } catch (err) {
+                showMsg(`❌ 网络错误：${err.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '激活 VIP';
+            }
+        });
+
+        function showMsg(text, type) {
+            msg.textContent = text;
+            msg.className = `msg ${type}`;
+            msg.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
