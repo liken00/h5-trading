@@ -1,27 +1,41 @@
 {
   "date": "2026-08-19",
-  "publish_time": "2026-08-19 10:33",
-  "title": "今日 1 只龙头候选 - 涨停复制战法",
-  "summary": "9:25 集合竞价后快速推送（1 只，实时验证）",
+  "publish_time": "2026-08-19 12:58",
+  "title": "今日 2 只龙头候选 - 涨停复制战法",
+  "summary": "9:25 集合竞价后快速推送（2 只, 腾讯 qt.gtimg.cn）",
   "stocks": [
     {
-      "code": "600613",
-      "name": "神奇制药",
-      "price": 8.54,
-      "open": 8.19,
-      "high": 8.54,
-      "low": 8.18,
-      "pct": 10.05,
+      "code": "600127",
+      "name": "金健米业",
+      "price": 7.82,
+      "prev_close": 7.11,
+      "pct": 9.99,
       "tags": [
         "主推",
         "涨停"
       ],
-      "strategy": "涨停 10.05% + 实时验证",
-      "entry_price": 8.54,
-      "target_price": 8.97,
-      "stop_loss": 8.28,
+      "strategy": "涨停 9.99% + 实时验证（腾讯 qt.gtimg.cn）",
+      "entry_price": 7.82,
+      "target_price": 8.21,
+      "stop_loss": 7.59,
       "position": "0.25成",
-      "note": "今日候选 — 涨停 10.05% + 实时验证（东财实时验证）"
+      "note": "今日候选 — 涨停 9.99% + 实时验证（腾讯 qt.gtimg.cn）"
+    },
+    {
+      "code": "600613",
+      "name": "神奇制药",
+      "price": 8.32,
+      "prev_close": 7.76,
+      "pct": 7.22,
+      "tags": [
+        "上涨"
+      ],
+      "strategy": "上涨 7.22% + 实时验证（腾讯 qt.gtimg.cn）",
+      "entry_price": 8.32,
+      "target_price": 8.74,
+      "stop_loss": 8.07,
+      "position": "0.25成",
+      "note": "今日候选 — 上涨 7.22% + 实时验证（腾讯 qt.gtimg.cn）"
     }
   ]
 }
