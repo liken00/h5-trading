@@ -6,24 +6,24 @@
     <title>今日选股 - 涨停复盘宝</title>
     <style>
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f6f8fa;
-            --bg-card: #ffffff;
-            --bg-card-hover: #eaeef2;
-            --text-primary: #1f2328;
-            --text-secondary: #57606a;
-            --text-muted: #8c959f;
-            --accent-red: #cf222e;
-            --accent-green: #1a7f37;
-            --accent-gold: #9a6700;
-            --accent-blue: #0969da;
-            --border: #d0d7de;
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-card-hover: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #484f58;
+            --accent-red: #f85149;
+            --accent-green: #3fb950;
+            --accent-gold: #d29922;
+            --accent-blue: #58a6ff;
+            --border: #30363d;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: var(--bg-primary);
-            color: var(--text-primary);
+            color: #fff;
             min-height: 100vh;
             padding-bottom: 24px;
         }
@@ -31,14 +31,14 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: var(--bg-secondary);
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
             border-bottom: 1px solid var(--border);
             padding: 16px;
         }
         .header-title {
             font-size: 20px;
             font-weight: 700;
-            color: var(--text-primary);
+            color: #fff;
             margin-bottom: 4px;
         }
         .header-meta {
@@ -49,14 +49,14 @@
             padding: 16px;
         }
         .summary-card {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            background: linear-gradient(135deg, #1f6feb 0%, #1158c7 100%);
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 16px;
         }
         .summary-title {
             font-size: 16px;
-            color: var(--text-primary);
+            color: #fff;
             font-weight: 600;
             margin-bottom: 6px;
         }
@@ -66,7 +66,7 @@
             line-height: 1.5;
         }
         .stock-card {
-            background: var(--bg-card);
+            background: #1a1a2e;
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 14px;
@@ -87,7 +87,7 @@
         }
         .stock-name {
             font-size: 16px;
-            color: var(--text-primary);
+            color: #fff;
             font-weight: 600;
         }
         .stock-code {
@@ -176,7 +176,7 @@
             margin-top: 20px;
             padding: 10px 20px;
             background: var(--accent-blue);
-            color: var(--text-primary);
+            color: #fff;
             text-decoration: none;
             border-radius: 8px;
             font-size: 14px;
