@@ -6,20 +6,20 @@
     <title>复盘宝 - 股票热点资讯平台</title>
     <style>
         :root {
-            --bg-primary: #0d1117;
-            --bg-secondary: #161b22;
-            --bg-card: #1c2128;
-            --bg-card-hover: #21262d;
-            --text-primary: #e6edf3;
-            --text-secondary: #8b949e;
-            --text-muted: #484f58;
-            --accent-red: #f85149;
-            --accent-green: #3fb950;
-            --accent-gold: #d29922;
-            --accent-blue: #58a6ff;
-            --border: #30363d;
-            --tab-active: #58a6ff;
-            --tab-inactive: #484f58;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f6f8fa;
+            --bg-card: #ffffff;
+            --bg-card-hover: #eaeef2;
+            --text-primary: #1f2328;
+            --text-secondary: #57606a;
+            --text-muted: #8c959f;
+            --accent-red: #cf222e;
+            --accent-green: #1a7f37;
+            --accent-gold: #9a6700;
+            --accent-blue: #0969da;
+            --border: #d0d7de;
+            --tab-active: #0969da;
+            --tab-inactive: #57606a;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -100,7 +100,7 @@
 
         /* 横幅卡片 */
         .banner-card {
-            background: linear-gradient(135deg, #1a3a4a 0%, #0d2332 100%);
+            background: var(--bg-secondary);
             border-radius: 12px;
             padding: 16px;
             position: relative;
@@ -604,14 +604,14 @@
 <!-- Index Content -->
 <div class="page-content active" id="page-home">
     <!-- 今日9:25 选股 Banner (数据驱动) -->
-    <div class="today-banner" id="todayBanner" onclick="openTodayDetail()" style="background:linear-gradient(135deg,#1f6feb 0%,#1158c7 100%);margin:12px;border-radius:12px;padding:16px;cursor:pointer;position:relative;overflow:hidden;">
+    <div class="today-banner" id="todayBanner" onclick="openTodayDetail()" style="background:linear-gradient(135deg,#e3f2fd 0%,#bbdefb 100%);margin:12px;border-radius:12px;padding:16px;cursor:pointer;position:relative;overflow:hidden;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
             <div style="background:rgba(255,255,255,0.2);border-radius:6px;padding:3px 8px;font-size:11px;color:#fff;font-weight:600;">9:25 选股</div>
-            <div id="todayDate" style="font-size:12px;color:rgba(255,255,255,0.85);">--</div>
+            <div id="todayDate" style="font-size:12px;color:var(--text-secondary);">--</div>
         </div>
         <div id="todayTitle" style="font-size:18px;color:#fff;font-weight:700;line-height:1.4;margin-bottom:4px;">加载中...</div>
-        <div id="todaySummary" style="font-size:12px;color:rgba(255,255,255,0.8);">基于双二板 + MA10 回调战法精选</div>
-        <div id="todayCount" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:32px;color:rgba(255,255,255,0.3);font-weight:800;">--</div>
+        <div id="todaySummary" style="font-size:12px;color:var(--text-secondary);">基于双二板 + MA10 回调战法精选</div>
+        <div id="todayCount" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:32px;color:var(--text-muted);font-weight:800;">--</div>
     </div>
 
     <!-- Indices Strip -->
