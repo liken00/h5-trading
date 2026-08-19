@@ -1,48 +1,27 @@
 {
-  "date": "2026-08-18",
-  "publish_time": "2026-08-18 09:30",
-  "title": "今日 2 只龙头候选 - 涨停复制战法",
-  "summary": "集合竞价后识别 2 只涨停股：金健米业 + 神奇制药（akshare 实时验证）",
+  "date": "2026-08-19",
+  "publish_time": "2026-08-19 10:33",
+  "title": "今日 1 只龙头候选 - 涨停复制战法",
+  "summary": "9:25 集合竞价后快速推送（1 只，实时验证）",
   "stocks": [
-    {
-      "code": "600127",
-      "name": "金健米业",
-      "strategy": "涨停 9.99% + 实时验证",
-      "entry_price": 7.82,
-      "target_price": 8.20,
-      "stop_loss": 7.70,
-      "position": "0.25成",
-      "tags": ["涨停", "农产品加工"],
-      "note": "今日候选 — 集合竞价后 +9.99% 涨停（akshare 实时验证一致）",
-      "verified": "akshare 2026-08-18 验证：现价 7.82 / 涨 9.99%"
-    },
     {
       "code": "600613",
       "name": "神奇制药",
+      "price": 8.54,
+      "open": 8.19,
+      "high": 8.54,
+      "low": 8.18,
+      "pct": 10.05,
+      "tags": [
+        "主推",
+        "涨停"
+      ],
       "strategy": "涨停 10.05% + 实时验证",
       "entry_price": 8.54,
-      "target_price": 8.95,
-      "stop_loss": 8.40,
+      "target_price": 8.97,
+      "stop_loss": 8.28,
       "position": "0.25成",
-      "tags": ["主推", "涨停", "医药"],
-      "note": "今日主推 — 实际 +10.05% 涨停（OCR 把涨停误读为 +5.54%，akshare 实时纠正）",
-      "verified": "akshare 2026-08-18 验证：现价 8.54 / 涨 10.05%"
+      "note": "今日候选 — 涨停 10.05% + 实时验证（东财实时验证）"
     }
-  ],
-  "_ocr_source": {
-    "image": "集合竞价结果截图",
-    "ocr_method": "vision_analyze + akshare 交叉验证",
-    "ocr_discrepancies": [
-      {
-        "stock": "神奇制药",
-        "ocr_pct": "+5.54%",
-        "actual_pct": "+10.05%",
-        "ocr_price": "8.19",
-        "actual_price": "8.54",
-        "fix": "用 akshare 实时数据覆盖"
-      }
-    ],
-    "mainlines_detected": "无（各涨停分散在不同题材，无双二板）",
-    "notes": "图里没有所属行业列和连板数列，已用 akshare 实时数据覆盖 OCR 数据"
-  }
+  ]
 }
