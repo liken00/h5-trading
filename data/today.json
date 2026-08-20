@@ -1,8 +1,8 @@
 {
   "date": "2026-08-20",
   "publish_time": "2026-08-20 10:31",
-  "title": "今日 5 只龙头候选 - 涨停复制战法",
-  "summary": "9:25 集合竞价后快速推送（5 只, #1 新浪 hq.sinajs.cn (91ms)）",
+  "title": "今日 2 只龙头候选 - 涨停复制战法",
+  "summary": "9:25 集合竞价快照 (2 只, 跌停已过滤)",
   "stocks": [
     {
       "code": "600613",
@@ -36,54 +36,6 @@
       "stop_loss": 8.34,
       "position": "0.25成",
       "note": "今日候选 — 涨停 9.97% + 实时验证（#1 新浪 hq.sinajs.cn (91ms)）"
-    },
-    {
-      "code": "603118",
-      "name": "共进股份",
-      "price": 17.1,
-      "prev_close": 17.11,
-      "pct": -0.06,
-      "tags": [
-        "下跌"
-      ],
-      "strategy": "下跌 0.06%",
-      "entry_price": 17.1,
-      "target_price": 17.96,
-      "stop_loss": 16.59,
-      "position": "0.25成",
-      "note": "今日候选 — 下跌 0.06%"
-    },
-    {
-      "code": "002081",
-      "name": "金 螳 螂",
-      "price": 5.54,
-      "prev_close": 5.64,
-      "pct": -1.77,
-      "tags": [
-        "下跌"
-      ],
-      "strategy": "下跌 1.77%",
-      "entry_price": 5.54,
-      "target_price": 5.82,
-      "stop_loss": 5.37,
-      "position": "0.25成",
-      "note": "今日候选 — 下跌 1.77%"
-    },
-    {
-      "code": "603089",
-      "name": "正裕工业",
-      "price": 9.77,
-      "prev_close": 10.62,
-      "pct": -8.0,
-      "tags": [
-        "下跌"
-      ],
-      "strategy": "下跌 8.00%",
-      "entry_price": 9.77,
-      "target_price": 10.26,
-      "stop_loss": 9.48,
-      "position": "0.25成",
-      "note": "今日候选 — 下跌 8.00%"
     }
   ]
 }
